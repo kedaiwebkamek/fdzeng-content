@@ -2,7 +2,7 @@ backend:
   name: github
   repo: kedaiwebkamek/fdzeng-content
   branch: master
-  base_url: https://fdzeng-com-three.vercel.app
+  base_url: https://fdzeng.com
   auth_endpoint: /api/auth
 
 media_folder: "uploads"
