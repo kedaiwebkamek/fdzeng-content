@@ -1,0 +1,17 @@
+{
+  "status": "Siap",
+  "year": "2018",
+  "date": "31 Jul 2018",
+  "amount": "RM 932,000.00",
+  "client": "",
+  "description": "Construction And Completion of The Proposed Dewan Serbaguna at Pantu, Sri Aman Division (RTP) PWD/HO/B051/2017",
+  "cat": "Building",
+  "division": "Sri Aman",
+  "loc": "Pantu, Sri Aman",
+  "accuracy": "Approximate (Pantu area, Sri Aman)",
+  "paragraph": "This is a placeholder description that provides a brief overview of the project scope and key objectives. It will be updated by the administration at a later date to feature the actual narrative.",
+  "images": [],
+  "coordinates": "1.23, 111.45",
+  "lat": 1.23,
+  "lng": 111.45
+}

@@ -1,0 +1,18 @@
+{
+  "num": "07",
+  "title": "Telekom Malaysia — Kontraktor Berdaftar",
+  "issuer": "TM Berhad",
+  "category": "contractor",
+  "tags": [
+    "TM",
+    "Telco",
+    "Infrastruktur"
+  ],
+  "status": "Aktif",
+  "isFeatured": true,
+  "featuredOrder": 6,
+  "iconName": "cell_tower",
+  "iconColor": "blue",
+  "logoImage": "tm.jpg",
+  "downloadFile": ""
+}

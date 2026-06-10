@@ -1,0 +1,18 @@
+{
+  "num": "10",
+  "title": "DOSH — Keselamatan & Kesihatan Pekerjaan",
+  "issuer": "Jabatan Keselamatan & Kesihatan Pekerjaan Malaysia",
+  "category": "quality",
+  "tags": [
+    "DOSH",
+    "Keselamatan",
+    "OSHA"
+  ],
+  "status": "Aktif",
+  "isFeatured": false,
+  "featuredOrder": 0,
+  "iconName": "health_and_safety",
+  "iconColor": "orange",
+  "logoImage": "",
+  "downloadFile": ""
+}

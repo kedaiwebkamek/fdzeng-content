@@ -1,0 +1,18 @@
+{
+  "num": "04",
+  "title": "PETROS — Sarawak Petroleum Vendor",
+  "issuer": "Petroleum Sarawak Berhad",
+  "category": "petroleum",
+  "tags": [
+    "PETROS",
+    "Sarawak",
+    "Tenaga"
+  ],
+  "status": "Aktif",
+  "isFeatured": true,
+  "featuredOrder": 4,
+  "iconName": "oil_barrel",
+  "iconColor": "green",
+  "logoImage": "petros.jpg",
+  "downloadFile": ""
+}

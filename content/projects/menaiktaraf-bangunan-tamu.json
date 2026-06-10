@@ -1,0 +1,17 @@
+{
+  "status": "Siap",
+  "year": "2019",
+  "date": "30 Oct 2019",
+  "amount": "RM 1,016,000.00",
+  "client": "",
+  "description": "Menaiktaraf Bangunan Tamu.",
+  "cat": "Maintenance",
+  "division": "Bintulu",
+  "loc": "Tatau",
+  "accuracy": "Approximate (Tatau area)",
+  "paragraph": "This is a placeholder description that provides a brief overview of the project scope and key objectives. It will be updated by the administration at a later date to feature the actual narrative.",
+  "images": [],
+  "coordinates": "2.88, 112.87",
+  "lat": 2.88,
+  "lng": 112.87
+}

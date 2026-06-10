@@ -1,0 +1,17 @@
+{
+  "status": "Siap",
+  "year": "2018",
+  "date": "11 Nov 2018",
+  "amount": "RM 1,148,000.00",
+  "client": "",
+  "description": "Membina Jambatan Sg. Tema (Rh. Belili) Ulu Niah, Miri Division (RTP).",
+  "cat": "Infrastructure",
+  "division": "Miri",
+  "loc": "Ulu Niah, Miri",
+  "accuracy": "Approximate (Ulu Niah area, Miri Division)",
+  "paragraph": "This is a placeholder description that provides a brief overview of the project scope and key objectives. It will be updated by the administration at a later date to feature the actual narrative.",
+  "images": [],
+  "coordinates": "3.9, 113.9",
+  "lat": 3.9,
+  "lng": 113.9
+}

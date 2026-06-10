@@ -1,0 +1,17 @@
+{
+  "status": "Sedang Berjalan",
+  "year": "Sedang Berjalan",
+  "date": "Sedang Berjalan",
+  "amount": "RM 10,000,000.00",
+  "client": "Housing Development Corporation (HDC)",
+  "description": "Cadangan Pembinaan 22 Unit Rumah Spektra Permata (RSP) Di Skim Pembesaran Kampung (SPK) Balingian, Mukah (Industrialized Building System)",
+  "cat": "Building",
+  "division": "Mukah",
+  "loc": "Balingian, Mukah",
+  "accuracy": "Approximate (SPK Balingian area, Mukah)",
+  "paragraph": "This is a placeholder description that provides a brief overview of the project scope and key objectives. It will be updated by the administration at a later date to feature the actual narrative.",
+  "images": [],
+  "coordinates": "2.9317, 112.5342",
+  "lat": 2.9317,
+  "lng": 112.5342
+}

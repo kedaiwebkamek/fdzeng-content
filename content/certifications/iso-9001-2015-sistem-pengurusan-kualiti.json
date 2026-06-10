@@ -1,0 +1,18 @@
+{
+  "num": "02",
+  "title": "ISO 9001:2015 — Sistem Pengurusan Kualiti",
+  "issuer": "Badan Pensijilan Antarabangsa",
+  "category": "quality",
+  "tags": [
+    "ISO",
+    "Kualiti",
+    "Antarabangsa"
+  ],
+  "status": "Aktif",
+  "isFeatured": true,
+  "featuredOrder": 1,
+  "iconName": "verified",
+  "iconColor": "grey",
+  "logoImage": "tnv.jpg",
+  "downloadFile": ""
+}

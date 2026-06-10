@@ -1,0 +1,19 @@
+{
+  "num": "01",
+  "title": "CIDB G7 — Gred Tertinggi Pembinaan",
+  "issuer": "Lembaga Pembangunan Industri Pembinaan Malaysia",
+  "category": "contractor",
+  "tags": [
+    "G7",
+    "Bangunan",
+    "Kejuruteraan Awam",
+    "M&E"
+  ],
+  "status": "Aktif",
+  "isFeatured": false,
+  "featuredOrder": 0,
+  "iconName": "construction",
+  "iconColor": "red",
+  "logoImage": "cidb-logo.png",
+  "downloadFile": ""
+}

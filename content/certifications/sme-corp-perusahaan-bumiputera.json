@@ -1,0 +1,18 @@
+{
+  "num": "08",
+  "title": "SME Corp — Perusahaan Bumiputera",
+  "issuer": "SME Corporation Malaysia",
+  "category": "government",
+  "tags": [
+    "SME Corp",
+    "Bumiputera",
+    "★★★"
+  ],
+  "status": "Aktif",
+  "isFeatured": false,
+  "featuredOrder": 0,
+  "iconName": "storefront",
+  "iconColor": "grey",
+  "logoImage": "smecorp.png",
+  "downloadFile": ""
+}

@@ -1,0 +1,17 @@
+{
+  "status": "Siap",
+  "year": "2018",
+  "date": "26 Jan 2018",
+  "amount": "RM 1,236,000.00",
+  "client": "",
+  "description": "The Construction and Completion of Access Road to Jalan Perdu, Ulu Spak, Betong (RTP).",
+  "cat": "Infrastructure",
+  "division": "Betong",
+  "loc": "Ulu Spak, Betong",
+  "accuracy": "Approximate (Ulu Spak, Betong)",
+  "paragraph": "This is a placeholder description that provides a brief overview of the project scope and key objectives. It will be updated by the administration at a later date to feature the actual narrative.",
+  "images": [],
+  "coordinates": "1.55, 111.55",
+  "lat": 1.55,
+  "lng": 111.55
+}

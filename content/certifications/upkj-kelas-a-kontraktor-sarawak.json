@@ -1,0 +1,18 @@
+{
+  "num": "05",
+  "title": "UPKJ Kelas A — Kontraktor Sarawak",
+  "issuer": "Unit Pendaftaran Kontraktor & Juruperunding Sarawak",
+  "category": "contractor",
+  "tags": [
+    "UPKJ",
+    "Kelas A",
+    "Sarawak"
+  ],
+  "status": "Aktif",
+  "isFeatured": true,
+  "featuredOrder": 2,
+  "iconName": "badge",
+  "iconColor": "red",
+  "logoImage": "upkj.png",
+  "downloadFile": ""
+}

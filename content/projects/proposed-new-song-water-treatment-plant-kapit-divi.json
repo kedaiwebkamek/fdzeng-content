@@ -1,0 +1,18 @@
+{
+  "status": "Sedang Berjalan",
+  "year": "Sedang Berjalan",
+  "date": "Sedang Berjalan",
+  "amount": "RM 120,000,000.00",
+  "client": "Jabatan Bekalan Air Luar Bandar Sarawak (JBALB)",
+  "description": "Proposed New Song Water Treatment Plant, Kapit Division",
+  "cat": "Utilities",
+  "division": "Kapit",
+  "loc": "Song, Kapit",
+  "accuracy": "Approximate (Song Town area, Kapit Division)",
+  "newsLink": "",
+  "paragraph": "This is a placeholder description that provides a brief overview of the project scope and key objectives. It will be updated by the administration at a later date to feature the actual narrative.",
+  "images": [],
+  "coordinates": "2.0167, 112.55",
+  "lat": 2.0167,
+  "lng": 112.55
+}

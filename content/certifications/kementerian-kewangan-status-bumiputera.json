@@ -1,0 +1,18 @@
+{
+  "num": "06",
+  "title": "Kementerian Kewangan — Status Bumiputera",
+  "issuer": "MOF Malaysia",
+  "category": "government",
+  "tags": [
+    "MOF",
+    "Bumiputera",
+    "Persekutuan"
+  ],
+  "status": "Aktif",
+  "isFeatured": true,
+  "featuredOrder": 5,
+  "iconName": "account_balance",
+  "iconColor": "blue",
+  "logoImage": "kkm.png",
+  "downloadFile": ""
+}

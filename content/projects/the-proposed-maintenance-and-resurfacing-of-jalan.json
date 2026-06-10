@@ -1,0 +1,17 @@
+{
+  "status": "Siap",
+  "year": "2019",
+  "date": "28 Nov 2019",
+  "amount": "RM 942,000.00",
+  "client": "",
+  "description": "The Proposed Maintenance and Resurfacing of Jalan Jaong (Salcra), Sri Aman Division.",
+  "cat": "Maintenance",
+  "division": "Sri Aman",
+  "loc": "Jalan Jaong, Sri Aman",
+  "accuracy": "Approximate (Jalan Jaong, Sri Aman)",
+  "paragraph": "This is a placeholder description that provides a brief overview of the project scope and key objectives. It will be updated by the administration at a later date to feature the actual narrative.",
+  "images": [],
+  "coordinates": "1.24, 111.47",
+  "lat": 1.24,
+  "lng": 111.47
+}

@@ -1,0 +1,17 @@
+{
+  "status": "Siap",
+  "year": "2015",
+  "date": "12 Oct 2015",
+  "amount": "RM 3,000,000.00",
+  "client": "",
+  "description": "Kerja-kerja Penyelenggaraan Dan Pembaikan Kuarters Sedia Ada Serta Kerja-kerja Berkaitan Di Sekolah Tunas Bakti Kuching, Sarawak",
+  "cat": "Building",
+  "division": "Kuching",
+  "loc": "Jalan Sultan Tengah, Kuching",
+  "accuracy": "Approximate (Sekolah Tunas Bakti area, Kuching)",
+  "paragraph": "This is a placeholder description that provides a brief overview of the project scope and key objectives. It will be updated by the administration at a later date to feature the actual narrative.",
+  "images": [],
+  "coordinates": "1.6, 110.32",
+  "lat": 1.6,
+  "lng": 110.32
+}

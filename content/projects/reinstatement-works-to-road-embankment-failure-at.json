@@ -1,0 +1,17 @@
+{
+  "status": "Siap",
+  "year": "2020",
+  "date": "15 Oct 2020",
+  "amount": "RM 885,000.00",
+  "client": "",
+  "description": "Reinstatement Works to Road Embankment Failure at KM5+950 Long Tengoa Road (Q3049), Lawas, Limbang Division.",
+  "cat": "Infrastructure",
+  "division": "Limbang",
+  "loc": "KM5+950 Long Tengoa Road, Lawas",
+  "accuracy": "Approximate (Long Tengoa Road, Lawas)",
+  "paragraph": "This is a placeholder description that provides a brief overview of the project scope and key objectives. It will be updated by the administration at a later date to feature the actual narrative.",
+  "images": [],
+  "coordinates": "4.75, 115.45",
+  "lat": 4.75,
+  "lng": 115.45
+}
