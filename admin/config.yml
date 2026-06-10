@@ -5,6 +5,8 @@ backend:
   base_url: https://fdzeng.com
   auth_endpoint: /api/auth
 
+publish_mode: editorial_workflow
+
 media_folder: "uploads"
 public_folder: "/uploads"
 
@@ -30,55 +32,57 @@ collections:
         field: status
         pattern: Siap
     fields:
+
+      # ── Status & Tarikh ──────────────────────────────────────────────────────
       - name: status
-        label: Status
+        label: "Status Projek"
         widget: select
         required: true
         options:
-          - { label: "Sedang Berjalan", value: "Sedang Berjalan" }
-          - { label: "Siap", value: "Siap" }
-        hint: "Sedang Berjalan = projek aktif, Siap = projek selesai"
-      - name: year
-        label: Year
-        widget: year-conditional
-        required: false
-        hint: "Diperlukan untuk projek Siap sahaja. Format tahun: YYYY contoh 2024"
+          - { label: "Sedang Berjalan — Projek masih aktif", value: "Sedang Berjalan" }
+          - { label: "Siap — Projek telah selesai & diserahkan", value: "Siap" }
+        hint: "Pilih Sedang Berjalan jika projek masih dalam pembinaan. Pilih Siap jika projek telah diserahkan kepada klien."
+
       - name: date
-        label: Tarikh
+        label: "Tarikh Siap"
         widget: date-conditional
         required: false
-        hint: |
-          Diperlukan untuk projek Siap sahaja.
-          Format: DD MMM YYYY — contoh: 29 Jan 2019
-          Bulan (BM): Jan Feb Mac Apr Mei Jun Jul Ogo Sep Okt Nov Dis
+        hint: "Diperlukan untuk projek Siap sahaja. Format: DD Bulan YYYY — contoh: 29 Jan 2019. Bulan (BM): Jan Feb Mac Apr Mei Jun Jul Ogo Sep Okt Nov Dis"
+
+      # ── Maklumat Projek ──────────────────────────────────────────────────────
+      - name: description
+        label: "Tajuk Projek"
+        widget: string
+        required: true
+        hint: "Tajuk ringkas dan jelas menggambarkan projek. Contoh: Cadangan Pembinaan Jalan Penghubung Kg. Stass, Kota Samarahan"
+
+      - name: client
+        label: "Klien / Majikan"
+        widget: string
+        required: true
+        hint: "Nama penuh klien atau agensi yang menguruskan projek. Contoh: Jabatan Kerja Raya Sarawak, PETRONAS Carigali, Suruhanjaya Perkhidmatan Air Negeri (SPAN)"
+
       - name: amount
-        label: Nilai Projek (RM)
+        label: "Nilai Projek (RM)"
         widget: currency-myr
         required: true
-        hint: "Masukkan nilai kontrak dalam angka sahaja. Contoh: 10000000 untuk RM 10,000,000"
-      - name: client
-        label: Client
-        widget: string
-        required: true
-        hint: "Contoh: Jabatan Kerja Raya Sarawak, PETRONAS, NRDA"
-      - name: description
-        label: Title Description
-        widget: string
-        required: true
-        hint: "Tajuk ringkas projek. Contoh: Cadangan Pembinaan Jalan Penghubung Kg. Stass"
+        hint: "Masukkan nilai kontrak dalam ANGKA SAHAJA — tanpa RM, koma, atau titik perpuluhan. Contoh: taip 10000000 untuk RM 10,000,000"
+
       - name: cat
-        label: Kategori (English)
+        label: "Kategori Projek"
         widget: select
         required: true
         options:
-          - Building
-          - Infrastructure
-          - Maintenance
-          - Telecom
-          - Utilities
-        hint: "Kategori dalam Bahasa Inggeris — digunakan untuk warna pin pada peta projek"
+          - { label: "Building — Bangunan & Fasiliti", value: "Building" }
+          - { label: "Infrastructure — Jalan, Jambatan & Longkang", value: "Infrastructure" }
+          - { label: "Maintenance — Penyelenggaraan & Baik Pulih", value: "Maintenance" }
+          - { label: "Telecom — Telekomunikasi & Fiber Optik", value: "Telecom" }
+          - { label: "Utilities — Air & Elektrik", value: "Utilities" }
+        hint: "Pilih kategori yang paling tepat menggambarkan skop kerja projek. Ini juga menentukan warna pin pada peta projek."
+
+      # ── Maklumat Lokasi ──────────────────────────────────────────────────────
       - name: division
-        label: Bahagian / Division
+        label: "Bahagian (Division)"
         widget: select
         required: true
         options:
@@ -94,91 +98,105 @@ collections:
           - Miri
           - Limbang
           - Lawas
-        hint: "Pilih bahagian lokasi projek di Sarawak"
+        hint: "Pilih bahagian pentadbiran Sarawak tempat projek ini dilaksanakan."
+
       - name: loc
-        label: Location
+        label: "Lokasi Penuh"
         widget: string
         required: true
-        hint: "Nama lokasi penuh. Contoh: Kuching, Sarawak"
+        hint: "Nama lokasi yang lebih spesifik daripada bahagian. Contoh: Kampung Stass, Kota Samarahan atau Jalan Oya, Sibu, Sarawak"
+
       - name: coordinates
-        label: Koordinat Lokasi
+        label: "Koordinat GPS"
         widget: string
         required: true
-        pattern: ['^-?[0-9]+\.[0-9]+,\s*-?[0-9]+\.[0-9]+$', 'Format tidak sah. Contoh: 1.551230, 110.372326']
+        pattern: ['^-?[0-9]+\.[0-9]+,\s*-?[0-9]+\.[0-9]+$', 'Format tidak sah. Contoh betul: 1.551230, 110.372326']
         hint: |
-          Cara dapatkan koordinat:
-          1. Buka Google Maps (maps.google.com)
-          2. Cari lokasi projek
-          3. Klik kanan pada titik lokasi
-          4. Koordinat akan muncul di bahagian atas menu
-          5. Klik pada koordinat untuk copy
-          6. Paste di sini
-          Contoh: 1.551230, 110.372326
+          Cara cepat dapatkan koordinat dari Google Maps:
+          1. Buka maps.google.com
+          2. Cari nama lokasi projek → tekan Enter
+          3. Klik kanan tepat pada titik lokasi di peta
+          4. Baris pertama yang muncul dalam menu = koordinat (contoh: 1.551230, 110.372326)
+          5. Klik pada nombor koordinat itu — ia akan copy secara automatik
+          6. Paste terus di kotak ini
+          ⚠ Pastikan ada KOMA (,) di antara dua nombor. Contoh betul: 1.551230, 110.372326
+
       - name: accuracy
-        label: Nota Ketepatan Lokasi (Pilihan)
+        label: "Nota Lokasi (Pilihan)"
         widget: string
         required: false
-        hint: "Penerangan tambahan tentang ketepatan lokasi koordinat. Contoh: Disekitar Kampung Asajaya"
+        hint: "Kosongkan jika koordinat adalah lokasi tepat tapak projek. Isi jika koordinat hanya anggaran. Contoh: Sekitar Kampung Asajaya, koordinat bukan lokasi tepat tapak projek"
+
+      # ── Paparan & Media ──────────────────────────────────────────────────────
       - name: isPilihan
-        label: Featured (Pilihan)
+        label: "Papar di Homepage (Projek Pilihan)"
         widget: boolean
         default: false
-        hint: "Aktifkan untuk paparkan projek dalam carousel Projek Pilihan di halaman utama (homepage)"
+        hint: "Aktifkan untuk paparkan projek ini dalam carousel Projek Pilihan di halaman utama. Jangan aktifkan lebih daripada 10 projek serentak."
+
       - name: paragraph
-        label: Paragraph
+        label: "Penerangan Lanjut"
         widget: text
         required: false
-        hint: "Penerangan panjang projek. Boleh kosongkan — akan dipaparkan dalam modal butiran projek"
+        hint: "Huraian panjang tentang projek — boleh masukkan skop kerja, kepentingan projek, atau maklumat teknikal. Akan dipaparkan dalam tetingkap butiran projek. Boleh kosongkan jika tiada maklumat tambahan."
+
       - name: images
-        label: Gambar Projek
+        label: "Gambar Projek"
         widget: list
         required: false
-        hint: "Gambar pertama = thumbnail kad projek & carousel homepage. Upload terus atau masukkan URL gambar. Format: JPG/PNG. Saiz maksimum 5MB setiap gambar."
+        summary: "{{fields.alt}}"
+        hint: "⭐ PENTING: Gambar PERTAMA dalam senarai = gambar utama (thumbnail) yang dipaparkan pada kad projek dan carousel homepage. Gambar selebihnya akan dipaparkan dalam galeri modal. Upload terus atau masukkan URL. Format: JPG/PNG, saiz maksimum 5MB setiap gambar."
         fields:
           - name: src
-            label: Gambar
+            label: "Gambar"
             widget: image
             required: true
             default: ""
-            hint: "Upload gambar atau masukkan URL penuh https://... Elakkan URL Facebook CDN kerana ia akan tamat tempoh"
+            hint: "Upload gambar dari komputer ATAU masukkan URL penuh bermula https://. ⚠ Elakkan URL dari Facebook — URL Facebook akan tamat tempoh dan gambar tidak akan dipaparkan."
           - name: alt
-            label: Penerangan Gambar
+            label: "Penerangan Gambar (Alt Text)"
             widget: string
             required: false
             default: ""
-            hint: "Penerangan gambar. Contoh: Kerja pembinaan jalan raya di Kuching"
+            hint: "Tulis penerangan ringkas gambar ini. Membantu Google kenali gambar anda (SEO). Contoh: Kerja pembesaran jalan raya di Jalan Oya, Sibu"
+
       - name: newsList
-        label: News Links
+        label: "Pautan Berita (Pilihan)"
         widget: list
         required: false
+        summary: "{{fields.title}}"
+        hint: "Tambah pautan ke artikel berita, siaran akhbar, atau laporan berkaitan projek ini. Kosongkan jika tiada."
         fields:
           - name: title
-            label: Title
+            label: "Tajuk Artikel"
             widget: string
             required: true
-            hint: "Tajuk artikel berita. Contoh: Majlis Penyerahan Projek Jalan Raya"
+            hint: "Tajuk artikel atau berita. Contoh: Majlis Penyerahan Projek Jalan Raya Samarahan"
           - name: link
-            label: URL
+            label: "URL Artikel"
             widget: string
             required: true
-            hint: "URL penuh artikel. Contoh: https://www.malaysiakini.com/news/..."
-            pattern: ['^https?://.+', 'Mesti URL penuh bermula https://']
+            hint: "Salin URL penuh dari bar alamat browser. Contoh: https://www.malaysiakini.com/news/xxxxx"
+            pattern: ['^https?://.+', 'Mesti bermula https:// atau http://']
+
       - name: videoList
-        label: Video Links
+        label: "Pautan Video (Pilihan)"
         widget: list
         required: false
+        summary: "{{fields.title}}"
+        hint: "Tambah pautan video YouTube atau platform lain berkaitan projek ini. Kosongkan jika tiada."
         fields:
           - name: title
-            label: Title
+            label: "Tajuk Video"
             widget: string
             required: true
-            hint: "Tajuk video. Contoh: Video Kemajuan Projek Pembinaan"
+            hint: "Tajuk video. Contoh: Video Kemajuan Projek Pembinaan Jambatan Sg. Sarawak"
           - name: link
-            label: URL
+            label: "URL Video"
             widget: string
             required: true
-            hint: "URL YouTube atau Vimeo penuh. Contoh: https://www.youtube.com/watch?v=..."
-            pattern: ['^https?://.+', 'Mesti URL penuh bermula https://']
+            hint: "Salin URL penuh dari bar alamat YouTube atau platform video. Contoh: https://www.youtube.com/watch?v=xxxxxxxxx"
+            pattern: ['^https?://.+', 'Mesti bermula https:// atau http://']
 
   # ── 2. CERTIFICATIONS ───────────────────────────────────────────────────────
   - name: certifications
@@ -189,86 +207,112 @@ collections:
     create: true
     search_fields: ['title', 'issuer', 'category', 'num']
     fields:
+
       - name: num
-        label: Number
+        label: "Nombor Sijil"
         widget: string
         required: true
-        pattern: ['^[0-9]{2}$', 'Format: 2 digit contoh 01, 02, 14']
-        hint: "Nombor sijil 2 digit. Contoh: 01, 02, 14 — Semak senarai sijil untuk nombor terkini"
+        pattern: ['^[0-9]{2}$', 'Mesti 2 digit. Contoh: 01, 09, 15']
+        hint: "Nombor unik 2 digit untuk sijil ini. Sijil terkini: No. 14 — gunakan 15 untuk sijil baharu. Semak senarai sijil sedia ada sebelum menetapkan nombor baru."
+
       - name: title
-        label: Title
+        label: "Nama Sijil"
         widget: string
         required: true
-        hint: "Nama penuh sijil. Contoh: CIDB G7 — Gred Tertinggi Pembinaan"
+        hint: "Nama penuh sijil atau kelayakan. Contoh: CIDB G7 — Gred Tertinggi Pembinaan, atau Pensijilan ISO 9001:2015 Sistem Pengurusan Kualiti"
+
       - name: issuer
-        label: Issuer
+        label: "Badan Pengeluar"
         widget: string
         required: true
-        hint: "Nama badan pengeluar sijil. Contoh: Lembaga Pembangunan Industri Pembinaan Malaysia"
+        hint: "Nama penuh agensi atau badan yang mengeluarkan sijil ini. Contoh: Lembaga Pembangunan Industri Pembinaan Malaysia (CIDB), SIRIM QAS International Sdn. Bhd."
+
       - name: category
-        label: Category
+        label: "Kategori Sijil"
         widget: select
         required: true
         options:
-          - contractor
-          - quality
-          - petroleum
-          - government
-          - telecom
-        hint: "Pilih kategori yang paling sesuai untuk sijil ini"
+          - { label: "Contractor — Pendaftaran Kontraktor (CIDB, UPKJ, TM)", value: "contractor" }
+          - { label: "Quality — Kualiti & Keselamatan (ISO, DOSH, BOMBA)", value: "quality" }
+          - { label: "Petroleum — Minyak & Gas (PETRONAS, PETROS)", value: "petroleum" }
+          - { label: "Government — Kerajaan & Perniagaan (MOF, SSM, SPAN)", value: "government" }
+          - { label: "Telecom — Telekomunikasi & Rangkaian", value: "telecom" }
+        hint: "Pilih kategori yang paling tepat menggambarkan jenis sijil ini. Ini menentukan pengelompokan sijil dalam halaman Sijil."
+
       - name: tags
-        label: Tags
+        label: "Tag Carian"
         widget: list
         required: false
         field: { name: tag, label: Tag, widget: string }
-        hint: "Kata kunci untuk carian. Contoh: G7, CIDB, ISO, Bumiputera — tambah satu tag pada satu masa"
+        hint: "Kata kunci untuk memudahkan carian sijil. Tambah satu tag pada satu masa. Contoh: G7, CIDB, ISO 9001, Bumiputera, UPKJ Kelas A"
+
       - name: status
-        label: Status
+        label: "Status Sijil"
         widget: select
         required: true
         options:
-          - Aktif
-          - Tamat
-        hint: "Aktif = sijil masih sah, Tamat = sijil telah luput"
+          - { label: "Aktif — Sijil masih sah dan dalam tempoh", value: "Aktif" }
+          - { label: "Tamat — Sijil telah luput atau tidak diperbaharui", value: "Tamat" }
+        hint: "Tukar kepada Tamat apabila sijil luput. Sijil Tamat masih dipaparkan dalam senarai tetapi tanpa lencana hijau."
+
+      - name: expiryDate
+        label: "Tarikh Luput (Pilihan)"
+        widget: string
+        required: false
+        hint: "Tarikh sijil luput untuk rujukan dalaman. Format: DD MMM YYYY — contoh: 31 Dis 2026. Kosongkan jika sijil tidak ada tarikh luput (contoh: SSM, ISO yang sentiasa diperbaharui)."
+
       - name: isFeatured
-        label: Featured
+        label: "Papar dalam Sijil Pilihan"
         widget: boolean
         default: false
-        hint: "Aktifkan untuk papar dalam 6 kad sijil pilihan di bahagian atas halaman Sijil. Maksimum 6 sijil boleh dipilih."
+        hint: "Aktifkan untuk papar sijil ini dalam 6 kad utama di bahagian atas halaman Sijil. Maksimum 6 sijil boleh dipilih serentak — semak sijil lain sebelum aktifkan."
+
       - name: featuredOrder
-        label: Featured Order
+        label: "Kedudukan dalam Grid (1–6)"
         widget: number
         required: false
         default: 0
         value_type: int
-        hint: "Tentukan kedudukan kad (1-6) dalam grid sijil pilihan. Contoh: 1 = pertama, 6 = terakhir. Isi 0 jika isFeatured tidak diaktifkan."
-        pattern: ['^[0-6]$', 'Nombor 0-6 sahaja']
+        hint: "Tentukan slot kedudukan sijil (1 = pertama/kiri, 6 = terakhir/kanan). Hanya digunakan jika 'Papar dalam Sijil Pilihan' diaktifkan di atas. Biarkan 0 jika tidak dipilih."
+        pattern: ['^[0-6]$', 'Nombor 0 hingga 6 sahaja']
+
       - name: logoImage
-        label: Logo Image
+        label: "Logo Sijil (Pilihan)"
         widget: image
         required: false
-        hint: "Logo untuk kad sijil pilihan sahaja. Saiz cadangan: 120x80px. Format: PNG/SVG"
+        hint: "Logo badan pengeluar untuk dipaparkan pada kad sijil pilihan. Saiz cadangan: 120×80px. Format: PNG atau SVG dengan latar telus. Kosongkan jika tiada — ikon teks akan digunakan sebagai ganti."
+
       - name: iconName
-        label: Icon Name (Material Symbol)
+        label: "Nama Ikon"
         widget: string
         required: true
-        hint: "Nama ikon Material Symbols. Contoh: verified, engineering, water_drop, bolt, shield — Rujuk: fonts.google.com/icons"
+        hint: |
+          Nama ikon dari Google Material Symbols — dipaparkan dalam senarai sijil.
+          Ikon disyorkan mengikut kategori:
+          • Kontraktor : engineering, construction, domain, handyman, build
+          • Kualiti/ISO : verified, shield, health_and_safety, workspace_premium, fact_check
+          • Petroleum   : water_drop, local_gas_station, factory, bolt, oil_barrel
+          • Kerajaan    : account_balance, business_center, gavel, badge, policy
+          • Telekom     : cell_tower, router, cable, wifi, hub
+          Lihat semua ikon di: fonts.google.com/icons — cari nama dan copy persis seperti yang terpapar (huruf kecil, garis bawah).
+
       - name: iconColor
-        label: Icon Color
+        label: "Warna Ikon"
         widget: select
         required: true
         options:
-          - red
-          - grey
-          - green
-          - blue
-          - orange
-        hint: "Warna ikon dalam senarai sijil"
+          - { label: "Merah — sijil utama atau kontraktor", value: "red" }
+          - { label: "Kelabu — sijil am atau tidak aktif", value: "grey" }
+          - { label: "Hijau — sijil kualiti atau keselamatan", value: "green" }
+          - { label: "Biru — sijil kerajaan atau profesional", value: "blue" }
+          - { label: "Oren — sijil petroleum atau tenaga", value: "orange" }
+        hint: "Warna latar dan warna ikon dalam senarai sijil."
+
       - name: downloadFile
-        label: Download File
+        label: "Fail Sijil PDF (Pilihan)"
         widget: file
         required: false
-        hint: "Upload fail PDF sijil asal. Saiz maksimum: 5MB. Pengguna boleh muat turun dari halaman Sijil."
+        hint: "Upload salinan sijil asal dalam format PDF. Pengguna laman web perlu masukkan nama dan organisasi mereka sebelum boleh muat turun. Saiz maksimum: 5MB. Kosongkan jika tidak mahu sijil ini boleh dimuat turun."
         media_library:
           config:
             max_file_size: 5242880
@@ -317,7 +361,7 @@ collections:
                 label: Alt Text
                 widget: string
                 hint: |
-                  Alt Text (Alternative Text) = penerangan ringkas gambar dalam bentuk teks.
-                  Ia digunakan oleh: (1) mesin Google untuk faham gambar anda → membantu SEO, (2) pembaca skrin untuk orang cacat penglihatan, (3) apabila gambar gagal dimuatkan.
+                  Alt Text = penerangan ringkas gambar dalam bentuk teks.
+                  Digunakan oleh Google untuk kenali gambar (membantu SEO) dan oleh pembaca skrin.
                   Contoh baik: "Kerja pembinaan jambatan di Sibu, Sarawak" atau "Pemasangan paip air di tapak projek Miri"
                   Elakkan: "gambar1", "foto", atau biarkan kosong.

@@ -844,8 +844,7 @@
         var isOngoing = status === 'Sedang Berjalan';
 
         [
-          { labelText: 'Year',   msgId: YEAR_MSG_ID, msg: '⏳ Projek masih berjalan — Tahun siap belum ditetapkan' },
-          { labelText: 'Tarikh', msgId: DATE_MSG_ID, msg: '⏳ Projek masih berjalan — Tarikh siap belum ditetapkan' }
+          { labelText: 'Tarikh Siap', msgId: DATE_MSG_ID, msg: '⏳ Projek masih berjalan — Tarikh siap belum ditetapkan' }
         ].forEach(function (item) {
           // Remove any existing overlay first
           var old = document.getElementById(item.msgId);
@@ -898,6 +897,111 @@
         document.addEventListener('DOMContentLoaded', setup);
       } else {
         setup();
+      }
+    })();
+  </script>
+
+  <script>
+    /* ── Featured Order conditional visibility ─────────────────────────────────
+       Hides the "Kedudukan dalam Grid" field and replaces it with an info banner
+       whenever the "Papar dalam Sijil Pilihan" toggle is OFF.                  */
+    (function () {
+      var ORDER_MSG_ID = 'fdz-cond-order-msg';
+
+      var msgStyle = [
+        'display:block',
+        'background:#f0f4ff',
+        'border-left:4px solid #6366f1',
+        'padding:12px 16px',
+        'border-radius:4px',
+        'color:#3730a3',
+        'font-size:13px',
+        'margin-top:4px'
+      ].join(';');
+
+      function findToggle() {
+        // Boolean widget renders as button[role="switch"] in Decap CMS 3.x
+        var buttons = document.querySelectorAll('button[role="switch"]');
+        for (var i = 0; i < buttons.length; i++) {
+          var btn = buttons[i];
+          // Walk up to find a label nearby with matching text
+          var container = btn.parentElement;
+          for (var k = 0; k < 8; k++) {
+            if (!container) break;
+            var labels = container.querySelectorAll('label');
+            for (var j = 0; j < labels.length; j++) {
+              if (labels[j].textContent.indexOf('Papar dalam Sijil Pilihan') !== -1) {
+                return btn;
+              }
+            }
+            container = container.parentElement;
+          }
+        }
+        return null;
+      }
+
+      function findFieldWrapper(labelText) {
+        var labels = document.querySelectorAll('label');
+        for (var i = 0; i < labels.length; i++) {
+          var lbl = labels[i];
+          var txt = lbl.textContent.replace(/\s*\*\s*/g, '').replace(/\s+/g, ' ').trim();
+          if (txt !== labelText) continue;
+          var el = lbl;
+          for (var k = 0; k < 6; k++) {
+            var p = el.parentElement;
+            if (!p || p === document.body) break;
+            if (p.children.length >= 2 && p.querySelector('input, select, textarea')) {
+              return p;
+            }
+            el = p;
+          }
+          return lbl.parentElement ? lbl.parentElement.parentElement : null;
+        }
+        return null;
+      }
+
+      function applyFeaturedOrderVisibility() {
+        var toggle = findToggle();
+        if (!toggle) return;
+
+        var isOn = toggle.getAttribute('aria-checked') === 'true';
+
+        // Remove existing overlay
+        var old = document.getElementById(ORDER_MSG_ID);
+        if (old && old.parentNode) old.parentNode.removeChild(old);
+
+        var wrapper = findFieldWrapper('Kedudukan dalam Grid (1–6)');
+        if (!wrapper) return;
+
+        if (isOn) {
+          wrapper.style.display = '';
+        } else {
+          wrapper.style.display = 'none';
+          var div = document.createElement('div');
+          div.id = ORDER_MSG_ID;
+          div.setAttribute('style', msgStyle);
+          div.textContent = 'ℹ️ Aktifkan "Papar dalam Sijil Pilihan" dahulu untuk tetapkan kedudukan grid.';
+          wrapper.parentNode.insertBefore(div, wrapper);
+        }
+      }
+
+      var debounce = null;
+      var observer = new MutationObserver(function () {
+        clearTimeout(debounce);
+        debounce = setTimeout(applyFeaturedOrderVisibility, 150);
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['aria-checked']
+      });
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', applyFeaturedOrderVisibility);
+      } else {
+        applyFeaturedOrderVisibility();
       }
     })();
   </script>
