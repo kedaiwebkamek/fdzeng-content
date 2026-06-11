@@ -1,18 +1,17 @@
 {
-  "num": "06",
-  "title": "Kementerian Kewangan — Status Bumiputera",
-  "issuer": "MOF Malaysia",
-  "category": "government",
-  "tags": [
-    "MOF",
-    "Bumiputera",
-    "Persekutuan"
-  ],
-  "status": "Aktif",
-  "isFeatured": true,
   "featuredOrder": 5,
+  "downloadFile": "",
   "iconName": "account_balance",
+  "num": "06",
   "iconColor": "blue",
   "logoImage": "kkm.png",
-  "downloadFile": ""
+  "status": "Aktif",
+  "title": "Kementerian Kewangan — Sijil Akuan Pendaftaran",
+  "isFeatured": true,
+  "tags": [
+    "MOF",
+    "Persekutuan"
+  ],
+  "issuer": "MOF Malaysia - Perbendaharaan Malaysia Sarawak",
+  "category": "government"
 }
