@@ -9,20 +9,7 @@
   "division": "Miri",
   "loc": "Taman Delight, Miri",
   "accuracy": "Approximate (Taman Delight, Miri)",
-  "images": [
-    {
-      "src": "https://scontent.fkul19-1.fna.fbcdn.net/v/t39.30808-6/510446379_122139493886668593_4925879919885359218_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=sWnuO5HuOIgQ7kNvwGkSXoB&_nc_oc=AdrVLCXgUNyUJO6PGxzV1A4zHP-InOaCqIJ0gJ6x95sqgg0yiwd-liaOcn_rMatvphA&_nc_zt=23&_nc_ht=scontent.fkul19-1.fna&_nc_gid=1e2NrCL4n5Z5GQAU0_IJ8Q&_nc_ss=7b2a8&oh=00_Af7ApGMm_TExvVT-XR91kEcDl5yEnj23CjQWNEzqPenwuA&oe=6A0D0F84",
-      "alt": ""
-    },
-    {
-      "src": "https://scontent.fkul19-2.fna.fbcdn.net/v/t39.30808-6/469969942_122103738848668593_3119402202067324164_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_ohc=1jLUEkcFspwQ7kNvwHXjbTT&_nc_oc=AdpwraTntMbbh09IC2vv-Jb8qNNR1ax9zPlzCbP_X84nHSxD4WG5N2ZRoHC58zJLU4w&_nc_zt=23&_nc_ht=scontent.fkul19-2.fna&_nc_gid=m3Fpc6b7evA-8ZV587ekOA&_nc_ss=7b2a8&oh=00_Af7Pzl5fcjfeE7BoZ_NLsS3CkyeBFzGSm3gajhlKtVtRaA&oe=6A0D0B29",
-      "alt": ""
-    },
-    {
-      "src": "https://scontent.fkul19-1.fna.fbcdn.net/v/t39.30808-6/469966210_122103747962668593_5416916013659575901_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_ohc=lSli73J1CQ8Q7kNvwGBD62q&_nc_oc=AdqvZhmOLfpmosiAcUpwRXBLcFjuwxvdVpfrcrmSTAkB-FlesL7kU6Y-Ek08wCqz6P0&_nc_zt=23&_nc_ht=scontent.fkul19-1.fna&_nc_gid=-VvccgqflKKGxpd5xWRspA&_nc_ss=7b2a8&oh=00_Af70H6VD6o-jLkSH606OmNxOdNSy2B5h4AMGCWOPI8BOBA&oe=6A0D2599",
-      "alt": ""
-    }
-  ],
+  "images": [],
   "coordinates": "4.38, 113.98",
   "lat": 4.38,
   "lng": 113.98

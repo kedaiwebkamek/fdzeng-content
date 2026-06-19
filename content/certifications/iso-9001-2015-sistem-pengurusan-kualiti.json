@@ -1,18 +1,21 @@
 {
   "num": "02",
-  "title": "ISO 9001:2015 — Sistem Pengurusan Kualiti",
-  "issuer": "Badan Pensijilan Antarabangsa",
+  "title": "ISO 9001:2015",
+  "issuer": "TNV Certification Pvt. Ltd.",
+  "brief": "Internationally recognised quality management standard. Certifies that FDZ Engineering's processes for project management and construction — covering building, mechanical & electrical, and civil infrastructure works — consistently meet customer and regulatory requirements.",
   "category": "quality",
-  "tags": [
-    "ISO",
-    "Kualiti",
-    "Antarabangsa"
-  ],
+  "tags": ["ISO", "Kualiti", "Antarabangsa"],
   "status": "Aktif",
   "isFeatured": true,
-  "featuredOrder": 1,
+  "featuredOrder": 6,
   "iconName": "verified",
   "iconColor": "grey",
   "logoImage": "tnv.jpg",
-  "downloadFile": ""
+  "downloadFile": "",
+  "validUntil": "2027-08-22",
+  "meta": [
+    { "label": "Certificate no.", "value": "240823016001" },
+    { "label": "Issued", "value": "23 Aug 2024" },
+    { "label": "Valid until", "value": "22 Aug 2027" }
+  ]
 }

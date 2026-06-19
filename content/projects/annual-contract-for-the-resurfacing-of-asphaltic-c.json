@@ -1,39 +1,18 @@
-{
-  "status": "Sedang Berjalan",
-  "year": "Sedang Berjalan",
-  "date": "Sedang Berjalan",
-  "amount": "PO Basis (\"as and when required\")",
-  "client": "Dewan Bandaraya Kuching Utara (DBKU)",
-  "description": "Annual Contract For The Resurfacing of Asphaltic Concrete (Premix) and Other Associated Maintenance Works For Roads Within DBKU Southern Areas",
-  "cat": "Maintenance",
-  "division": "Kuching",
-  "loc": "Kuching",
-  "accuracy": "Approximate (Central Kuching; DBKU Southern Areas)",
-  "newsList": [
-    {
-      "title": "Penyerahan Projek Annual Maintenance Works (Contoh Sahaja)",
-      "link": "https://www.facebook.com/jkrsarawak/posts/pfbid02W2oapPTidkWLV33MJRu4Jf4bm8fxrLQpVh3aNTCLtkZ1NjtHV8PZ8oZWLagNx28wl"
-    }
-  ],
-  "images": [
-    {
-      "src": "local.png",
-      "alt": ""
-    },
-    {
-      "src": "local.png",
-      "alt": ""
-    },
-    {
-      "src": "local.png",
-      "alt": ""
-    },
-    {
-      "src": "local.png",
-      "alt": ""
-    }
-  ],
-  "coordinates": "1.5569, 110.345",
-  "lat": 1.5569,
-  "lng": 110.345
+﻿{
+    "status":  "Sedang Berjalan",
+    "year":  "Sedang Berjalan",
+    "date":  "Sedang Berjalan",
+    "amount":  "PO Basis (\"as and when required\")",
+    "client":  "Dewan Bandaraya Kuching Utara (DBKU)",
+    "description":  "Annual Contract For The Resurfacing of Asphaltic Concrete (Premix) and Other Associated Maintenance Works For Roads Within DBKU Southern Areas",
+    "cat":  "Maintenance",
+    "division":  "Kuching",
+    "loc":  "Kuching",
+    "accuracy":  "Approximate (Central Kuching; DBKU Southern Areas)",
+    "images":  [
+
+               ],
+    "coordinates":  "1.5569, 110.345",
+    "lat":  1.5569,
+    "lng":  110.345
 }

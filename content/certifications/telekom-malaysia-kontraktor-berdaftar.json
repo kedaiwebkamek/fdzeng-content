@@ -1,18 +1,21 @@
 {
   "num": "07",
-  "title": "Telekom Malaysia — Kontraktor Berdaftar",
-  "issuer": "TM Berhad",
+  "title": "TM Supplier Registration",
+  "issuer": "TM Technology Services Sdn. Bhd.",
+  "brief": "Approved vendor status with Telekom Malaysia (TM), covering 30 registered product and service categories — including civil engineering, building construction, electrical works, M&E maintenance, tower installation, and telecommunications infrastructure. Enables FDZ Engineering to participate in TM's procurement and tender processes.",
   "category": "contractor",
-  "tags": [
-    "TM",
-    "Telco",
-    "Infrastruktur"
-  ],
+  "tags": ["TM", "Telco", "Infrastruktur"],
   "status": "Aktif",
   "isFeatured": true,
-  "featuredOrder": 6,
+  "featuredOrder": 10,
   "iconName": "cell_tower",
   "iconColor": "blue",
   "logoImage": "tm.jpg",
-  "downloadFile": ""
+  "downloadFile": "",
+  "validUntil": "2026-12-08",
+  "meta": [
+    { "label": "Certificate no.", "value": "1031512844" },
+    { "label": "Categories", "value": "30 registered" },
+    { "label": "Valid until", "value": "08 Dec 2026" }
+  ]
 }

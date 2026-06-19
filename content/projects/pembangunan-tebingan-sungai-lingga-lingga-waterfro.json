@@ -9,7 +9,13 @@
   "division": "Sri Aman",
   "loc": "Lingga, Sri Aman",
   "accuracy": "Approximate (Sungai Lingga waterfront area)",
-  "images": [],
+  "isPilihan": true,
+  "images": [
+    { "src": "/uploads/projects/lingga-waterfront/lingga-waterfront-1.jpeg", "alt": "" },
+    { "src": "/uploads/projects/lingga-waterfront/lingga-waterfront-2.jpeg", "alt": "" },
+    { "src": "/uploads/projects/lingga-waterfront/lingga-waterfront-3.jpeg", "alt": "" },
+    { "src": "/uploads/projects/lingga-waterfront/lingga-waterfront-4.jpeg", "alt": "" }
+  ],
   "coordinates": "1.35, 111.1667",
   "lat": 1.35,
   "lng": 111.1667

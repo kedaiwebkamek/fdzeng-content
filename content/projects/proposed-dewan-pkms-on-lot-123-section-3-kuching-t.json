@@ -1,40 +1,73 @@
-{
-  "status": "Sedang Berjalan",
-  "year": "Sedang Berjalan",
-  "date": "Sedang Berjalan",
-  "amount": "RM 20,000,000.00",
-  "client": "Persatuan Kebangsaan Melayu Sarawak (PKMS)",
-  "description": "Proposed Dewan PKMS on Lot 123, Section 3, Kuching Town Land District, Kuching, Sarawak.",
-  "cat": "Building",
-  "division": "Kuching",
-  "loc": "Lot 123, Section 3, Kuching",
-  "accuracy": "Approximate (Kuching Town Land District)",
-  "isPilihan": true,
-  "newsList": [
-    {
-      "title": "Contract Signing Ceremony between PKMS and FDZ Engineering held at PKMS HQ.",
-      "link": "https://www.facebook.com/permalink.php?story_fbid=pfbid0229cxFHM3LRdS2AkVbRfntbfgFLWxphy4YV2uCs1yEXMFVxb8nB6nNVpsbKWm2kRrl&id=61570057791049"
-    }
-  ],
-  "images": [
-    {
-      "src": "/uploads/dewan_pkms.jpg",
-      "alt": "Dewan PKMS, Kuching"
-    },
-    {
-      "src": "https://scontent.fkul15-1.fna.fbcdn.net/v/t39.30808-6/468981680_122095475840668593_7440120060844935973_n.jpg?stp=dst-jpg_s590x590_tt6&_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_ohc=GLGbu_4-d9UQ7kNvwF5SmF7&_nc_oc=Adrj4NVpNb8bhqbUSkrWJwIG_C0r3RsDHFXvs8LKhb1nuZFA8oopZddXhkDORnfFcnO8pdKwPLTPmfrLMsCRVR_e&_nc_zt=23&_nc_ht=scontent.fkul15-1.fna&_nc_gid=QuT3bsJLzDKsb65NG2Cv5A&_nc_ss=7b289&oh=00_Af5Ai9HvObxHQLQgxLdx4eLy_yn7pSEgHLQPhPiY-iHQ_Q&oe=6A0F4CBA",
-      "alt": ""
-    },
-    {
-      "src": "https://scontent.fkul10-2.fna.fbcdn.net/v/t39.30808-6/468862120_122095475882668593_6445766173373037367_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_ohc=AHMF9qFLH6cQ7kNvwGOYhtW&_nc_oc=AdridzsgirHemjYr6ieKbLhqQk17XR7CYa6ttSRmlcvmtD8R0pxLPBDrT8e4Cos2oLHM8de9DQY7g2t1eWOxFbU4&_nc_zt=23&_nc_ht=scontent.fkul10-2.fna&_nc_gid=YHSoG-Z48piB25AxVUJNVg&_nc_ss=7b289&oh=00_Af4_EO4AJBt_7-jI0IOgeM0CJu4NKYyyXzw2wT5E9k573A&oe=6A0F2DE0",
-      "alt": ""
-    },
-    {
-      "src": "https://scontent.fkul10-2.fna.fbcdn.net/v/t39.30808-6/468803001_122095475828668593_1131291669807497247_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=rj_b73Y5gsoQ7kNvwH1gTRI&_nc_oc=AdrfQBpX8iSA-eiADknRCdZGTbzQ9ZD9P9OFmyMfxzX17R7B0T1mwOU5DuCMhY0jU7KmoDlfl9yHJJgk9X3WJBgB&_nc_zt=23&_nc_ht=scontent.fkul10-2.fna&_nc_gid=Zv1lc-VxrrQAFtxii3VPsA&_nc_ss=7b289&oh=00_Af4aKaHDQJRO8qPRzGuunXaI7EnPIKB8qHLu0E3g9Em10g&oe=6A0F30D9",
-      "alt": ""
-    }
-  ],
-  "coordinates": "1.56, 110.34",
-  "lat": 1.56,
-  "lng": 110.34
+﻿{
+    "id": "O8",
+    "status":  "Sedang Berjalan",
+    "year":  "Sedang Berjalan",
+    "date":  "Sedang Berjalan",
+    "amount":  "RM 20,000,000.00",
+    "client":  "Persatuan Kebangsaan Melayu Sarawak (PKMS)",
+    "description":  "Proposed Dewan PKMS on Lot 123, Section 3, Kuching Town Land District, Kuching, Sarawak.",
+    "cat":  "Building",
+    "division":  "Kuching",
+    "loc":  "Lot 123, Section 3, Kuching",
+    "accuracy":  "Approximate (Kuching Town Land District)",
+    "newsList":  [
+                     {
+                         "title":  "Contract Signing Ceremony between PKMS and FDZ Engineering held at PKMS HQ.",
+                         "link":  "https://www.facebook.com/permalink.php?story_fbid=pfbid0229cxFHM3LRdS2AkVbRfntbfgFLWxphy4YV2uCs1yEXMFVxb8nB6nNVpsbKWm2kRrl\u0026id=61570057791049"
+                     }
+                 ],
+    "images":  [
+                   {
+                       "src":  "/uploads/projects/dewan-pkms/dewan-pkms-1.jpg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/dewan-pkms/dewan-pkms-2.jpg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/dewan-pkms/dewan-pkms-3.jpg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/dewan-pkms/dewan-pkms-4.jpg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/dewan-pkms/dewan-pkms-5.jpeg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/dewan-pkms/dewan-pkms-6.jpeg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/dewan-pkms/dewan-pkms-7.jpeg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/dewan-pkms/dewan-pkms-8.jpeg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/dewan-pkms/dewan-pkms-9.jpeg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/dewan-pkms/dewan-pkms-10.jpeg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/dewan-pkms/dewan-pkms-11.jpeg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/dewan-pkms/dewan-pkms-12.jpeg",
+                       "alt":  ""
+                   }
+               ],
+    "coordinates":  "1.56, 110.34",
+    "lat":  1.56,
+    "lng":  110.34,
+    "isPilihan":  true
 }

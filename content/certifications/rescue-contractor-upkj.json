@@ -1,0 +1,20 @@
+{
+  "num": "13",
+  "title": "Rescue Contractor",
+  "issuer": "Sarawak State Financial Secretary",
+  "brief": "Designated Rescue Contractor status under Sarawak State Treasury guidelines enables FDZ Engineering to step in and complete stalled or defaulted government contracts. This classification reflects the state's confidence in the company's financial and technical capacity to deliver under pressure.",
+  "category": "contractor",
+  "tags": ["Rescue", "UPKJ", "Sarawak"],
+  "status": "Aktif",
+  "isFeatured": true,
+  "featuredOrder": 5,
+  "iconName": "emergency",
+  "iconColor": "red",
+  "logoImage": "upkj.png",
+  "downloadFile": "",
+  "validUntil": "2027-11-24",
+  "meta": [
+    { "label": "Ref. no.", "value": "RC000040" },
+    { "label": "Valid until", "value": "24 Nov 2027" }
+  ]
+}

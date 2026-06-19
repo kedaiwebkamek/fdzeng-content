@@ -9,7 +9,11 @@
   "division": "Limbang",
   "loc": "Ba'kelalan, Lawas",
   "accuracy": "Approximate (Ba'kelalan area, Lawas)",
-  "images": [],
+  "isPilihan": true,
+  "images": [
+    { "src": "/uploads/projects/agriculture-bakelalan/agriculture-bakelalan-1.png", "alt": "" },
+    { "src": "/uploads/projects/agriculture-bakelalan/agriculture-bakelalan-2.png", "alt": "" }
+  ],
   "coordinates": "3.974, 115.618",
   "lat": 3.974,
   "lng": 115.618

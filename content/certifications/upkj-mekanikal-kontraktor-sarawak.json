@@ -1,0 +1,21 @@
+{
+  "num": "05b",
+  "title": "UPKJ — Mechanical",
+  "issuer": "Sarawak State Financial Secretary",
+  "brief": "Separate UPKJ registration in the Mechanical field, allowing FDZ Engineering to be engaged on mechanical works components within Sarawak state-funded projects — including plant, equipment, and infrastructure system installations.",
+  "category": "contractor",
+  "tags": ["UPKJ", "Mekanikal", "Sarawak"],
+  "status": "Aktif",
+  "isFeatured": true,
+  "featuredOrder": 4,
+  "iconName": "badge",
+  "iconColor": "red",
+  "logoImage": "upkj.png",
+  "downloadFile": "",
+  "validUntil": "2027-11-15",
+  "meta": [
+    { "label": "Sijil no.", "value": "UPKJ/M/001656" },
+    { "label": "Field", "value": "Mechanical (Mekanikal)" },
+    { "label": "Valid until", "value": "15 Nov 2027" }
+  ]
+}

@@ -1,18 +1,21 @@
 {
   "num": "06",
-  "title": "Kementerian Kewangan — Status Bumiputera",
-  "issuer": "MOF Malaysia",
+  "title": "Ministry of Finance (MOF)",
+  "issuer": "Kementerian Kewangan Malaysia",
+  "brief": "Federal government supplier registration with the Malaysian Ministry of Finance. Required to bid on federal procurement contracts. Covers supply and service categories across multiple sectors and authorises designated company directors to sign and execute government contract documents.",
   "category": "government",
-  "tags": [
-    "MOF",
-    "Bumiputera",
-    "Persekutuan"
-  ],
+  "tags": ["MOF", "Bumiputera", "Persekutuan"],
   "status": "Aktif",
   "isFeatured": true,
-  "featuredOrder": 5,
+  "featuredOrder": 7,
   "iconName": "account_balance",
   "iconColor": "blue",
   "logoImage": "kkm.png",
-  "downloadFile": ""
+  "downloadFile": "",
+  "validUntil": "2026-11-01",
+  "meta": [
+    { "label": "Sijil no.", "value": "KQ23928183703684886" },
+    { "label": "Ref. no.", "value": "357-30019350" },
+    { "label": "Valid until", "value": "01 Nov 2026" }
+  ]
 }

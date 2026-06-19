@@ -1,44 +1,68 @@
-{
-  "status": "Sedang Berjalan",
-  "year": "Sedang Berjalan",
-  "date": "Sedang Berjalan",
-  "amount": "RM 9,000,000.00",
-  "client": "Bintulu Development Authority (BDA)",
-  "description": "Proposed 2-Storey Foodcourt On Part of Lot 5047 Off Jalan Pantai Tanjung Batu, Block 26, Kemena Land District Bintulu",
-  "cat": "Building",
-  "division": "Bintulu",
-  "loc": "Jalan Pantai Tanjung Batu, Bintulu",
-  "accuracy": "Approximate (Off Jalan Pantai Tanjung Batu, Bintulu)",
-  "isPilihan": true,
-  "newsList": [
-    {
-      "title": "One of our ongoing project 2 storey Foodcourt along the Pantai Tanjung Batu, Bintulu",
-      "link": "https://www.facebook.com/permalink.php?story_fbid=pfbid02hyJgcjsjGHUpJmpDMTUzrf7aeGLtrg8M23Sd6Rnomd3LapozLWYLpdmdcwkc78CTl&id=61570057791049"
-    }
-  ],
-  "images": [
-    {
-      "src": "/uploads/tanjung_batu.jpg",
-      "alt": "Foodcourt Tanjung Batu, Bintulu"
-    },
-    {
-      "src": "https://scontent.fkul15-1.fna.fbcdn.net/v/t39.30808-6/670913998_122173688534668593_1675979464664146467_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_ohc=W9Vesr8aA5cQ7kNvwHnEQTm&_nc_oc=AdpuI1id8p2tsRR55uXNcC1jvfW55GNK0OGxjvuzs17Zyl334hcq6W7cDTBfOduAcl3F0RqZgXv1NR7mFlVpQ9g8&_nc_zt=23&_nc_ht=scontent.fkul15-1.fna&_nc_gid=1iUwUnUQ1-yeN3ZbgwwN6w&_nc_ss=7b289&oh=00_Af5RUcBGhyhgQo6oM6VaP7_t8gbGSYx8sTPf1pj3LKIR4w&oe=6A0F4EA2",
-      "alt": ""
-    },
-    {
-      "src": "https://scontent.fkul10-2.fna.fbcdn.net/v/t39.30808-6/669459395_122173688306668593_1534059657090620648_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_ohc=29HkOTH7cnsQ7kNvwHmBeQW&_nc_oc=AdpgnJDRoG40cxd7CzvJEkhQst51DOGhWXvfqAy0y30A2RtMHdX6rLrbTx1WQKChptbWY0PS6JBQs2VqD0PHS-ze&_nc_zt=23&_nc_ht=scontent.fkul10-2.fna&_nc_gid=eu9qjEyTVyBV02mZaNYfaw&_nc_ss=7b289&oh=00_Af6isjhTmYCq_DxUoQ6xnqpnCx6ytuh3Lu2aemwmhmlnZg&oe=6A0F3A0B",
-      "alt": ""
-    },
-    {
-      "src": "https://scontent.fkul10-2.fna.fbcdn.net/v/t39.30808-6/670355124_122173688522668593_3815858001082024656_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_ohc=8PAN5J2WTT4Q7kNvwG9l_d-&_nc_oc=Adq-RU8i-27GQtLXLpO5UCDt-wV6Rla7-Sjwi66YCWbXZruTtZLsFPJEPSRtkBcXg2WeirofV5zIZ23XHwo5KKX0&_nc_zt=23&_nc_ht=scontent.fkul10-2.fna&_nc_gid=3a3t4Z7UJ3hP76mjshRBCg&_nc_ss=7b289&oh=00_Af6fge51w4r7Qpj8trx9hxemk6-Fj1mj2eCAk_WiN1SThw&oe=6A0F4EF0",
-      "alt": ""
-    },
-    {
-      "src": "https://scontent.fkul15-1.fna.fbcdn.net/v/t39.30808-6/672678947_122173688342668593_4489895220211357005_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_ohc=4yXCj51tldYQ7kNvwElJarp&_nc_oc=AdpOIMAflm2q-4ZkYslLcc5mNe86dy3FnPDcQsTWtZCMMf5y-pWJG974NpaFoKyVvLqPTMvEiLavv4nP-ew5uwRL&_nc_zt=23&_nc_ht=scontent.fkul15-1.fna&_nc_gid=NDFtQSazBTeqBcfbqEdXPw&_nc_ss=7b289&oh=00_Af7qLV4nU9AtQuc-j8bxp3ndzX4XNk9InVbLnMD_Ns3OHA&oe=6A0F3724",
-      "alt": ""
-    }
-  ],
-  "coordinates": "3.173, 113.053",
-  "lat": 3.173,
-  "lng": 113.053
+﻿{
+    "status":  "Sedang Berjalan",
+    "year":  "Sedang Berjalan",
+    "date":  "Sedang Berjalan",
+    "amount":  "RM 9,000,000.00",
+    "client":  "Bintulu Development Authority (BDA)",
+    "description":  "Proposed 2-Storey Foodcourt On Part of Lot 5047 Off Jalan Pantai Tanjung Batu, Block 26, Kemena Land District Bintulu",
+    "cat":  "Building",
+    "division":  "Bintulu",
+    "loc":  "Jalan Pantai Tanjung Batu, Bintulu",
+    "accuracy":  "Approximate (Off Jalan Pantai Tanjung Batu, Bintulu)",
+    "newsList":  [
+                     {
+                         "title":  "One of our ongoing project 2 storey Foodcourt along the Pantai Tanjung Batu, Bintulu",
+                         "link":  "https://www.facebook.com/permalink.php?story_fbid=pfbid02hyJgcjsjGHUpJmpDMTUzrf7aeGLtrg8M23Sd6Rnomd3LapozLWYLpdmdcwkc78CTl\u0026id=61570057791049"
+                     }
+                 ],
+    "images":  [
+                   {
+                       "src":  "/uploads/projects/foodcourt-bintulu/foodcourt-bintulu-1.png",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/foodcourt-bintulu/foodcourt-bintulu-2.png",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/foodcourt-bintulu/foodcourt-bintulu-3.png",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/foodcourt-bintulu/foodcourt-bintulu-4.png",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/foodcourt-bintulu/foodcourt-bintulu-5.jpg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/foodcourt-bintulu/foodcourt-bintulu-6.jpg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/foodcourt-bintulu/foodcourt-bintulu-7.jpg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/foodcourt-bintulu/foodcourt-bintulu-8.jpg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/foodcourt-bintulu/foodcourt-bintulu-9.jpg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/foodcourt-bintulu/foodcourt-bintulu-10.jpg",
+                       "alt":  ""
+                   },
+                   {
+                       "src":  "/uploads/projects/foodcourt-bintulu/foodcourt-bintulu-11.jpg",
+                       "alt":  ""
+                   }
+               ],
+    "coordinates":  "3.173, 113.053",
+    "lat":  3.173,
+    "lng":  113.053,
+    "isPilihan":  true
 }

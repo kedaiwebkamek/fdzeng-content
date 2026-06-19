@@ -1,18 +1,21 @@
 {
   "num": "05",
-  "title": "UPKJ Kelas A — Kontraktor Sarawak",
-  "issuer": "Unit Pendaftaran Kontraktor & Juruperunding Sarawak",
+  "title": "UPKJ — Work (Bumiputera)",
+  "issuer": "Sarawak State Financial Secretary",
+  "brief": "Registration with the Sarawak State Treasury's Contractor Registration Unit confirms eligibility to tender for Sarawak state government contracts. Bumiputera status endorsement opens access to Bumiputera-reserved tenders and direct negotiations under state procurement guidelines.",
   "category": "contractor",
-  "tags": [
-    "UPKJ",
-    "Kelas A",
-    "Sarawak"
-  ],
+  "tags": ["UPKJ", "Kelas A", "Sarawak"],
   "status": "Aktif",
   "isFeatured": true,
-  "featuredOrder": 2,
+  "featuredOrder": 3,
   "iconName": "badge",
   "iconColor": "red",
   "logoImage": "upkj.png",
-  "downloadFile": ""
+  "downloadFile": "",
+  "validUntil": "2027-04-05",
+  "meta": [
+    { "label": "Sijil no.", "value": "UPKJ/W/021786" },
+    { "label": "Field", "value": "Work (Kerja)" },
+    { "label": "Valid until", "value": "05 Apr 2027" }
+  ]
 }

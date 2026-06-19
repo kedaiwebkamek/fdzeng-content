@@ -1,18 +1,20 @@
 {
   "num": "03",
-  "title": "PETRONAS — Vendor Minyak & Gas",
+  "title": "PETRONAS License",
   "issuer": "Petroliam Nasional Berhad",
+  "brief": "A PETRONAS license is required to supply products or services to Malaysia's national oil corporation and its subsidiaries. This license authorises FDZ Engineering to participate in tenders and contracts within the upstream and downstream oil & gas sector throughout Malaysia.",
   "category": "petroleum",
-  "tags": [
-    "PETRONAS",
-    "Petroleum",
-    "Vendor"
-  ],
+  "tags": ["PETRONAS", "Petroleum", "Vendor"],
   "status": "Aktif",
   "isFeatured": true,
-  "featuredOrder": 3,
+  "featuredOrder": 8,
   "iconName": "local_gas_station",
   "iconColor": "green",
   "logoImage": "petronas.png",
-  "downloadFile": ""
+  "downloadFile": "",
+  "validUntil": "2027-08-12",
+  "meta": [
+    { "label": "Scope", "value": "Oil & gas supply, Malaysia" },
+    { "label": "Valid until", "value": "12 Aug 2027" }
+  ]
 }

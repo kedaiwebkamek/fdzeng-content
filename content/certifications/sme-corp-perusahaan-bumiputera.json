@@ -1,18 +1,21 @@
 {
   "num": "08",
-  "title": "SME Corp — Perusahaan Bumiputera",
-  "issuer": "SME Corporation Malaysia",
+  "title": "CIDB SCORE — 3 Star",
+  "issuer": "SME Corp / CIDB Malaysia",
+  "brief": "The SCORE (SME Competitiveness Rating for Enhancement) programme evaluates contractors on management capability, technical skills, and project delivery. A 3-Star rating signals above-average competitiveness and good project management practices, positioning FDZ Engineering among the stronger G7 contractors in Sarawak.",
   "category": "government",
-  "tags": [
-    "SME Corp",
-    "Bumiputera",
-    "★★★"
-  ],
+  "tags": ["SME Corp", "CIDB SCORE", "★★★"],
   "status": "Aktif",
-  "isFeatured": false,
-  "featuredOrder": 0,
+  "isFeatured": true,
+  "featuredOrder": 2,
   "iconName": "storefront",
   "iconColor": "grey",
   "logoImage": "smecorp.png",
-  "downloadFile": ""
+  "downloadFile": "",
+  "validUntil": "2027-03-08",
+  "meta": [
+    { "label": "Reg. no.", "value": "0120110824-SR135974" },
+    { "label": "Grade", "value": "G7 · 3-Star" },
+    { "label": "Valid until", "value": "08 Mar 2027" }
+  ]
 }

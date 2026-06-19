@@ -1,18 +1,20 @@
 {
   "num": "04",
-  "title": "PETROS — Sarawak Petroleum Vendor",
+  "title": "PETROS Vendor Registration",
   "issuer": "Petroleum Sarawak Berhad",
+  "brief": "Vendor registration with Petroleum Sarawak Berhad (PETROS) and its group of companies, including exploration & production, gas distribution, and niaga subsidiaries. Covers three service categories: civil, structural, scaffolding & building maintenance (SC2); offshore & onshore facilities construction (SO2); and electrical engineering & maintenance (SE1).",
   "category": "petroleum",
-  "tags": [
-    "PETROS",
-    "Sarawak",
-    "Tenaga"
-  ],
+  "tags": ["PETROS", "Sarawak", "Tenaga"],
   "status": "Aktif",
   "isFeatured": true,
-  "featuredOrder": 4,
+  "featuredOrder": 9,
   "iconName": "oil_barrel",
   "iconColor": "green",
   "logoImage": "petros.jpg",
-  "downloadFile": ""
+  "downloadFile": "",
+  "validUntil": "",
+  "meta": [
+    { "label": "Ref. no.", "value": "P220037-S" },
+    { "label": "Categories", "value": "SC2 · SO2 · SE1" }
+  ]
 }

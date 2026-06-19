@@ -255,11 +255,11 @@ collections:
           - { label: "Tamat — Sijil telah luput atau tidak diperbaharui", value: "Tamat" }
         hint: "Tukar kepada Tamat apabila sijil luput. Sijil Tamat masih dipaparkan dalam senarai tetapi tanpa lencana hijau."
 
-      - name: expiryDate
+      - name: validUntil
         label: "Tarikh Luput (Pilihan)"
         widget: string
         required: false
-        hint: "Tarikh sijil luput untuk rujukan dalaman. Format: DD MMM YYYY — contoh: 31 Dis 2026. Kosongkan jika sijil tidak ada tarikh luput (contoh: SSM, ISO yang sentiasa diperbaharui)."
+        hint: "Tarikh sijil luput dalam format ISO. Contoh: 2027-04-05. Kosongkan jika sijil tidak ada tarikh luput (contoh: SSM, ISO yang sentiasa diperbaharui)."
 
       - name: isFeatured
         label: "Papar dalam Sijil Pilihan"
