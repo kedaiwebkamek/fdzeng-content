@@ -1,45 +1,45 @@
 {
   "header": {
-    "label": "Galeri Foto",
-    "title": "Kerja Di Lapangan",
-    "description": "Kami percaya kualiti sebenar terletak pada perincian. Galeri ini memaparkan standard kejuruteraan hasil koordinasi mantap bersama subkontraktor dan klien bagi memastikan setiap spesifikasi projek dipenuhi secara telus di lapangan."
+    "label": "Photo Gallery",
+    "title": "Work In The Field",
+    "description": "We believe true quality lies in the details. This gallery showcases our engineering standards through close coordination with subcontractors and clients to ensure every project specification is met transparently in the field."
   },
   "facebookUrl": "https://www.facebook.com/people/FDZ-Engineering-Sdn-Bhd/61570057791049/?sk=photos",
   "items": [
     {
       "id": "a",
       "src": "/uploads/projects/jalan-kupang/jalan-kupang-3.jpg",
-      "alt": "Projek Jalan Kupang"
+      "alt": "Jalan Kupang Project"
     },
     {
       "id": "b",
       "src": "/uploads/projects/jalan-kupang/jalan-kupang-4.jpg",
-      "alt": "Projek Jalan Kupang"
+      "alt": "Jalan Kupang Project"
     },
     {
       "id": "c",
       "src": "/uploads/projects/jalan-kupang/jalan-kupang-5.jpg",
-      "alt": "Projek Jalan Kupang"
+      "alt": "Jalan Kupang Project"
     },
     {
       "id": "d",
       "src": "/uploads/projects/jalan-kupang/jalan-kupang-6.jpg",
-      "alt": "Projek Jalan Kupang"
+      "alt": "Jalan Kupang Project"
     },
     {
       "id": "e",
       "src": "/uploads/projects/jalan-kupang/jalan-kupang-7.jpg",
-      "alt": "Projek Jalan Kupang"
+      "alt": "Jalan Kupang Project"
     },
     {
       "id": "f",
       "src": "/uploads/projects/jalan-kupang/jalan-kupang-8.jpg",
-      "alt": "Projek Jalan Kupang"
+      "alt": "Jalan Kupang Project"
     },
     {
       "id": "g",
       "src": "/uploads/projects/jalan-kupang/jalan-kupang-9.jpg",
-      "alt": "Projek Jalan Kupang"
+      "alt": "Jalan Kupang Project"
     }
   ]
 }
