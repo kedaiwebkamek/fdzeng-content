@@ -1,0 +1,23 @@
+{
+  "num": "01b",
+  "title": "Sijil Perolehan Kerja Kerajaan",
+  "issuer": "Construction Industry Development Board Malaysia",
+  "brief": "Companion certificate to the <em>Perakuan Pendaftaran</em>, confirming eligibility to undertake government construction work under the registered G7 grade and naming the company officers authorised to sign on government procurement matters.",
+  "category": "contractor",
+  "tags": ["CIDB", "Kerajaan", "G7"],
+  "status": "Aktif",
+  "isFeatured": true,
+  "featuredOrder": 2,
+  "iconName": "fact_check",
+  "iconColor": "red",
+  "logoImage": "cidb-logo.png",
+  "downloadFile": "",
+  "validUntil": "2029-09-16",
+  "meta": [
+    { "label": "No. Pendaftaran", "value": "0120110824-SR135974" },
+    { "label": "Gred B", "value": "(Pembinaan Bangunan)" },
+    { "label": "Gred CE", "value": "(Pembinaan Kejuruteraan Awam)" },
+    { "label": "Gred ME", "value": "(Mekanikal dan Elektrikal)" },
+    { "label": "Tempoh Sah Laku", "value": "15/04/2026 – 16/09/2029" }
+  ]
+}

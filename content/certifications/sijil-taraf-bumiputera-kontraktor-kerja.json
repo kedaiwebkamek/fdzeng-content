@@ -1,0 +1,23 @@
+{
+  "num": "01c",
+  "title": "Sijil Taraf Bumiputera - Kontraktor Kerja",
+  "featuredTitle": "Sijil Taraf Bumiputera",
+  "issuer": "Kementerian Pembangunan Usahawan dan Koperasi — Pusat Khidmat Kontraktor",
+  "featuredIssuer": "Kementerian Pembangunan Usahawan dan Koperasi",
+  "brief": "Federal-level <em>Bumiputera</em> status certificate tied to the company's CIDB G7 registration, issued by the <em>Pusat Khidmat Kontraktor</em>. This is separate from the Sarawak state-level UPKJ <em>Bumiputera</em> recognition shown elsewhere on this page.",
+  "category": "contractor",
+  "tags": ["Bumiputera", "PKK", "G7"],
+  "status": "Aktif",
+  "isFeatured": true,
+  "featuredOrder": 3,
+  "iconName": "workspace_premium",
+  "iconColor": "blue",
+  "logoImage": "kementerian-pembangunan.png",
+  "downloadFile": "",
+  "validUntil": "2029-09-16",
+  "meta": [
+    { "label": "No. Sijil Pendaftaran", "value": "0120110824-SR135974" },
+    { "label": "Gred Pendaftaran / Kategori", "value": "G7/B, G7/CE, G7/ME" },
+    { "label": "Tempoh Sah Laku", "value": "28/04/2026 hingga 16/09/2029" }
+  ]
+}

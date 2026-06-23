@@ -1,10 +1,10 @@
 {
   "num": "01",
-  "title": "CIDB Registration",
+  "title": "Perakuan Pendaftaran",
   "issuer": "Construction Industry Development Board Malaysia",
-  "brief": "Mandatory contractor registration under the CIDB Act 1994. Grade G7 — the highest grade — authorises FDZ Engineering to tender for government and private construction projects of unlimited contract value across three categories: Building (B), Civil Engineering (CE), and Mechanical & Electrical (ME).",
+  "brief": "The core CIDB contractor registration certificate under the CIDB Act 1994. Grade G7 — the highest grade — authorises FDZ Engineering to tender for construction projects of unlimited contract value across three categories: Building (B), Civil Engineering (CE), and Mechanical & Electrical (ME).",
   "category": "contractor",
-  "tags": ["G7", "Bangunan", "Kejuruteraan Awam", "M&E"],
+  "tags": ["CIDB", "G7", "Bangunan", "Kejuruteraan Awam", "M&E"],
   "status": "Aktif",
   "isFeatured": true,
   "featuredOrder": 1,
@@ -14,8 +14,13 @@
   "downloadFile": "",
   "validUntil": "2029-09-16",
   "meta": [
-    { "label": "Reg. no.", "value": "0120110824-SR135974" },
-    { "label": "Grades", "value": "G7 — B, CE & ME" },
-    { "label": "Valid until", "value": "16 Sep 2029" }
+    { "label": "No. Pendaftaran", "value": "0120110824-SR135974" },
+    { "label": "Tarikh Mula Berdaftar", "value": "24/08/2011" },
+    { "label": "Gred B", "value": "B01 B02 B14 B16 C07 B13 B15 B24 B26 B28 B29" },
+    { "label": "Gred CE", "value": "CE01 CE03 CE06 CE08 CE10 CE20 CE21 CE24 CE30 CE34 CE36 CE40 CE42 CE43" },
+    { "label": "Gred ME", "value": "E07 E16 M15 M19 M22" },
+    { "label": "Tarikh Mula Berkuatkuasa", "value": "13/04/2026" },
+    { "label": "Tarikh Habis Tempoh Perakuan", "value": "16/09/2029" },
+    { "label": "Status", "value": "AKTIF" }
   ]
 }
