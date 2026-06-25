@@ -8,8 +8,8 @@
     "description":  "Proposed Dewan PKMS on Lot 123, Section 3, Kuching Town Land District, Kuching, Sarawak.",
     "cat":  "Building",
     "division":  "Kuching",
-    "loc":  "Lot 123, Section 3, Kuching",
-    "accuracy":  "Approximate (Kuching Town Land District)",
+    "loc":  "Lot 123, Section 3, Kuching (PKMS, Jln Haji Taha)",
+    "accuracy":  "Approximate (PKMS area, Jln Haji Taha, Kuching old town)",
     "newsList":  [
                      {
                          "title":  "Contract Signing Ceremony between PKMS and FDZ Engineering held at PKMS HQ.",
@@ -66,8 +66,8 @@
                        "alt":  ""
                    }
                ],
-    "coordinates":  "1.56, 110.34",
-    "lat":  1.56,
-    "lng":  110.34,
+    "coordinates":  "1.5556, 110.3397",
+    "lat":  1.5556,
+    "lng":  110.3397,
     "isPilihan":  true
 }

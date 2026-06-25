@@ -6,11 +6,11 @@
   "client": "",
   "description": "Realignment of Road at KM6, Jalan Kelupu, Bintangor (Phase 2)",
   "cat": "Infrastructure",
-  "division": "Mukah",
+  "division": "Sarikei",
   "loc": "KM6 Jalan Kelupu, Bintangor",
   "accuracy": "Approximate (KM6 Jalan Kelupu, Bintangor)",
   "images": [],
-  "coordinates": "2.17, 111.64",
-  "lat": 2.17,
-  "lng": 111.64
+  "coordinates": "2.16556, 111.63417",
+  "lat": 2.16556,
+  "lng": 111.63417
 }

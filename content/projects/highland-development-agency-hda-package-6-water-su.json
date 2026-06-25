@@ -8,14 +8,9 @@
   "cat": "Utilities",
   "division": "Miri",
   "loc": "Long Bemang / Long Bedian, Telang Usan",
-  "accuracy": "Indicative alignment, not surveyed (water supply between Long Bemang & Long Bedian, Telang Usan)",
+  "accuracy": "Approximate (Long Bedian / Long Bemang area, Telang Usan, Baram)",
   "images": [],
-  "coordinates": "3.4567, 114.0567",
-  "lat": 3.4567,
-  "lng": 114.0567,
-  "path": [
-    [3.4750, 114.0420],
-    [3.4565, 114.0570],
-    [3.4380, 114.0720]
-  ]
+  "coordinates": "3.795, 114.735",
+  "lat": 3.795,
+  "lng": 114.735
 }

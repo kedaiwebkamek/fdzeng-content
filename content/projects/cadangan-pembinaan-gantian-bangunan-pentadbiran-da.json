@@ -7,8 +7,8 @@
     "description":  "Cadangan Pembinaan Gantian Bangunan Pentadbiran Dan Lain-lain Kemudahan Serta Naiktaraf Bangunan Akademik Sedia Ada Di Sekolah Kebangsaan Merpati Jepang Di Atas Lot 30 47 Section 2 Kuching Town Land District, Jalan Muhibbah, Kuching, Sarawak.",
     "cat":  "Building",
     "division":  "Kuching",
-    "loc":  "Jalan Muhibbah, Kuching",
-    "accuracy":  "Approximate (SK Merpati Jepang, Jalan Muhibbah, Kuching)",
+    "loc":  "SK Merpati Jepang, Jln Patinggi Ali, Kuching",
+    "accuracy":  "Approximate (SK Merpati Jepang, Jln Patinggi Ali, Kg Sungai Lajim, Kuching)",
     "isPilihan":  true,
     "newsList":  [
                      {
@@ -50,7 +50,7 @@
                        "alt":  ""
                    }
                ],
-    "coordinates":  "1.53, 110.37",
-    "lat":  1.53,
-    "lng":  110.37
+    "coordinates":  "1.5630, 110.3307",
+    "lat":  1.5630,
+    "lng":  110.3307
 }

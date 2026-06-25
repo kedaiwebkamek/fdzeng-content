@@ -7,8 +7,8 @@
     "description":  "Projek Jalan Dari Kampung Kupang Ke Simpang Jalan Bajau, Saratok, Sarawak.",
     "cat":  "Infrastructure",
     "division":  "Betong",
-    "loc":  "Kampung Kupang → Simpang Jln Bajau, Saratok",
-    "accuracy":  "Indicative alignment, not surveyed (~19.9 km road: Kg. Kupang → Simpang Jalan Bajau, Saratok)",
+    "loc":  "Kampung Kupang, Saratok",
+    "accuracy":  "Approximate (Kg. Kupang, Saratok)",
     "newsList":  [
                      {
                          "title":  "DPM to officiate road project, visit longhouse",
@@ -75,14 +75,8 @@
                           "link":  "https://www.facebook.com/beritasuarasarawak/videos/jalan-bajau-kupang-fdz-engineering-diamanah-siapkan-projek-32-bulan-anak-tidal-b/1138903004613296/"
                       }
                   ],
-    "coordinates":  "1.7627, 111.3083",
-    "lat":  1.7627,
-    "lng":  111.3083,
-    "path":  [
-                 [1.7433, 111.3417],
-                 [1.7555, 111.3175],
-                 [1.7700, 111.2960],
-                 [1.7820, 111.2780]
-             ],
+    "coordinates":  "1.7433, 111.3417",
+    "lat":  1.7433,
+    "lng":  111.3417,
     "isPilihan":  true
 }

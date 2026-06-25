@@ -6,11 +6,11 @@
   "client": "",
   "description": "Kerja-kerja Penyelenggaraan Dan Pembaikan Kuarters Sedia Ada Serta Kerja-kerja Berkaitan Di Sekolah Tunas Bakti Kuching, Sarawak",
   "cat": "Building",
-  "division": "Kuching",
-  "loc": "Jalan Sultan Tengah, Kuching",
-  "accuracy": "Approximate (Sekolah Tunas Bakti area, Kuching)",
+  "division": "Samarahan",
+  "loc": "Sekolah Tunas Bakti, Kota Samarahan",
+  "accuracy": "Approximate (Sekolah Tunas Bakti, KM2 Jln Datuk Mohamad Musa, Kota Samarahan)",
   "images": [],
-  "coordinates": "1.6, 110.32",
-  "lat": 1.6,
-  "lng": 110.32
+  "coordinates": "1.4594, 110.4186",
+  "lat": 1.4594,
+  "lng": 110.4186
 }
