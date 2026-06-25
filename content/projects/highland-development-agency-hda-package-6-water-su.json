@@ -7,10 +7,15 @@
   "description": "Highland Development Agency (HDA) Package 6: Water Supply and Electricity Infrastructure Project in Telang Usan Sub-Package A: Proposed Construction of New Water Treatment and Supply System at Long Bemang and Long Bedian, Miri Division",
   "cat": "Utilities",
   "division": "Miri",
-  "loc": "Long Bemang / Long Bedian, Miri",
-  "accuracy": "Approximate (Telang Usan area, Miri Division)",
+  "loc": "Long Bemang / Long Bedian, Telang Usan",
+  "accuracy": "Indicative alignment, not surveyed (water supply between Long Bemang & Long Bedian, Telang Usan)",
   "images": [],
   "coordinates": "3.4567, 114.0567",
   "lat": 3.4567,
-  "lng": 114.0567
+  "lng": 114.0567,
+  "path": [
+    [3.4750, 114.0420],
+    [3.4565, 114.0570],
+    [3.4380, 114.0720]
+  ]
 }

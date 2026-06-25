@@ -7,10 +7,16 @@
   "description": "Northen Region Development Agency (NRDA) Package 1: Road Infrastructure Projects In Limbang District Proposed Upgrading Of Existing Tendungan Pandaruan Road, Limbang District, Limbang Division.",
   "cat": "Infrastructure",
   "division": "Limbang",
-  "loc": "Pandaruan, Limbang",
-  "accuracy": "Approximate (Tendungan Pandaruan Road, Limbang)",
+  "loc": "Tendungan Pandaruan Road, Limbang",
+  "accuracy": "Indicative alignment, not surveyed (road upgrade: Tendungan Pandaruan Road, Limbang)",
   "images": [],
-  "coordinates": "4.6, 115.05",
-  "lat": 4.6,
-  "lng": 115.05
+  "coordinates": "4.61, 115.04",
+  "lat": 4.61,
+  "lng": 115.04,
+  "path": [
+    [4.5850, 115.0650],
+    [4.6000, 115.0500],
+    [4.6180, 115.0330],
+    [4.6350, 115.0150]
+  ]
 }
