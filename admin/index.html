@@ -49,10 +49,10 @@
         iconName: 'verified',
         iconColor: 'red',
         downloadFile: '',
+        validUntil: '2029-09-16',
         meta: [
           { label: 'No. Pendaftaran', value: '0120110824-SR135974' },
-          { label: 'Gred', value: 'G7/B, G7/CE, G7/ME' },
-          { label: 'Sah sehingga', value: '16 Sep 2029' }
+          { label: 'Gred', value: 'G7/B, G7/CE, G7/ME' }
         ]
       };
 
@@ -80,16 +80,32 @@
         return '<span class="cert-hint-ico" title="' + plain + '"><span class="material-symbols-outlined">info</span></span>';
       }
 
-      // ── meta [{label,value}] → the label/value detail table (list view) ──────
-      function buildMetaTable(meta) {
-        if (!meta || !meta.length) return '';
+      // ── ISO date (2027-08-22) → "22 Aug 2027" for the derived expiry row ─────
+      function fmtValidUntil(iso) {
+        var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
+        if (!m) return iso || '';
+        var mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(m[2], 10) - 1] || '';
+        return m[3] + ' ' + mon + ' ' + m[1];
+      }
+
+      var CERT_EXPIRY_RE = /valid until|sah sehingga|tempoh sah laku|habis tempoh|tarikh luput/i;
+
+      // ── meta [{label,value}] (+ validUntil) → the label/value detail table ────
+      // Mirrors certificates.html: appends a derived "Valid until" row from
+      // validUntil when the cert doesn't already list a validity period.
+      function buildMetaTable(meta, validUntil) {
+        meta = meta || [];
+        var hasExpiry = meta.some(function (m) { return m && CERT_EXPIRY_RE.test(m.label || ''); });
         var rows = meta.map(function (m) {
           if (!m) return '';
           var label = typeof m === 'string' ? m : (m.label || '');
           var value = typeof m === 'string' ? '' : (m.value || '');
           return '<div class="cert-meta-row"><span class="cert-meta-label">' + label + '</span><span class="cert-meta-value">' + value + '</span></div>';
         }).join('');
-        return '<div class="cert-meta-table">' + rows + '</div>';
+        if (!hasExpiry && validUntil) {
+          rows += '<div class="cert-meta-row"><span class="cert-meta-label">Valid until</span><span class="cert-meta-value">' + fmtValidUntil(validUntil) + '</span></div>';
+        }
+        return rows ? '<div class="cert-meta-table">' + rows + '</div>' : '';
       }
 
       // ── Format raw number string → "RM X,XXX,XXX" (handles both old and new format) ──
@@ -330,7 +346,7 @@
           '      <div class="cert-list-item__info">',
           '        <h3 class="cert-list-item__title">' + (d.title || '—') + briefHint(d.brief) + '</h3>',
           '        <p class="cert-list-item__meta">' + (d.issuer || '—') + '</p>',
-          buildMetaTable(d.meta),
+          buildMetaTable(d.meta, d.validUntil),
           '      </div>',
           '    </div>',
           '    <div class="cert-list-item__right">',
@@ -473,6 +489,7 @@
           brief:        data.get('brief')        || '',
           featuredTitle:  data.get('featuredTitle')  || '',
           featuredIssuer: data.get('featuredIssuer') || '',
+          validUntil:   data.get('validUntil')    || '',
           meta:         toArray(data.get('meta'))
         };
 
@@ -491,6 +508,7 @@
           brief:        CERT_SAMPLE.brief,
           featuredTitle:  CERT_SAMPLE.featuredTitle,
           featuredIssuer: CERT_SAMPLE.featuredIssuer,
+          validUntil:   CERT_SAMPLE.validUntil,
           meta:         CERT_SAMPLE.meta
         };
 

@@ -15,7 +15,6 @@
   "validUntil": "2026-12-08",
   "meta": [
     { "label": "Certificate no.", "value": "1031512844" },
-    { "label": "Categories", "value": "30 registered" },
-    { "label": "Valid until", "value": "08 Dec 2026" }
+    { "label": "Categories", "value": "30 registered" }
   ]
 }

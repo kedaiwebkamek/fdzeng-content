@@ -16,7 +16,6 @@
   "meta": [
     { "label": "Sijil no.", "value": "UPKJ/M/001656" },
     { "label": "Field", "value": "Mechanical (Mekanikal)" },
-    { "label": "Kelas \"A\" Kepala V", "value": "1(a), 2(a), 2(b), 3" },
-    { "label": "Valid until", "value": "15 Nov 2027" }
+    { "label": "Kelas \"A\" Kepala V", "value": "1(a), 2(a), 2(b), 3" }
   ]
 }

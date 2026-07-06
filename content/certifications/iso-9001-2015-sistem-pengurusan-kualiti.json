@@ -15,7 +15,6 @@
   "validUntil": "2027-08-22",
   "meta": [
     { "label": "Certificate no.", "value": "240823016001" },
-    { "label": "Issued", "value": "23 Aug 2024" },
-    { "label": "Valid until", "value": "22 Aug 2027" }
+    { "label": "Issued", "value": "23 Aug 2024" }
   ]
 }

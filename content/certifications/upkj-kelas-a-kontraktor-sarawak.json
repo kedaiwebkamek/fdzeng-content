@@ -19,7 +19,6 @@
     { "label": "Kelas \"A\" Kepala I", "value": "2(d)(i), 5(a), 3(a)(b), 4(b), 2(b)(ii), 4(b), 2(b)(ii), 4(a), 1, 6, 2(c)(ii), 3(a)(i)" },
     { "label": "Kelas \"A\" Kepala II", "value": "8, 1(d), 6, 1(s), 10(b), 5(a), 1(b), 7, 3(b), 3(a), 5(a), 5(c), 2(a), 2(b), 1(c), 1(a)" },
     { "label": "Kelas \"A\" Kepala III", "value": "9(d), 3(a), 4(b), 4(c), 1(a), 1(o), 3(c), 2(a), 4(a), 1(b), 2(c), 2(d), 3(b), 2(c), 1(a)" },
-    { "label": "Kelas \"A\" Kepala IV", "value": "3, 1(b), 2(a), 4(a), 1(a), 4(b)" },
-    { "label": "Valid until", "value": "05 Apr 2027" }
+    { "label": "Kelas \"A\" Kepala IV", "value": "3, 1(b), 2(a), 4(a), 1(a), 4(b)" }
   ]
 }

@@ -209,11 +209,11 @@ collections:
     fields:
 
       - name: num
-        label: "Nombor Sijil"
+        label: "Nombor Sijil (Dalaman — Pilihan)"
         widget: string
-        required: true
-        pattern: ['^[0-9]{2}$', 'Mesti 2 digit. Contoh: 01, 09, 15']
-        hint: "Nombor unik 2 digit untuk sijil ini. Sijil terkini: No. 14 — gunakan 15 untuk sijil baharu. Semak senarai sijil sedia ada sebelum menetapkan nombor baru."
+        required: false
+        pattern: ['^$|^[0-9]{2}$', 'Kosong atau 2 digit. Contoh: 01, 09, 15']
+        hint: "Rujukan dalaman sahaja — nombor ini TIDAK dipaparkan di laman web. Boleh dikosongkan. (Digunakan hanya untuk carian dalaman.)"
 
       - name: title
         label: "Nama Sijil"
@@ -262,10 +262,11 @@ collections:
         hint: "Tukar kepada Tamat apabila sijil luput. Sijil Tamat masih dipaparkan dalam senarai tetapi tanpa lencana hijau."
 
       - name: validUntil
-        label: "Tarikh Luput (Pilihan)"
+        label: "Tarikh Luput"
         widget: string
         required: false
-        hint: "Tarikh sijil luput dalam format ISO. Contoh: 2027-04-05. Kosongkan jika sijil tidak ada tarikh luput (contoh: SSM, ISO yang sentiasa diperbaharui)."
+        pattern: ['^$|^\d{4}-\d{2}-\d{2}$', 'Kosong atau format ISO YYYY-MM-DD. Contoh: 2027-04-05']
+        hint: "SATU-SATUNYA tempat untuk tetapkan tarikh luput. Format ISO YYYY-MM-DD (contoh: 2027-04-05). Baris 'Sah sehingga' akan dipaparkan & diwarnakan secara automatik di laman web — JANGAN tambah baris tarikh luput dalam Butiran Sijil di bawah. Kosongkan jika sijil tidak luput (contoh: SSM)."
 
       - name: meta
         label: "Butiran Sijil (Label & Nilai)"
@@ -273,7 +274,7 @@ collections:
         required: false
         label_singular: "Butiran"
         summary: "{{fields.label}}: {{fields.value}}"
-        hint: "Baris butiran yang dipaparkan pada sijil (contoh: No. Pendaftaran, Tarikh Mula, Tarikh Luput, Gred). Tambah satu baris untuk setiap butiran — 'Label' di kiri, 'Nilai' di kanan."
+        hint: "Baris butiran yang dipaparkan pada sijil (contoh: No. Pendaftaran, Tarikh Mula, Gred). Tambah satu baris untuk setiap butiran — 'Label' di kiri, 'Nilai' di kanan. NOTA: jangan tambah baris 'Tarikh Luput'/'Valid until' di sini — ia diuruskan oleh medan Tarikh Luput di atas."
         fields:
           - name: label
             label: "Label"
@@ -318,11 +319,12 @@ collections:
         hint: "Logo badan pengeluar untuk dipaparkan pada kad sijil pilihan. Saiz cadangan: 120×80px. Format: PNG atau SVG dengan latar telus. Kosongkan jika tiada — ikon teks akan digunakan sebagai ganti."
 
       - name: iconName
-        label: "Nama Ikon"
+        label: "Nama Ikon (Sandaran — Pilihan)"
         widget: string
-        required: true
+        required: false
         hint: |
-          Nama ikon dari Google Material Symbols — dipaparkan dalam senarai sijil.
+          Ikon SANDARAN — dipaparkan HANYA jika tiada Logo Sijil dimuat naik. Jika ada logo, medan ini diabaikan; boleh dikosongkan.
+          Nama ikon dari Google Material Symbols.
           Ikon disyorkan mengikut kategori:
           • Kontraktor : engineering, construction, domain, handyman, build
           • Kualiti/ISO : verified, shield, health_and_safety, workspace_premium, fact_check
@@ -332,16 +334,17 @@ collections:
           Lihat semua ikon di: fonts.google.com/icons — cari nama dan copy persis seperti yang terpapar (huruf kecil, garis bawah).
 
       - name: iconColor
-        label: "Warna Ikon"
+        label: "Warna Ikon (Sandaran — Pilihan)"
         widget: select
-        required: true
+        required: false
+        default: "grey"
         options:
           - { label: "Merah — sijil utama atau kontraktor", value: "red" }
           - { label: "Kelabu — sijil am atau tidak aktif", value: "grey" }
           - { label: "Hijau — sijil kualiti atau keselamatan", value: "green" }
           - { label: "Biru — sijil kerajaan atau profesional", value: "blue" }
           - { label: "Oren — sijil petroleum atau tenaga", value: "orange" }
-        hint: "Warna latar dan warna ikon dalam senarai sijil."
+        hint: "Warna ikon sandaran — hanya relevan jika tiada Logo Sijil dimuat naik. Biarkan Kelabu jika sijil ada logo."
 
       - name: downloadFile
         label: "Fail Sijil PDF (Pilihan)"
