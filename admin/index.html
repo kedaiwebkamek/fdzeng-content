@@ -223,43 +223,59 @@
 
       // ── Shared card/item builders (accept plain JS field objects) ────────────
 
+      // Category → display label + icon, matching the live projects page
+      var CAT_BM = {
+        'Building': 'Building & Facilities',
+        'Infrastructure': 'Infrastructure',
+        'Maintenance': 'Maintenance',
+        'Telecom': 'Telecom',
+        'Utilities': 'Utilities'
+      };
+      var CAT_ICON = {
+        'Building': 'apartment',
+        'Infrastructure': 'road',
+        'Maintenance': 'construction',
+        'Telecom': 'cell_tower',
+        'Utilities': 'water_pump'
+      };
+
       function buildProjectCard(d) {
-        var isOngoing   = d.status === 'Ongoing';
-        var statusLabel = isOngoing
-          ? '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#28c840;margin-right:4px;flex-shrink:0;"></span>' + (d.status || '')
-          : (d.status || '—');
+        var isOngoing  = d.status === 'Ongoing';
+        var badgeClass = isOngoing ? ' dyn-card__badge-status--active' : '';
+        var statusHtml = isOngoing ? '<span class="dyn-ping"></span>Ongoing' : 'Completed';
         var dateBadge = (!isOngoing && d.date)
           ? '<span class="dyn-card__meta-year">' + d.date + '</span>'
           : '<span></span>';
+        var catLabel = CAT_BM[d.cat] || d.cat || '';
         var clientHtml = isOngoing
-          ? '<p class="dyn-card__client">Klien: <span class="dyn-card__client-name">' + (d.client || '—') + '</span></p>'
+          ? '<p class="dyn-card__client">Client: <span class="dyn-card__client-name">' + (d.client || '—') + '</span></p>'
           : '';
         var newsChip = (d.newsListLen > 0)
-          ? '<span class="news-chip"><span class="material-symbols-outlined" style="font-size:13px;">link</span>' + d.newsListLen + ' Pautan Berkaitan</span>'
+          ? '<span class="dyn-chip dyn-chip--news"><span class="material-symbols-outlined" style="font-size:13px;">link</span>' + d.newsListLen + ' Related Link' + (d.newsListLen === 1 ? '' : 's') + '</span>'
           : '';
         var videoChip = (d.videoListLen > 0)
-          ? '<span class="video-chip"><span class="material-symbols-outlined" style="font-size:13px;">play_circle</span>' + d.videoListLen + ' Video</span>'
+          ? '<span class="dyn-chip dyn-chip--video"><span class="material-symbols-outlined" style="font-size:13px;">play_circle</span>' + d.videoListLen + ' Video</span>'
           : '';
         var imgHtml = (d.imgSrc && d.imgSrc !== '')
-          ? '<img class="dyn-card__img" src="' + d.imgSrc + '" alt="Gambar projek">'
-          : '<div class="dyn-card__img-placeholder">Tiada Gambar</div>';
+          ? '<img class="dyn-card__img" src="' + d.imgSrc + '" alt="Project">'
+          : '<div class="dyn-card__no-img"><span class="material-symbols-outlined">' + (CAT_ICON[d.cat] || 'folder_open') + '</span></div>';
         return [
           '<div class="dyn-card">',
           '  <div class="dyn-card__img-wrap">',
           '    ' + imgHtml,
-          '    <span class="dyn-card__badge-status' + (isOngoing ? ' dyn-card__badge-status--active' : '') + '">' + statusLabel + '</span>',
-          (d.isPilihan ? '    <span class="dyn-card__badge-pilihan">&#x2B50; Pilihan</span>' : ''),
+          '    <span class="dyn-card__badge-status' + badgeClass + '">' + statusHtml + '</span>',
+          '    <img src="/fdzeng-logo.png" class="dyn-card__brand-watermark" alt="">',
           '  </div>',
           '  <div class="dyn-card__body">',
           '    <div class="dyn-card__meta">',
           '      ' + dateBadge,
-          '      <div><span class="dyn-card__meta-cat">' + (d.cat || d.category || '') + '</span></div>',
+          '      <span class="dyn-card__meta-cat">' + catLabel + '</span>',
           '    </div>',
-          '    <h3 class="dyn-card__title">' + (d.description || '') + '</h3>',
+          '    <h3 class="dyn-card__title" style="margin-bottom:' + (isOngoing ? '0' : 'auto') + '">' + (d.description || '') + '</h3>',
           '    ' + clientHtml,
-          '    <div class="dyn-card__footer" style="margin-top:' + (isOngoing ? '0' : 'auto') + '">',
+          '    <div class="dyn-card__footer">',
           '      <div class="dyn-card__val-block">',
-          '        <p class="dyn-card__val-title">Nilai Projek</p>',
+          '        <p class="dyn-card__val-title">Project Value</p>',
           '        <p class="dyn-card__val-amt">' + formatAmount(d.amount) + '</p>',
           '      </div>',
           '      ' + newsChip,
@@ -273,19 +289,19 @@
       function buildProjectTableRow(d) {
         var isOngoing = d.status === 'Ongoing';
         var statusHtml = isOngoing
-          ? '<span style="display:inline-flex;align-items:center;gap:4px;color:#16a34a;font-weight:600;font-size:0.7rem"><span style="width:7px;height:7px;border-radius:50%;background:#16a34a;display:inline-block;"></span>Berjalan</span>'
-          : '<span style="color:#6b7280;font-size:0.7rem;font-weight:600;">Siap</span>';
+          ? '<span style="display:inline-flex;align-items:center;gap:4px;color:#16a34a;font-weight:600;font-size:0.7rem"><span style="width:7px;height:7px;border-radius:50%;background:#16a34a;display:inline-block;"></span>Ongoing</span>'
+          : '<span style="color:#6b7280;font-size:0.7rem;font-weight:600;">Completed</span>';
         return [
           '<div style="overflow-x:auto;width:100%;">',
           '<table style="width:100%;border-collapse:collapse;font-size:0.72rem;font-family:Inter,sans-serif;">',
           '  <thead>',
           '    <tr style="background:#f3f4f6;border-bottom:2px solid #e5e7eb;">',
-          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;">Penerangan</th>',
-          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Lokasi</th>',
-          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Klien</th>',
-          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Tarikh</th>',
-          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Kategori</th>',
-          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Nilai</th>',
+          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;">Description</th>',
+          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Location</th>',
+          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Client</th>',
+          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Date</th>',
+          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Category</th>',
+          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Value</th>',
           '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Status</th>',
           '    </tr>',
           '  </thead>',
@@ -295,7 +311,7 @@
           '      <td style="padding:8px 10px;color:#374151;white-space:nowrap;">' + (d.loc || '—') + '</td>',
           '      <td style="padding:8px 10px;color:#374151;white-space:nowrap;">' + (d.client || '—') + '</td>',
           '      <td style="padding:8px 10px;color:#374151;white-space:nowrap;">' + (d.date || '—') + '</td>',
-          '      <td style="padding:8px 10px;color:#374151;white-space:nowrap;">' + (d.category || '—') + '</td>',
+          '      <td style="padding:8px 10px;color:#374151;white-space:nowrap;">' + (CAT_BM[d.cat] || d.cat || '—') + '</td>',
           '      <td style="padding:8px 10px;color:#374151;white-space:nowrap;font-weight:600;">' + formatAmount(d.amount) + '</td>',
           '      <td style="padding:8px 10px;">' + statusHtml + '</td>',
           '    </tr>',
@@ -435,26 +451,30 @@
           '.pv-sample-badge{position:absolute;top:0;right:0;background:#6b7280;color:#fff;font-size:0.5rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:0 0.5rem 0 0.25rem;}',
           '.pv-divider{width:340px;margin:4px 0 20px;text-align:center;}',
           '.pv-divider__note{font-size:0.62rem;color:#9ca3af;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:16px;}',
-          '.dyn-card{width:100%;background:#1a1c1d;color:#fff;border:1px solid rgba(0,0,0,.2);border-radius:0.5rem;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 10px 30px -10px rgba(0,0,0,.4);}',
-          '.dyn-card__img-wrap{position:relative;height:160px;overflow:hidden;background:#2a2c2e;}',
+          '.dyn-card{width:100%;background:#ffffff;color:#1a1c1d;border:1px solid #e2e2e4;border-radius:0.5rem;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 10px 30px -12px rgba(0,0,0,.12);}',
+          '.dyn-card__img-wrap{position:relative;height:160px;overflow:hidden;background:#e8e8ea;}',
           '.dyn-card__img{width:100%;height:100%;object-fit:cover;}',
-          '.dyn-card__img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#555;font-size:0.75rem;letter-spacing:.05em;text-transform:uppercase;}',
+          '.dyn-card__no-img{width:100%;height:100%;background:#141518;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:24px 24px;display:flex;align-items:center;justify-content:center;}',
+          '.dyn-card__no-img .material-symbols-outlined{font-size:2.2rem;color:rgba(255,255,255,0.18);}',
+          '.dyn-card__brand-watermark{position:absolute;bottom:8px;right:8px;width:70px;opacity:0.75;filter:brightness(0) invert(1);pointer-events:none;z-index:5;}',
           '.dyn-card__badge-status{position:absolute;top:16px;left:16px;background:#141518;color:#fff;padding:4px 12px;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:.125rem;display:flex;align-items:center;gap:6px;}',
           '.dyn-card__badge-status--active{background:#b5000b;}',
-          '.dyn-card__badge-pilihan{position:absolute;top:16px;right:16px;background:#f59e0b;color:#fff;padding:4px 10px;font-size:.6rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border-radius:.125rem;}',
+          '.dyn-ping{display:inline-block;width:8px;height:8px;border-radius:50%;background:#28c840;box-shadow:0 0 0 0 rgba(40,200,64,0.6);animation:dyn-ping 1.5s ease infinite;}',
+          '@keyframes dyn-ping{0%{box-shadow:0 0 0 0 rgba(40,200,64,0.5);}70%{box-shadow:0 0 0 6px rgba(40,200,64,0);}100%{box-shadow:0 0 0 0 rgba(40,200,64,0);}}',
           '.dyn-card__body{padding:20px;display:flex;flex-direction:column;flex-grow:1;border-top:3px solid transparent;}',
           '.dyn-card__meta{display:flex;justify-content:space-between;margin-bottom:8px;align-items:center;flex-wrap:wrap;gap:8px;}',
           '.dyn-card__meta-year{font-size:.7rem;font-weight:700;letter-spacing:.1em;color:#fff;background:#b5000b;padding:4px 8px;border-radius:4px;white-space:nowrap;display:inline-flex;align-items:center;}',
-          '.dyn-card__meta-cat{font-size:.65rem;font-weight:600;letter-spacing:.05em;color:#a1a1aa;text-transform:uppercase;}',
-          '.dyn-card__title{font-family:"Barlow",sans-serif;font-size:.85rem;font-weight:900;line-height:1.35;color:#fff;padding-bottom:16px;text-transform:uppercase;letter-spacing:-.01em;flex-grow:1;}',
-          '.dyn-card__client{font-size:.75rem;font-weight:600;color:#d4d4d8;margin-bottom:16px;padding-top:16px;border-top:1px dashed rgba(255,255,255,.1);}',
-          '.dyn-card__client-name{font-weight:700;color:#f9f6ee;}',
-          '.dyn-card__footer{padding-top:12px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:6px;}',
+          '.dyn-card__meta-cat{font-size:.65rem;font-weight:600;letter-spacing:.05em;color:#5f5e5e;text-transform:uppercase;}',
+          '.dyn-card__title{font-family:"Barlow",sans-serif;font-size:.9rem;font-weight:900;line-height:1.35;color:#1a1c1d;padding-bottom:16px;text-transform:uppercase;letter-spacing:-.01em;}',
+          '.dyn-card__client{font-size:.75rem;font-weight:600;color:#5f5e5e;margin-top:auto;margin-bottom:16px;padding-top:16px;border-top:1px dashed #e2e2e4;}',
+          '.dyn-card__client-name{font-weight:700;color:#1a1c1d;}',
+          '.dyn-card__footer{padding-top:12px;border-top:1px solid #e2e2e4;display:flex;flex-direction:column;gap:6px;}',
           '.dyn-card__val-block{display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 12px;width:100%;box-sizing:border-box;margin-bottom:2px;}',
-          '.dyn-card__val-title{font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#a1a1aa;margin-bottom:2px;}',
-          '.dyn-card__val-amt{font-family:"Barlow",sans-serif;font-size:.95rem;font-weight:900;color:#b5000b;}',
-          '.news-chip{display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 12px;background:#fff;border:1px solid #1a1a1a;color:#000;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;border-radius:2px;width:100%;box-sizing:border-box;}',
-          '.video-chip{display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 12px;background:rgba(255,0,0,.06);border:1px solid rgba(255,0,0,.3);color:#e82222;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;border-radius:2px;width:100%;box-sizing:border-box;}',
+          '.dyn-card__val-title{font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#5f5e5e;margin-bottom:2px;}',
+          '.dyn-card__val-amt{font-family:"Barlow",sans-serif;font-size:1rem;font-weight:900;color:#1a1c1d;}',
+          '.dyn-chip{display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 12px;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;border-radius:2px;width:100%;box-sizing:border-box;}',
+          '.dyn-chip--news{background:#fff;border:1px solid #1a1a1a;color:#000;}',
+          '.dyn-chip--video{background:rgba(255,0,0,.06);border:1px solid rgba(255,0,0,.3);color:#e82222;}',
           '</style>'
         ].join('');
 
