@@ -10,7 +10,7 @@
   "featuredOrder": 10,
   "iconName": "local_gas_station",
   "iconColor": "green",
-  "logoImage": "petronas.png",
+  "logoImage": "/uploads/petronas.png",
   "downloadFile": "",
   "validUntil": "2027-08-12",
   "meta": [

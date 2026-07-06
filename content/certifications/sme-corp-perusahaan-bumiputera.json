@@ -10,7 +10,7 @@
   "featuredOrder": 7,
   "iconName": "storefront",
   "iconColor": "grey",
-  "logoImage": "smecorp.png",
+  "logoImage": "/uploads/smecorp.png",
   "downloadFile": "",
   "validUntil": "2027-03-08",
   "meta": [

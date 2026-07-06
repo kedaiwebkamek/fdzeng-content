@@ -10,7 +10,7 @@
   "featuredOrder": 2,
   "iconName": "fact_check",
   "iconColor": "red",
-  "logoImage": "cidb-logo.png",
+  "logoImage": "/uploads/cidb-logo.png",
   "downloadFile": "",
   "validUntil": "2029-09-16",
   "meta": [

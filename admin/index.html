@@ -290,28 +290,24 @@
       }
 
       function buildCertCard(d) {
-        var isAktif = d.status === 'Aktif';
-        var statusClass = isAktif ? 'cert-card__status-value--aktif' : 'cert-card__status-value--tamat';
+        var statusMod = d.status === 'Tamat' ? ' cert-card__status-value--tamat'
+                      : d.status === 'Dalam Pembaharuan' ? ' cert-card__status-value--renewal'
+                      : '';
         var iconHtml = (d.logoSrc && d.logoSrc !== '')
           ? '<img src="' + d.logoSrc + '" class="cert-card__icon-img" alt="' + (d.title || '') + '">'
           : (d.iconName
               ? '<span class="material-symbols-outlined">' + d.iconName + '</span>'
-              : '<div style="font-size:0.55rem;font-weight:700;color:#9ca3af;text-align:center;line-height:1.3;letter-spacing:.06em;text-transform:uppercase;">Tiada<br>Logo</div>');
+              : '<div style="font-size:0.5rem;font-weight:700;color:#9ca3af;text-align:center;line-height:1.3;text-transform:uppercase;">Tiada<br>Logo</div>');
         var displayTitle  = d.featuredTitle  || d.title  || '—';
         var displayIssuer = d.featuredIssuer || d.issuer || '—';
         return [
-          '<div class="certs-grid-preview">',
+          '<div class="certs-grid">',
           '  <article class="cert-card">',
           '    <div class="cert-card__icon">' + iconHtml + '</div>',
           '    <h3 class="cert-card__title">' + displayTitle + briefHint(d.brief) + '</h3>',
-          '    <p class="cert-card__desc">' + displayIssuer + '</p>',
+          '    <p class="cert-card__issuer">' + displayIssuer + '</p>',
           '    <div class="cert-card__footer">',
-          '      <span class="cert-card__status-label">Status</span>',
-          '      <span class="cert-card__status-value ' + statusClass + '">',
-          (isAktif ? '        <span class="cert-card__status-dot"></span>' : ''),
-          '        ' + (d.status || '—'),
-          '      </span>',
-          (d.featuredOrder ? '      <span class="cert-card__order-badge">Slot ' + d.featuredOrder + '</span>' : ''),
+          '      <span class="cert-card__status-value' + statusMod + '">' + (d.status || '—') + '</span>',
           '      <button class="cert-card__download-btn"><span class="material-symbols-outlined" style="font-size:1.2rem;color:#b5000b;">download</span></button>',
           '    </div>',
           '  </article>',
@@ -320,25 +316,20 @@
       }
 
       function buildCertListItem(d) {
-        var isAktif = d.status === 'Aktif';
-        var statusClass = isAktif ? 'cert-status--active' : 'cert-status--expired';
+        var statusClass = d.status === 'Aktif' ? 'cert-status--active'
+                        : d.status === 'Tamat' ? 'cert-status--tamat'
+                        : 'cert-status--renewal';
         var iconHtml = (d.logoSrc && d.logoSrc !== '')
           ? '<img src="' + d.logoSrc + '" style="height:28px;width:auto;object-fit:contain;" alt="' + (d.title || '') + '">'
           : '<span class="material-symbols-outlined">' + (d.iconName || 'workspace_premium') + '</span>';
-        var tagPills = (d.tags || []).map(function(t) {
-          var label = !t ? '' : (typeof t === 'string' ? t : (t.tag || ''));
-          return label ? '<span class="cert-tag">' + label + '</span>' : '';
-        }).join('');
         return [
           '<div class="cert-list">',
           '  <div class="cert-list-item">',
           '    <div class="cert-list-item__left">',
           '      <div class="cert-list-item__icon cert-list-item__icon--' + (d.iconColor || 'grey') + '">' + iconHtml + '</div>',
           '      <div class="cert-list-item__info">',
-          '        <span class="cert-list-item__num">' + (d.num || '—') + '</span>',
           '        <h3 class="cert-list-item__title">' + (d.title || '—') + briefHint(d.brief) + '</h3>',
           '        <p class="cert-list-item__meta">' + (d.issuer || '—') + '</p>',
-          '        <div class="cert-list-item__tags">' + (tagPills || '<span class="cert-tag">—</span>') + '</div>',
           buildMetaTable(d.meta),
           '      </div>',
           '    </div>',
@@ -518,45 +509,42 @@
           '.pv-divider__note{font-size:0.62rem;color:#9ca3af;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:16px;}',
           '.pv-subsection{margin-bottom:16px;}',
           '.pv-sublabel{font-size:0.55rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#9ca3af;margin-bottom:8px;}',
-          '.certs-grid-preview{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#e8e8ea;}',
-          '.cert-card{background:#fff;padding:40px 32px;position:relative;overflow:hidden;display:flex;flex-direction:column;}',
-          '.cert-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:#b5000b;}',
+          '.certs-grid{display:grid;grid-template-columns:1fr;gap:1px;background:#e8e8ea;border:1px solid #e8e8ea;border-radius:0.5rem;overflow:hidden;}',
+          '.cert-card{background:#fff;padding:40px 32px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;}',
           '.cert-card__icon{width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:#eeeef0;border:1px solid #e8e8ea;border-radius:0.5rem;color:#b5000b;font-size:1.5rem;margin-bottom:24px;overflow:hidden;}',
-          '.cert-card__icon-img{height:40px;width:auto;object-fit:contain;}',
+          '.cert-card__icon-img{height:32px;width:auto;object-fit:contain;}',
           '.cert-card__title{font-family:"Barlow",sans-serif;font-size:1.05rem;font-weight:900;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:12px;color:#1a1c1d;}',
-          '.cert-card__desc{font-size:0.85rem;color:#5f5e5e;line-height:1.65;margin-bottom:24px;flex:1;}',
-          '.cert-card__footer{display:flex;justify-content:flex-start;gap:8px;align-items:center;padding-top:16px;border-top:1px solid #e8e8ea;}',
-          '.cert-card__status-label{font-size:0.62rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#5f5e5e;margin-right:2px;}',
-          '.cert-card__status-value{font-family:"Barlow",sans-serif;font-size:0.65rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:9999px;}',
-          '.cert-card__status-value--aktif{color:#15803d;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.2);}',
-          '.cert-card__status-value--tamat{color:#9ca3af;background:rgba(156,163,175,0.12);border:1px solid rgba(156,163,175,0.2);}',
-          '.cert-card__status-dot{width:5px;height:5px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,0.8);display:inline-block;}',
+          '.cert-card__issuer{font-size:0.72rem;color:#5f5e5e;margin-bottom:10px;opacity:0.8;flex:1;}',
+          '.cert-card__footer{display:flex;justify-content:center;gap:8px;align-items:center;padding-top:16px;border-top:1px solid #e8e8ea;width:100%;}',
+          '.cert-card__status-value{font-family:"Barlow",sans-serif;font-size:0.65rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#15803d;display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.2);padding:5px 12px;border-radius:9999px;}',
+          '.cert-card__status-value::before{content:"";width:5px;height:5px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px rgba(34,197,94,0.8);}',
+          '.cert-card__status-value--tamat{color:#b5000b;background:rgba(181,0,11,0.1);border-color:rgba(181,0,11,0.2);}',
+          '.cert-card__status-value--tamat::before{background:#b5000b;box-shadow:0 0 8px rgba(181,0,11,0.5);}',
+          '.cert-card__status-value--renewal{color:#c2410c;background:rgba(194,65,12,0.1);border-color:rgba(194,65,12,0.2);}',
+          '.cert-card__status-value--renewal::before{background:#c2410c;box-shadow:0 0 8px rgba(194,65,12,0.6);}',
           '.cert-card__download-btn{background:none;border:none;cursor:pointer;padding:6px;display:inline-flex;align-items:center;justify-content:center;border-radius:0.25rem;margin-left:auto;}',
-          '.cert-card__order-badge{font-size:0.6rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#fff;background:#f59e0b;padding:3px 8px;border-radius:4px;margin-left:auto;}',
           '.cert-list{border:1.5px solid #e8e8ea;border-radius:0.5rem;overflow:hidden;background:#fff;}',
-          '.cert-list-item{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 28px;border-bottom:1px solid #e8e8ea;}',
+          '.cert-list-item{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:22px 28px;border-bottom:1px solid #e8e8ea;}',
           '.cert-list-item:last-child{border-bottom:none;}',
-          '.cert-list-item__left{display:flex;align-items:center;gap:20px;flex:1;min-width:0;}',
-          '.cert-list-item__icon{width:48px;height:48px;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}',
-          '.cert-list-item__icon--red{background:rgba(181,0,11,0.08);color:#b5000b;}',
-          '.cert-list-item__icon--grey{background:#eeeef0;color:#5f5e5e;}',
-          '.cert-list-item__icon--green{background:rgba(34,197,94,0.08);color:#15803d;}',
-          '.cert-list-item__icon--blue{background:rgba(59,130,246,0.08);color:#1d4ed8;}',
-          '.cert-list-item__icon--orange{background:rgba(249,115,22,0.08);color:#c2410c;}',
-          '.cert-list-item__info{min-width:0;}',
-          '.cert-list-item__num{font-family:"JetBrains Mono",monospace;font-size:0.62rem;font-weight:700;color:#5f5e5e;letter-spacing:0.1em;display:block;margin-bottom:2px;}',
-          '.cert-list-item__title{font-family:"Barlow",sans-serif;font-size:0.95rem;font-weight:900;text-transform:uppercase;letter-spacing:0.01em;color:#1a1c1d;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}',
-          '.cert-list-item__meta{font-size:0.75rem;color:#5f5e5e;margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}',
-          '.cert-list-item__tags{display:flex;flex-wrap:wrap;gap:5px;}',
-          '.cert-tag{font-size:0.6rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 8px;background:#eeeef0;border-radius:4px;color:#5f5e5e;}',
-          '.cert-list-item__right{display:flex;align-items:center;gap:12px;flex-shrink:0;}',
-          '.cert-status{font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;}',
-          '.cert-status--active{color:#15803d;background:rgba(34,197,94,0.1);padding:4px 10px;border-radius:999px;}',
-          '.cert-status--expired{color:#9ca3af;background:rgba(156,163,175,0.1);padding:4px 10px;border-radius:999px;}',
-          '.cert-dl-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;height:38px;font-family:"Barlow",sans-serif;font-size:0.68rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;background:#b5000b;color:#fff;border:none;border-radius:0.25rem;cursor:pointer;white-space:nowrap;}',
+          '.cert-list-item__left{display:flex;align-items:flex-start;gap:20px;flex:1;min-width:0;}',
+          '.cert-list-item__icon{width:48px;height:48px;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;background:#fff;overflow:hidden;}',
+          '.cert-list-item__icon--red{color:#b5000b;}',
+          '.cert-list-item__icon--grey{color:#5f5e5e;}',
+          '.cert-list-item__icon--green{color:#15803d;}',
+          '.cert-list-item__icon--blue{color:#1d4ed8;}',
+          '.cert-list-item__icon--orange{color:#c2410c;}',
+          '.cert-list-item__info{min-width:0;flex:1;}',
+          '.cert-list-item__title{font-family:"Barlow",sans-serif;font-size:0.95rem;font-weight:900;text-transform:uppercase;letter-spacing:0.01em;color:#1a1c1d;margin-bottom:2px;}',
+          '.cert-list-item__meta{font-size:0.78rem;color:#5f5e5e;margin-bottom:0;}',
+          '.cert-list-item__right{display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0;align-self:center;}',
+          '.cert-status{font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;}',
+          '.cert-status--active{color:#15803d;background:rgba(34,197,94,0.1);}',
+          '.cert-status--renewal{color:#c2410c;background:rgba(194,65,12,0.1);}',
+          '.cert-status--tamat{color:#b5000b;background:rgba(181,0,11,0.1);}',
+          '.cert-dl-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 18px;height:38px;min-width:132px;font-family:"Barlow",sans-serif;font-size:0.68rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;background:#b5000b;color:#fff;border:1.5px solid #b5000b;border-radius:0.25rem;cursor:pointer;white-space:nowrap;}',
           '.cert-dl-btn .material-symbols-outlined{font-size:1rem;}',
           '.cert-hint-ico{display:inline-flex;align-items:center;vertical-align:middle;margin-left:6px;cursor:help;text-transform:none;font-weight:400;}',
-          '.cert-hint-ico .material-symbols-outlined{font-size:0.95rem;color:#9ca3af;opacity:0.55;}',
+          '.cert-hint-ico .material-symbols-outlined{font-size:0.95rem;color:#5f5e5e;opacity:0.45;}',
           '.cert-meta-table{margin-top:10px;padding-top:10px;border-top:1px solid #e8e8ea;display:flex;flex-direction:column;gap:4px;}',
           '.cert-meta-row{display:flex;gap:10px;align-items:baseline;}',
           '.cert-meta-label{font-size:0.7rem;color:#5f5e5e;min-width:110px;flex-shrink:0;font-weight:500;}',
