@@ -1,56 +1,52 @@
 {
-    "status":  "Completed",
-    "year":  "2023",
-    "date":  "21 Feb 2023",
-    "amount":  "RM 10,000,000.00",
-    "client":  "",
-    "description":  "Cadangan Pembinaan Gantian Bangunan Pentadbiran Dan Lain-lain Kemudahan Serta Naiktaraf Bangunan Akademik Sedia Ada Di Sekolah Kebangsaan Merpati Jepang Di Atas Lot 30 47 Section 2 Kuching Town Land District, Jalan Muhibbah, Kuching, Sarawak.",
-    "cat":  "Building",
-    "division":  "Kuching",
-    "loc":  "SK Merpati Jepang, Jln Patinggi Ali, Kuching",
-    "accuracy":  "Approximate (SK Merpati Jepang, Jln Patinggi Ali, Kg Sungai Lajim, Kuching)",
-    "isPilihan":  true,
-    "newsList":  [
-                     {
-                         "title":  "One of our completed project is newly upgraded SK Merpati Jepang completed in early 2023.",
-                         "link":  "https://www.facebook.com/permalink.php?story_fbid=pfbid02fNV9XcwsM1vxrqHPtGqb2PF15UBgyq6CgTsJhHK1tavJ179cRhNnEVfMy5JZmcnhl\u0026id=61570057791049"
-                     }
-                 ],
-    "images":  [
-                   {
-                       "src":  "/uploads/projects/sekolah-merpati/sekolah-merpati-1.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/sekolah-merpati/sekolah-merpati-2.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/sekolah-merpati/sekolah-merpati-3.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/sekolah-merpati/sekolah-merpati-4.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/sekolah-merpati/sekolah-merpati-5.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/sekolah-merpati/sekolah-merpati-6.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/sekolah-merpati/sekolah-merpati-7.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/sekolah-merpati/sekolah-merpati-8.jpg",
-                       "alt":  ""
-                   }
-               ],
-    "coordinates":  "1.5630, 110.3307",
-    "lat":  1.5630,
-    "lng":  110.3307
+  "loc": "SK Merpati Jepang, Jln Patinggi Ali, Kuching",
+  "lng": 110.3307,
+  "client": "",
+  "division": "Kuching",
+  "date": "21 Feb 2023",
+  "newsList": [
+    {
+      "title": "One of our completed project is newly upgraded SK Merpati Jepang completed in early 2023.",
+      "link": "https://www.facebook.com/permalink.php?story_fbid=pfbid02fNV9XcwsM1vxrqHPtGqb2PF15UBgyq6CgTsJhHK1tavJ179cRhNnEVfMy5JZmcnhl&id=61570057791049"
+    }
+  ],
+  "status": "Completed",
+  "isPilihan": true,
+  "cat": "Building",
+  "amount": "RM 10,000,000.00",
+  "images": [
+    {
+      "src": "/uploads/projects/sekolah-merpati/sekolah-merpati-1.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/sekolah-merpati/sekolah-merpati-2.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/sekolah-merpati/sekolah-merpati-3.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/sekolah-merpati/sekolah-merpati-4.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/sekolah-merpati/sekolah-merpati-5.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/sekolah-merpati/sekolah-merpati-6.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/sekolah-merpati/sekolah-merpati-7.jpg",
+      "alt": ""
+    }
+  ],
+  "accuracy": "Approximate (SK Merpati Jepang, Jln Patinggi Ali, Kg Sungai Lajim, Kuching)",
+  "coordinates": "1.5630, 110.3307",
+  "description": "Cadangan Pembinaan Gantian Bangunan Pentadbiran Dan Lain-lain Kemudahan Serta Naiktaraf Bangunan Akademik Sedia Ada Di Sekolah Kebangsaan Merpati Jepang Di Atas Lot 30 47 Section 2 Kuching Town Land District, Jalan Muhibbah, Kuching, Sarawak.",
+  "year": "2023",
+  "lat": 1.563
 }
