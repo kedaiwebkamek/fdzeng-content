@@ -119,14 +119,22 @@
       }
 
       // ── Widget 1: Currency MYR ─────────────────────────────────────────────────
+      // Normalize any stored amount to raw whole-ringgit digits. Accepts raw
+      // digits ("710000") AND legacy pre-formatted values ("RM 710,000.00").
+      function currencyToRaw(v) {
+        var s = String(v == null ? '' : v).replace(/[^0-9.]/g, '');
+        if (s.indexOf('.') !== -1) s = s.split('.')[0]; // drop cents
+        s = s.replace(/^0+(?=\d)/, '');                 // strip leading zeros
+        return s;
+      }
+      function currencyCommas(raw) {
+        if (!raw) return '';
+        return raw.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      }
+
       function CurrencyMYRControl(props) {
-        function formatCommas(raw) {
-          if (!raw) return '';
-          return raw.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        }
         function handleChange(e) {
-          var raw = e.target.value.replace(/[^0-9]/g, '');
-          props.onChange(raw);
+          props.onChange(currencyToRaw(e.target.value));
         }
         return h('div', {
           style: { display: 'flex', alignItems: 'center', borderRadius: '4px', overflow: 'hidden', border: '1px solid #ddd', background: '#fff', height: '40px' }
@@ -137,7 +145,7 @@
           h('input', {
             type: 'text',
             id: props.forID,
-            value: formatCommas(props.value || ''),
+            value: currencyCommas(currencyToRaw(props.value)),
             placeholder: 'Contoh: 2500000',
             onChange: handleChange,
             style: { border: 'none', outline: 'none', padding: '0 12px', flex: 1, fontSize: '0.9rem', fontFamily: 'inherit', height: '100%', background: 'transparent' }
@@ -146,9 +154,9 @@
       }
 
       function CurrencyMYRPreview(props) {
-        var raw = props.value || '';
+        var raw = currencyToRaw(props.value);
         if (!raw) return h('span', {}, '—');
-        return h('span', {}, 'RM ' + raw.replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+        return h('span', {}, 'RM ' + currencyCommas(raw));
       }
 
       CMS.registerWidget('currency-myr', CurrencyMYRControl, CurrencyMYRPreview);
@@ -715,8 +723,6 @@
         name: 'preSave',
         handler: function(args) { /* no-op */ }
       });
-
-      CMS.registerPreviewStyle('/admin/custom.css');
     });
 
     window.addEventListener('load', function() {
