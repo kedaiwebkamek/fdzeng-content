@@ -22,15 +22,20 @@ collections:
     format: json
     create: true
     summary: "{{status}} — {{description}}"
-    sortable_fields: ['status']
-    search_fields: ['description', 'client', 'cat', 'division', 'loc', 'status']
+    sortable_fields: ['description', 'status', 'client', 'division']
+    search_fields: ['description', 'client', 'cat', 'division', 'loc', 'year', 'status', 'accuracy']
     view_filters:
-      - label: Sedang Berjalan
-        field: status
-        pattern: Ongoing
-      - label: Siap
-        field: status
-        pattern: Completed
+      - { label: "Sedang Berjalan", field: status, pattern: Ongoing }
+      - { label: "Siap", field: status, pattern: Completed }
+      - { label: "Kategori: Bangunan & Fasiliti", field: cat, pattern: Building }
+      - { label: "Kategori: Infrastruktur", field: cat, pattern: Infrastructure }
+      - { label: "Kategori: Penyelenggaraan", field: cat, pattern: Maintenance }
+      - { label: "Kategori: Telekomunikasi", field: cat, pattern: Telecom }
+      - { label: "Kategori: Utiliti (Air & Elektrik)", field: cat, pattern: Utilities }
+    view_groups:
+      - { label: "Kumpulan: Kategori", field: cat }
+      - { label: "Kumpulan: Bahagian (Division)", field: division }
+      - { label: "Kumpulan: Status", field: status }
     fields:
 
       # ── Status & Tarikh ──────────────────────────────────────────────────────
