@@ -857,6 +857,95 @@
         content.insertBefore(logo, content.firstChild);
       }
 
+      // ── In-CMS help panel (Panduan) — Malay quick guide for the site owner ────
+      function injectHelpPanel() {
+        if (document.getElementById('fdz-help-btn')) return;
+        if (!document.querySelector("[class*='AppHeader']")) return; // CMS only, not the login page
+
+        if (!document.getElementById('fdz-help-style')) {
+          var st = document.createElement('style');
+          st.id = 'fdz-help-style';
+          st.textContent = [
+            "#fdz-help-btn{position:fixed;right:22px;bottom:22px;z-index:9998;display:inline-flex;align-items:center;gap:7px;background:#b5000b;color:#fff;font-family:'Barlow',sans-serif;font-weight:800;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;border:none;border-radius:999px;padding:12px 20px;box-shadow:0 10px 26px rgba(181,0,11,0.4);cursor:pointer;transition:transform .2s,background .2s;}",
+            "#fdz-help-btn:hover{background:#e30613;transform:translateY(-2px);}",
+            "#fdz-help-overlay{position:fixed;inset:0;z-index:9999;background:rgba(14,15,17,0.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:24px;}",
+            "#fdz-help-modal{background:#fff;width:100%;max-width:640px;max-height:86vh;overflow-y:auto;border-radius:14px;border-top:4px solid #b5000b;box-shadow:0 30px 80px -20px rgba(0,0,0,0.6);position:relative;}",
+            "#fdz-help-modal .fh-head{position:sticky;top:0;background:#141518;color:#fff;padding:20px 26px;display:flex;align-items:center;gap:12px;}",
+            "#fdz-help-modal .fh-head img{height:22px;filter:brightness(0) invert(1);}",
+            "#fdz-help-modal .fh-head h2{font-family:'Barlow',sans-serif;font-weight:900;font-size:1.05rem;text-transform:uppercase;letter-spacing:0.02em;margin:0;}",
+            "#fdz-help-close{margin-left:auto;background:none;border:none;color:#fff;font-size:1.6rem;line-height:1;cursor:pointer;opacity:0.7;}",
+            "#fdz-help-close:hover{opacity:1;}",
+            "#fdz-help-modal .fh-body{padding:22px 26px 30px;font-family:'Inter',sans-serif;color:#1a1c1d;font-size:0.9rem;line-height:1.65;}",
+            "#fdz-help-modal h3{font-family:'Barlow',sans-serif;font-weight:800;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.04em;color:#b5000b;margin:22px 0 8px;padding-top:16px;border-top:1px solid #eee;}",
+            "#fdz-help-modal h3:first-child{border-top:none;padding-top:0;margin-top:0;}",
+            "#fdz-help-modal ol,#fdz-help-modal ul{margin:0 0 4px;padding-left:20px;}",
+            "#fdz-help-modal li{margin-bottom:5px;}",
+            "#fdz-help-modal .fh-tip{background:#fff8e1;border-left:4px solid #f59e0b;padding:9px 13px;border-radius:4px;color:#92400e;font-size:0.82rem;margin:8px 0;}",
+            "#fdz-help-modal code{background:#f0f0f2;padding:1px 6px;border-radius:3px;font-size:0.82rem;}"
+          ].join('\n');
+          document.head.appendChild(st);
+        }
+
+        var btn = document.createElement('button');
+        btn.id = 'fdz-help-btn';
+        btn.type = 'button';
+        btn.innerHTML = '📖 Panduan';
+
+        var overlay = document.createElement('div');
+        overlay.id = 'fdz-help-overlay';
+        overlay.innerHTML =
+          '<div id="fdz-help-modal" role="dialog" aria-label="Panduan CMS">' +
+            '<div class="fh-head"><img src="/fdzeng-logo.png" alt="FDZ"><h2>Panduan Ringkas CMS</h2><button id="fdz-help-close" aria-label="Tutup">&times;</button></div>' +
+            '<div class="fh-body">' +
+              '<h3>➕ Menambah Projek Baru</h3>' +
+              '<ol>' +
+                '<li>Klik <b>Projects</b> di sebelah kiri, kemudian butang <b>New Project</b>.</li>' +
+                '<li>Isi <b>Status</b> (Sedang Berjalan / Siap), <b>Tajuk Projek</b>, <b>Klien</b>, dan <b>Nilai Projek</b> (taip angka sahaja — contoh <code>20000000</code>).</li>' +
+                '<li>Pilih <b>Kategori</b> dan <b>Bahagian</b>, isi <b>Lokasi Penuh</b>.</li>' +
+                '<li><b>Koordinat GPS:</b> KLIK pada peta untuk letak penanda lokasi (atau seret penanda). Koordinat diisi automatik.</li>' +
+                '<li>Upload <b>Gambar Projek</b> (lihat peraturan di bawah).</li>' +
+                '<li>Klik <b>Save</b> untuk simpan draf, kemudian <b>Publish</b> untuk terbitkan ke laman web.</li>' +
+              '</ol>' +
+              '<div class="fh-tip">Tip: untuk projek yang serupa, buka projek sedia ada → menu tiga titik → <b>Duplicate entry</b> untuk salin, kemudian ubah butiran.</div>' +
+              '<h3>🖼️ Peraturan Gambar</h3>' +
+              '<ul>' +
+                '<li><b>Gambar pertama = thumbnail</b> yang dipapar pada kad projek & homepage. Susun gambar terbaik dahulu.</li>' +
+                '<li>Format JPG atau PNG, saiz maksimum <b>5MB</b> setiap gambar.</li>' +
+                '<li><b>JANGAN guna URL dari Facebook</b> — ia akan tamat tempoh dan gambar hilang. Upload terus dari komputer.</li>' +
+                '<li>Isi <b>Alt Text</b> (penerangan ringkas gambar) untuk bantu Google (SEO).</li>' +
+              '</ul>' +
+              '<h3>📅 Status & Tarikh</h3>' +
+              '<ul>' +
+                '<li>Pilih <b>Sedang Berjalan</b> untuk projek aktif — medan Tarikh Siap akan disembunyikan automatik.</li>' +
+                '<li>Pilih <b>Siap</b> dan isi <b>Tarikh Siap</b> (contoh <code>29 Jan 2019</code>) untuk projek selesai.</li>' +
+              '</ul>' +
+              '<h3>📜 Sijil (Certifications)</h3>' +
+              '<ul>' +
+                '<li>Isi <b>Nama Sijil</b>, <b>Badan Pengeluar</b>, <b>Penerangan Ringkas</b>, dan <b>Butiran Sijil</b> (baris label–nilai).</li>' +
+                '<li><b>Tarikh Luput</b> diisi SEKALI sahaja (format <code>2027-04-05</code>) — baris "Sah sehingga" dipapar automatik. Jangan tambah dalam Butiran.</li>' +
+                '<li>Aktifkan <b>Papar dalam Sijil Pilihan</b> + tetapkan kedudukan (1–6) untuk 6 kad utama.</li>' +
+              '</ul>' +
+              '<h3>📸 Galeri Foto</h3>' +
+              '<ul>' +
+                '<li>Buka <b>Galeri Foto</b> → tambah/susun item dalam senarai <b>Gallery Items</b> (seret untuk susun semula).</li>' +
+              '</ul>' +
+              '<h3>💾 Simpan & Terbit</h3>' +
+              '<ul>' +
+                '<li><b>Save</b> menyimpan sebagai draf (belum ke laman web).</li>' +
+                '<li>Guna <b>Set status</b> (Draft → In review → Ready) kemudian <b>Publish</b> untuk terbitkan.</li>' +
+                '<li>Laman web dikemas kini automatik beberapa minit selepas Publish.</li>' +
+              '</ul>' +
+            '</div>' +
+          '</div>';
+
+        btn.addEventListener('click', function () { overlay.style.display = 'flex'; });
+        overlay.addEventListener('click', function (e) { if (e.target === overlay) overlay.style.display = 'none'; });
+        document.body.appendChild(btn);
+        document.body.appendChild(overlay);
+        overlay.querySelector('#fdz-help-close').addEventListener('click', function () { overlay.style.display = 'none'; });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') overlay.style.display = 'none'; });
+      }
+
       function brandLogin() {
         var authPage = document.querySelector('[class*="AuthenticationPage"]');
         if (!authPage) return;
@@ -888,13 +977,14 @@
       }
 
       // Watch for the login page / CMS header to (re)appear and brand them
-      var enhanceObserver = new MutationObserver(function () { brandLogin(); brandHeader(); });
+      var enhanceObserver = new MutationObserver(function () { brandLogin(); brandHeader(); injectHelpPanel(); });
       enhanceObserver.observe(document.body, {
         childList: true, subtree: true
       });
 
       brandLogin();
       brandHeader();
+      injectHelpPanel();
     });
   </script>
   <script src="https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js"></script>
