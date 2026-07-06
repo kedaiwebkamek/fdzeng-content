@@ -19,8 +19,11 @@ fdzeng-content/
 │       ├── dewan-pkms/
 │       ├── jalan-kupang/
 │       └── ...
-└── admin/                         ← Decap CMS panel — do not edit
+└── admin/                         ← Decap CMS panel (config.yml + index.html)
+                                      SOURCE OF THE LIVE PANEL — see note below
 ```
+
+> **`admin/` is the single source of the live CMS panel.** On every deploy, `fdzeng.com`'s build copies `admin/` out of this repo and serves it at `https://www.fdzeng.com/admin/`. The `fdzeng.com` repo no longer keeps its own copy, so this is the **only** place the panel is edited. Edit `admin/config.yml` (fields/labels/hints) or `admin/index.html` (widgets/preview) here, then push — do not recreate an `admin/` folder in `fdzeng.com`.
 
 ---
 
@@ -47,7 +50,7 @@ git pull origin master
 Push to master
   → GitHub Actions fires Vercel deploy hook
       → Vercel clones this repo
-      → copies content/ and uploads/ into fdzeng.com
+      → copies content/, uploads/ AND admin/ into fdzeng.com
       → runs build-data.js (compiles JSON bundles + regenerates indexes)
       → site goes live
 ```

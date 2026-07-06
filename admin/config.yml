@@ -2,7 +2,7 @@ backend:
   name: github
   repo: kedaiwebkamek/fdzeng-content
   branch: master
-  base_url: https://fdzeng.com
+  base_url: https://www.fdzeng.com
   auth_endpoint: /api/auth
 
 publish_mode: editorial_workflow

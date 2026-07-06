@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
   <title>FDZ Engineering — CMS Admin</title>
   <link rel="cms-config-url" href="/admin/config.yml">
 </head>
@@ -555,16 +556,13 @@
       };
 
       // ── Sanitize on save: trim leading/trailing spaces from all string fields ──
+      // NOTE: returning a modified entry from preSave causes "s.get is not a function"
+      // in Decap CMS v3.3.x because it tries to call .get() on the plain JS return value.
+      // Handler is registered as a no-op for now; trimming can be re-added once the
+      // correct return format for this CMS version is confirmed.
       CMS.registerEventListener({
         name: 'preSave',
-        handler: function(args) {
-          var data = args.entry.get('data');
-          var trimmed = data.map(function(value) {
-            if (typeof value === 'string') return value.trim().replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ');
-            return value;
-          });
-          return { data: trimmed };
-        }
+        handler: function(args) { /* no-op */ }
       });
 
       CMS.registerPreviewStyle('/admin/custom.css');
@@ -920,11 +918,9 @@
       ].join(';');
 
       function findToggle() {
-        // Boolean widget renders as button[role="switch"] in Decap CMS 3.x
         var buttons = document.querySelectorAll('button[role="switch"]');
         for (var i = 0; i < buttons.length; i++) {
           var btn = buttons[i];
-          // Walk up to find a label nearby with matching text
           var container = btn.parentElement;
           for (var k = 0; k < 8; k++) {
             if (!container) break;
@@ -966,7 +962,6 @@
 
         var isOn = toggle.getAttribute('aria-checked') === 'true';
 
-        // Remove existing overlay
         var old = document.getElementById(ORDER_MSG_ID);
         if (old && old.parentNode) old.parentNode.removeChild(old);
 
