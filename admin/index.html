@@ -748,6 +748,42 @@
         document.head.appendChild(s);
       })();
 
+      // ── FDZ-branded CMS interface (the post-login chrome) ────────────────────
+      // Layout-safe by design: only colours, fonts, backgrounds and radius — never
+      // anything that moves or resizes Decap's structure. Targets Decap's emotion
+      // component labels; a missed selector just leaves that element default.
+      (function injectAppStyle() {
+        if (document.getElementById('fdz-app-style')) return;
+        var s = document.createElement('style');
+        s.id = 'fdz-app-style';
+        s.textContent = [
+          "#nc-root, #nc-root button, #nc-root input, #nc-root textarea, #nc-root select, body { font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif; }",
+          "[class*='CollectionTop'] h1,[class*='EntryListing'] h1,[class*='EntryListing'] h2,[class*='CollectionHeader'] { font-family:'Barlow',sans-serif !important; font-weight:900 !important; letter-spacing:-0.01em; text-transform:uppercase; }",
+          "[class*='AppHeader'] { border-bottom:3px solid #b5000b !important; box-shadow:0 2px 14px rgba(0,0,0,0.05) !important; }",
+          "#fdz-hdr-logo { height:26px; width:auto; display:block; margin-right:10px; align-self:center; }",
+          "[class*='AppHeader'] a[class*='active'],[class*='AppHeaderNavLink'][class*='active'] { color:#b5000b !important; }",
+          "[class*='AppHeaderActions'] a,[class*='AppHeaderQuickNew'],[class*='CollectionTop'] a[href*='/new'],button[class*='Primary'],a[class*='Primary'] { background-color:#b5000b !important; border-color:#b5000b !important; color:#fff !important; }",
+          "[class*='AppHeaderActions'] a:hover,button[class*='Primary']:hover,a[class*='Primary']:hover { background-color:#e30613 !important; border-color:#e30613 !important; }",
+          "[class*='ListCard'],[class*='Card-'] { border-radius:10px !important; transition:box-shadow .2s,transform .2s,border-color .2s !important; }",
+          "[class*='ListCard']:hover,[class*='Card-']:hover { border-color:#ffdad5 !important; box-shadow:0 14px 32px -14px rgba(0,0,0,0.16) !important; transform:translateY(-2px); }",
+          "[class*='SidebarNavLink'][class*='active'],[class*='NavLink'][class*='active'] { background-color:#141518 !important; color:#fff !important; border-radius:7px; }",
+          "#nc-root a:focus-visible, #nc-root button:focus-visible { outline:2px solid #b5000b !important; outline-offset:2px; }"
+        ].join('\n');
+        document.head.appendChild(s);
+      })();
+
+      // Drop the FDZ logo into the CMS top header (self-heals if React re-renders)
+      function brandHeader() {
+        var hdr = document.querySelector("[class*='AppHeader']");
+        if (!hdr || hdr.querySelector('#fdz-hdr-logo')) return;
+        var content = hdr.querySelector("[class*='AppHeaderContent']") || hdr;
+        var logo = document.createElement('img');
+        logo.id = 'fdz-hdr-logo';
+        logo.src = '/fdzeng-logo.png';
+        logo.alt = 'FDZ Engineering';
+        content.insertBefore(logo, content.firstChild);
+      }
+
       function brandLogin() {
         var authPage = document.querySelector('[class*="AuthenticationPage"]');
         if (!authPage) return;
@@ -778,13 +814,14 @@
         }
       }
 
-      // Watch for the login page to (re)appear and brand it
-      var enhanceObserver = new MutationObserver(function () { brandLogin(); });
+      // Watch for the login page / CMS header to (re)appear and brand them
+      var enhanceObserver = new MutationObserver(function () { brandLogin(); brandHeader(); });
       enhanceObserver.observe(document.body, {
         childList: true, subtree: true
       });
 
       brandLogin();
+      brandHeader();
     });
   </script>
   <script src="https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js"></script>
