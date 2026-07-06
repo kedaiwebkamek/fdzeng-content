@@ -21,16 +21,16 @@ collections:
     extension: json
     format: json
     create: true
-    summary: "{{description}} | {{client}} ({{status}})"
+    summary: "{{status}} — {{description}}"
     sortable_fields: ['status']
     search_fields: ['description', 'client', 'cat', 'division', 'loc', 'status']
     view_filters:
       - label: Sedang Berjalan
         field: status
-        pattern: Sedang Berjalan
+        pattern: Ongoing
       - label: Siap
         field: status
-        pattern: Siap
+        pattern: Completed
     fields:
 
       # ── Status & Tarikh ──────────────────────────────────────────────────────
@@ -39,8 +39,8 @@ collections:
         widget: select
         required: true
         options:
-          - { label: "Sedang Berjalan — Projek masih aktif", value: "Sedang Berjalan" }
-          - { label: "Siap — Projek telah selesai & diserahkan", value: "Siap" }
+          - { label: "Sedang Berjalan — Projek masih aktif", value: "Ongoing" }
+          - { label: "Siap — Projek telah selesai & diserahkan", value: "Completed" }
         hint: "Pilih Sedang Berjalan jika projek masih dalam pembinaan. Pilih Siap jika projek telah diserahkan kepada klien."
 
       - name: date

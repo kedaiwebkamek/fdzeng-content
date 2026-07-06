@@ -16,7 +16,7 @@
 
       // ── Sample fallback data ────────────────────────────────────────────────
       var PROJECT_SAMPLE = {
-        status: 'Sedang Berjalan',
+        status: 'Ongoing',
         year: '2026',
         date: '29 Jan 2019',
         amount: '2500000',
@@ -119,7 +119,7 @@
           for (var i = 0; i < selects.length; i++) {
             var opts = selects[i].options;
             for (var j = 0; j < opts.length; j++) {
-              if (opts[j].value === 'Sedang Berjalan') return selects[i].value;
+              if (opts[j].value === 'Ongoing') return selects[i].value;
             }
           }
         } catch(e) {}
@@ -159,7 +159,7 @@
       }
 
       function YearConditionalControl(props) {
-        var isOngoing = getEntryStatus(props) === 'Sedang Berjalan';
+        var isOngoing = getEntryStatus(props) === 'Ongoing';
         return h('div', {},
           isOngoing ? conditionalBanner() : null,
           conditionalInput(props, 'Contoh: 2024')
@@ -169,7 +169,7 @@
       CMS.registerWidget('year-conditional', YearConditionalControl);
 
       function DateConditionalControl(props) {
-        var isOngoing = getEntryStatus(props) === 'Sedang Berjalan';
+        var isOngoing = getEntryStatus(props) === 'Ongoing';
         return h('div', {},
           isOngoing ? conditionalBanner() : null,
           conditionalInput(props, 'Contoh: 29 Jan 2019')
@@ -181,7 +181,7 @@
       // ── Shared card/item builders (accept plain JS field objects) ────────────
 
       function buildProjectCard(d) {
-        var isOngoing   = d.status === 'Sedang Berjalan';
+        var isOngoing   = d.status === 'Ongoing';
         var statusLabel = isOngoing
           ? '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#28c840;margin-right:4px;flex-shrink:0;"></span>' + (d.status || '')
           : (d.status || '—');
@@ -228,7 +228,7 @@
       }
 
       function buildProjectTableRow(d) {
-        var isOngoing = d.status === 'Sedang Berjalan';
+        var isOngoing = d.status === 'Ongoing';
         var statusHtml = isOngoing
           ? '<span style="display:inline-flex;align-items:center;gap:4px;color:#16a34a;font-weight:600;font-size:0.7rem"><span style="width:7px;height:7px;border-radius:50%;background:#16a34a;display:inline-block;"></span>Berjalan</span>'
           : '<span style="color:#6b7280;font-size:0.7rem;font-weight:600;">Siap</span>';
@@ -788,7 +788,7 @@
   <script>
     /* ── Conditional Year/Date field visibility ────────────────────────────────
        Watches the CMS form DOM and hides the Year and Tarikh fields (replacing
-       them with an info overlay) whenever status is "Sedang Berjalan".         */
+       them with an info overlay) whenever status is "Ongoing".                 */
     (function () {
       var YEAR_MSG_ID = 'fdz-cond-year-msg';
       var DATE_MSG_ID = 'fdz-cond-date-msg';
@@ -804,12 +804,12 @@
         'margin-top:4px'
       ].join(';');
 
-      // Find the status <select> by locating an option with value "Sedang Berjalan"
+      // Find the status <select> by locating an option with value "Ongoing"
       function findStatusSelect() {
         var selects = document.querySelectorAll('select');
         for (var i = 0; i < selects.length; i++) {
           for (var j = 0; j < selects[i].options.length; j++) {
-            if (selects[i].options[j].value === 'Sedang Berjalan') return selects[i];
+            if (selects[i].options[j].value === 'Ongoing') return selects[i];
           }
         }
         return null;
@@ -839,7 +839,7 @@
       }
 
       function applyVisibility(status) {
-        var isOngoing = status === 'Sedang Berjalan';
+        var isOngoing = status === 'Ongoing';
 
         [
           { labelText: 'Tarikh Siap', msgId: DATE_MSG_ID, msg: '⏳ Projek masih berjalan — Tarikh siap belum ditetapkan' }
@@ -877,7 +877,7 @@
         }
 
         // Apply immediately: handles both initial load and navigation to an
-        // existing "Sedang Berjalan" entry where fields should be hidden on open
+        // existing "Ongoing" entry where fields should be hidden on open
         applyVisibility(sel.value);
       }
 
