@@ -227,6 +227,12 @@ collections:
         required: true
         hint: "Nama penuh agensi atau badan yang mengeluarkan sijil ini. Contoh: Lembaga Pembangunan Industri Pembinaan Malaysia (CIDB), SIRIM QAS International Sdn. Bhd."
 
+      - name: brief
+        label: "Penerangan Ringkas"
+        widget: text
+        required: false
+        hint: "Penerangan ringkas tentang sijil ini — dipaparkan sebagai tooltip 'info' (ⓘ) pada kad dan senarai sijil di laman web. Terangkan apa sijil ini membolehkan syarikat lakukan. Tag HTML ringkas seperti <em>...</em> (italik) dibenarkan."
+
       - name: category
         label: "Kategori Sijil"
         widget: select
@@ -261,6 +267,23 @@ collections:
         required: false
         hint: "Tarikh sijil luput dalam format ISO. Contoh: 2027-04-05. Kosongkan jika sijil tidak ada tarikh luput (contoh: SSM, ISO yang sentiasa diperbaharui)."
 
+      - name: meta
+        label: "Butiran Sijil (Label & Nilai)"
+        widget: list
+        required: false
+        label_singular: "Butiran"
+        summary: "{{fields.label}}: {{fields.value}}"
+        hint: "Baris butiran yang dipaparkan pada sijil (contoh: No. Pendaftaran, Tarikh Mula, Tarikh Luput, Gred). Tambah satu baris untuk setiap butiran — 'Label' di kiri, 'Nilai' di kanan."
+        fields:
+          - name: label
+            label: "Label"
+            widget: string
+            hint: "Nama butiran. Contoh: No. Pendaftaran, Tarikh Luput, Gred B, Kategori"
+          - name: value
+            label: "Nilai"
+            widget: string
+            hint: "Nilai butiran. Contoh: 0120110824-SR135974, 16/09/2029, G7/B"
+
       - name: isFeatured
         label: "Papar dalam Sijil Pilihan"
         widget: boolean
@@ -275,6 +298,18 @@ collections:
         value_type: int
         hint: "Tentukan slot kedudukan sijil (1 = pertama/kiri, 6 = terakhir/kanan). Hanya digunakan jika 'Papar dalam Sijil Pilihan' diaktifkan di atas. Biarkan 0 jika tidak dipilih."
         pattern: ['^[0-6]$', 'Nombor 0 hingga 6 sahaja']
+
+      - name: featuredTitle
+        label: "Tajuk Ganti — Kad Pilihan (Pilihan)"
+        widget: string
+        required: false
+        hint: "Pilihan. Jika diisi, tajuk ini menggantikan 'Nama Sijil' HANYA pada kad Sijil Pilihan (biasanya versi lebih ringkas/pendek). Kosongkan untuk guna Nama Sijil biasa."
+
+      - name: featuredIssuer
+        label: "Badan Pengeluar Ganti — Kad Pilihan (Pilihan)"
+        widget: string
+        required: false
+        hint: "Pilihan. Jika diisi, menggantikan 'Badan Pengeluar' pada kad Sijil Pilihan sahaja. Kosongkan untuk guna Badan Pengeluar biasa."
 
       - name: logoImage
         label: "Logo Sijil (Pilihan)"

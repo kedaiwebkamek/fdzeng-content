@@ -71,7 +71,7 @@ The admin panel at `fdzeng.com/admin/` (Decap CMS) manages the same JSON files i
 | Certifications | `content/certifications/` | Nama Sijil → `title`, Badan Pengeluar → `issuer`, etc. |
 | Galeri Foto | `content/gallery.json` | Gallery Items → `items[]` |
 
-> **Note:** Some fields exist in the JSON files but are not shown in the CMS (manual-only). These fields are preserved safely when the CMS edits the same file — the CMS only overwrites fields it knows about.
+> **Important:** When the CMS saves an entry it rewrites the file from the fields defined in `admin/config.yml` **only** — any field that is *not* in the config is **dropped**. So the CMS fields must stay in sync with the JSON, otherwise editing an entry silently deletes data. (The one deliberate exception is a project's `year`: it is auto-derived from `status`/`date` at build time by `build-data.js`, so it is intentionally not a CMS field and never needs to be stored by hand.)
 
 ---
 
@@ -278,7 +278,7 @@ git push origin master
 
 **`isFeatured` + `featuredOrder`:** Maximum 6 featured certs at a time. Each must have a unique `featuredOrder` (1–6).
 
-> **`brief` and `meta` are manual-only fields** — the CMS does not show them, but it safely preserves them when you edit the cert via the admin panel.
+> **`brief`** (Penerangan Ringkas) and **`meta`** (Butiran Sijil — label/value rows) are now editable in the CMS, along with the optional **`featuredTitle`/`featuredIssuer`** overrides for the featured card.
 
 ---
 
