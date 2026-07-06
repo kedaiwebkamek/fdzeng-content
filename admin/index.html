@@ -720,217 +720,71 @@
     });
 
     window.addEventListener('load', function() {
-      function injectLoginLogo() {
-        var logoWrapper = document.querySelector(
-          '[class*="DecapLogoIcon"],' +
-          '[class*="IconWrapper"]'
-        );
+      // ── FDZ-branded login screen ────────────────────────────────────────────
+      // Decap renders its own <AuthenticationPage> (logo icon + "Login with
+      // GitHub" button). We turn that page into the fdzeng.com dark hero with the
+      // logo on a white chip and a brand-red button. We only ADD our own sibling
+      // nodes + CSS — never move Decap's React-managed button.
+      (function injectLoginStyle() {
+        if (document.getElementById('fdz-login-style')) return;
+        var s = document.createElement('style');
+        s.id = 'fdz-login-style';
+        s.textContent = [
+          "@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@600;700;800;900&family=Inter:wght@400;500;600&display=swap');",
+          '[class*="AuthenticationPage"]{position:fixed;inset:0;min-height:100vh;width:100vw;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#141518 !important;background-image:radial-gradient(circle at 50% 20%,rgba(181,0,11,0.18),transparent 55%),linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px) !important;background-size:100% 100%,44px 44px,44px 44px !important;padding:32px;overflow:auto;}',
+          '[class*="AuthenticationPage"] [class*="LogoIcon"],[class*="AuthenticationPage"] [class*="IconWrapper"]{display:none !important;}',
+          '#fdz-login-hero{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:2;}',
+          '#fdz-login-hero .fdz-logo-chip{background:#fff;border-radius:14px;padding:22px 30px;box-shadow:0 26px 60px -18px rgba(0,0,0,0.7);border-top:3px solid #b5000b;}',
+          '#fdz-login-hero .fdz-logo{width:220px;max-width:68vw;height:auto;display:block;}',
+          '#fdz-login-hero .fdz-rule{width:44px;height:3px;background:#b5000b;border-radius:2px;margin:26px 0 18px;}',
+          '#fdz-login-hero .fdz-cms{font-family:"Barlow",sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:0.08em;text-transform:uppercase;color:#fff;}',
+          '#fdz-login-hero .fdz-cms-sub{font-family:"Inter",sans-serif;font-size:0.74rem;color:rgba(255,255,255,0.5);margin-top:8px;letter-spacing:0.02em;}',
+          '[class*="AuthenticationPage"] button{background:#b5000b !important;color:#fff !important;font-family:"Barlow",sans-serif !important;font-weight:900 !important;font-size:0.8rem !important;letter-spacing:0.12em !important;text-transform:uppercase !important;border:none !important;border-radius:4px !important;padding:15px 34px !important;margin-top:28px !important;box-shadow:0 10px 26px rgba(181,0,11,0.4) !important;cursor:pointer !important;transition:all 0.2s !important;position:relative;z-index:2;}',
+          '[class*="AuthenticationPage"] button:hover{background:#e30613 !important;transform:translateY(-1px) !important;box-shadow:0 14px 32px rgba(227,6,19,0.45) !important;}',
+          '[class*="AuthenticationPage"] p{color:rgba(255,255,255,0.55) !important;font-family:"Inter",sans-serif !important;font-size:0.78rem !important;position:relative;z-index:2;}',
+          '#fdz-login-tag{font-family:"Barlow",sans-serif;font-size:0.56rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:26px;position:relative;z-index:2;}',
+          '#fdz-login-foot{position:fixed;bottom:18px;left:0;right:0;text-align:center;font-family:"Inter",sans-serif;font-size:0.62rem;letter-spacing:0.08em;color:rgba(255,255,255,0.25);z-index:2;}'
+        ].join('\n');
+        document.head.appendChild(s);
+      })();
 
-        if (logoWrapper && !logoWrapper._replaced) {
-          logoWrapper._replaced = true;
-          logoWrapper.innerHTML = '';
-          logoWrapper.style.cssText =
-            'display: flex;' +
-            'justify-content: center;' +
-            'align-items: center;' +
-            'width: 100%;';
+      function brandLogin() {
+        var authPage = document.querySelector('[class*="AuthenticationPage"]');
+        if (!authPage) return;
+        // Re-check by element (not a flag) so it self-heals if React re-renders
+        if (document.getElementById('fdz-login-hero')) return;
+        // Wait until Decap has rendered the login button
+        if (!authPage.querySelector('button')) return;
 
-          var img = document.createElement('img');
-          img.src = '/fdzeng-logo.png';
-          img.alt = 'FDZ Engineering';
-          img.style.cssText =
-            'height: 32px;' +
-            'width: auto;' +
-            'object-fit: contain;' +
-            'display: block;';
+        var hero = document.createElement('div');
+        hero.id = 'fdz-login-hero';
+        hero.innerHTML =
+          '<div class="fdz-logo-chip"><img class="fdz-logo" src="/fdzeng-logo.png" alt="FDZ Engineering Sdn Bhd"></div>' +
+          '<div class="fdz-rule"></div>' +
+          '<div class="fdz-cms">Content Management System</div>' +
+          '<div class="fdz-cms-sub">Panel Kandungan Laman Web Rasmi</div>';
+        authPage.insertBefore(hero, authPage.firstChild);
 
-          logoWrapper.appendChild(img);
+        var tag = document.createElement('div');
+        tag.id = 'fdz-login-tag';
+        tag.innerHTML = 'G7 Bumiputera Contractor &bull; Sarawak';
+        authPage.appendChild(tag);
+
+        if (!document.getElementById('fdz-login-foot')) {
+          var foot = document.createElement('div');
+          foot.id = 'fdz-login-foot';
+          foot.innerHTML = 'Secure admin access &bull; www.fdzeng.com/admin';
+          authPage.appendChild(foot);
         }
       }
 
-      var loginObserver = new MutationObserver(
-        function() { injectLoginLogo(); }
-      );
-
-      loginObserver.observe(document.body, {
-        childList: true,
-        subtree: true
-      });
-
-      injectLoginLogo();
-
-      function injectLoginEnhancements() {
-        var authPage = document.querySelector(
-          '[class*="AuthenticationPage"],' +
-          '[class*="login-page"],' +
-          '[class*="LoginPage"]'
-        );
-
-        if (authPage && !authPage._enhanced) {
-          authPage._enhanced = true;
-
-          // Create enhancement container
-          var container = document.createElement('div');
-          container.id = 'fdz-login-enhance';
-          container.style.cssText =
-            'display:flex;' +
-            'flex-direction:column;' +
-            'align-items:center;' +
-            'gap:16px;' +
-            'margin-bottom:24px;';
-
-          // Clock element
-          var clock = document.createElement('div');
-          clock.id = 'fdz-clock';
-          clock.style.cssText =
-            'font-family:"JetBrains Mono",monospace;' +
-            'font-size:2rem;' +
-            'font-weight:700;' +
-            'color:#1a1c1d;' +
-            'letter-spacing:0.05em;' +
-            'text-align:center;';
-
-          // Date element
-          var dateEl = document.createElement('div');
-          dateEl.id = 'fdz-date';
-          dateEl.style.cssText =
-            'font-family:"Inter",sans-serif;' +
-            'font-size:0.75rem;' +
-            'font-weight:500;' +
-            'color:#6b7280;' +
-            'letter-spacing:0.1em;' +
-            'text-transform:uppercase;' +
-            'text-align:center;';
-
-          // Pulse container
-          var pulseWrap = document.createElement('div');
-          pulseWrap.style.cssText =
-            'display:flex;' +
-            'flex-direction:column;' +
-            'align-items:center;' +
-            'gap:8px;';
-
-          // SVG heartbeat line
-          var pulseSvg = document.createElement('div');
-          pulseSvg.innerHTML = `
-            <svg width="200" height="40" viewBox="0 0 200 40">
-              <polyline
-                id="fdz-pulse-line"
-                points="0,20 30,20 45,5 55,35 65,5 75,35 85,20 200,20"
-                fill="none"
-                stroke="#b5000b"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <animate
-                  attributeName="stroke-dasharray"
-                  from="0,300"
-                  to="300,0"
-                  dur="2s"
-                  repeatCount="indefinite"
-                />
-                <animate
-                  attributeName="opacity"
-                  values="1;0.3;1"
-                  dur="2s"
-                  repeatCount="indefinite"
-                />
-              </polyline>
-            </svg>
-          `;
-
-          // Live server status
-          var liveStatus = document.createElement('div');
-          liveStatus.style.cssText =
-            'display:flex;' +
-            'align-items:center;' +
-            'gap:6px;' +
-            'font-family:"Inter",sans-serif;' +
-            'font-size:0.65rem;' +
-            'font-weight:600;' +
-            'color:#16a34a;' +
-            'letter-spacing:0.08em;' +
-            'text-transform:uppercase;';
-          liveStatus.innerHTML = `
-            <span style="
-              width:7px;height:7px;
-              border-radius:50%;
-              background:#16a34a;
-              display:inline-block;
-              box-shadow:0 0 0 0 rgba(22,163,74,0.4);
-              animation:fdz-ping 1.5s ease infinite;
-            "></span>
-            Live Server Connected
-          `;
-
-          // Clock update function
-          function updateClock() {
-            var now = new Date();
-            var h = now.getHours();
-            var m = now.getMinutes().toString().padStart(2,'0');
-            var s = now.getSeconds().toString().padStart(2,'0');
-            var ampm = h >= 12 ? 'PM' : 'AM';
-            h = h % 12 || 12;
-            clock.textContent = h + ':' + m + ':' + s + ' ' + ampm;
-
-            var days = ['Sunday','Monday','Tuesday',
-              'Wednesday','Thursday','Friday','Saturday'];
-            var months = ['January','February','March','April',
-              'May','June','July','August','September',
-              'October','November','December'];
-            dateEl.textContent =
-              days[now.getDay()] + ', ' +
-              now.getDate() + ' ' +
-              months[now.getMonth()] + ' ' +
-              now.getFullYear();
-          }
-
-          updateClock();
-          setInterval(updateClock, 1000);
-
-          // Inject animation keyframes
-          var style = document.createElement('style');
-          style.textContent = `
-            @keyframes fdz-ping {
-              0% { box-shadow: 0 0 0 0 rgba(22,163,74,0.4); }
-              70% { box-shadow: 0 0 0 8px rgba(22,163,74,0); }
-              100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
-            }
-            @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Inter:wght@400;500;600&display=swap');
-          `;
-          document.head.appendChild(style);
-
-          // Assemble
-          pulseWrap.appendChild(pulseSvg);
-          pulseWrap.appendChild(liveStatus);
-          container.appendChild(clock);
-          container.appendChild(dateEl);
-          container.appendChild(pulseWrap);
-
-          // Inject into auth page
-          var logoEl = authPage.querySelector('img')
-            || authPage.firstChild;
-          if (logoEl && logoEl.parentNode) {
-            logoEl.parentNode.insertBefore(
-              container,
-              logoEl.nextSibling
-            );
-          } else {
-            authPage.prepend(container);
-          }
-        }
-      }
-
-      // Watch for login page to load
-      var enhanceObserver = new MutationObserver(
-        function() { injectLoginEnhancements(); }
-      );
+      // Watch for the login page to (re)appear and brand it
+      var enhanceObserver = new MutationObserver(function () { brandLogin(); });
       enhanceObserver.observe(document.body, {
         childList: true, subtree: true
       });
 
-      injectLoginEnhancements();
+      brandLogin();
     });
   </script>
   <script src="https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js"></script>
