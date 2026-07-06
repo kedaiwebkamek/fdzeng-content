@@ -152,7 +152,10 @@ collections:
             widget: image
             required: true
             default: ""
-            hint: "Upload gambar dari komputer ATAU masukkan URL penuh bermula https://. ⚠ Elakkan URL dari Facebook — URL Facebook akan tamat tempoh dan gambar tidak akan dipaparkan."
+            media_library:
+              config:
+                max_file_size: 5242880
+            hint: "Upload gambar dari komputer ATAU masukkan URL penuh bermula https://. Saiz maksimum 5MB. ⚠ Elakkan URL dari Facebook — URL Facebook akan tamat tempoh dan gambar tidak akan dipaparkan."
           - name: alt
             label: "Penerangan Gambar (Alt Text)"
             widget: string
@@ -205,7 +208,20 @@ collections:
     extension: json
     format: json
     create: true
-    search_fields: ['title', 'issuer', 'category', 'num']
+    summary: "{{title}} — {{issuer}}"
+    search_fields: ['title', 'issuer', 'category', 'num', 'status', 'brief']
+    sortable_fields: ['title', 'issuer', 'category', 'status']
+    view_filters:
+      - { label: "Aktif", field: status, pattern: Aktif }
+      - { label: "Tamat", field: status, pattern: Tamat }
+      - { label: "Kategori: Contractor", field: category, pattern: contractor }
+      - { label: "Kategori: Quality", field: category, pattern: quality }
+      - { label: "Kategori: Petroleum", field: category, pattern: petroleum }
+      - { label: "Kategori: Government", field: category, pattern: government }
+      - { label: "Kategori: Telecom", field: category, pattern: telecom }
+    view_groups:
+      - { label: "Kumpulan: Kategori", field: category }
+      - { label: "Kumpulan: Status", field: status }
     fields:
 
       - name: num
@@ -256,6 +272,7 @@ collections:
         label: "Status Sijil"
         widget: select
         required: true
+        default: "Aktif"
         options:
           - { label: "Aktif — Sijil masih sah dan dalam tempoh", value: "Aktif" }
           - { label: "Tamat — Sijil telah luput atau tidak diperbaharui", value: "Tamat" }
@@ -316,6 +333,9 @@ collections:
         label: "Logo Sijil (Pilihan)"
         widget: image
         required: false
+        media_library:
+          config:
+            max_file_size: 5242880
         hint: "Logo badan pengeluar untuk dipaparkan pada kad sijil pilihan. Saiz cadangan: 120×80px. Format: PNG atau SVG dengan latar telus. Kosongkan jika tiada — ikon teks akan digunakan sebagai ganti."
 
       - name: iconName
@@ -394,6 +414,9 @@ collections:
               - name: src
                 label: Image
                 widget: image
+                media_library:
+                  config:
+                    max_file_size: 5242880
                 hint: "Upload gambar kerja di lapangan. Format: JPG/PNG. Saiz maksimum 5MB."
               - name: alt
                 label: Alt Text
