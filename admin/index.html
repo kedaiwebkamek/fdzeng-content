@@ -6,6 +6,9 @@
   <meta name="robots" content="noindex, nofollow" />
   <title>FDZ Engineering — CMS Admin</title>
   <link rel="cms-config-url" href="/admin/config.yml">
+  <!-- Leaflet for the map-based coordinate picker widget -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
   <script>
@@ -228,6 +231,59 @@
       }
 
       CMS.registerWidget('date-conditional', DateConditionalControl);
+
+      // ── Widget: Map coordinate picker ─────────────────────────────────────────
+      // Click the map (or drag the pin) to set a project's GPS. Stores the same
+      // "lat, lng" string the coordinates field has always used. Uses Leaflet
+      // (loaded in <head>). Sarawak-centred default.
+      function parseLatLng(v) {
+        var m = /(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)/.exec(v || '');
+        return m ? [parseFloat(m[1]), parseFloat(m[2])] : null;
+      }
+      function CoordinateMapControl(props) {
+        function initMap(el) {
+          if (!el || el._fdzMap) return;
+          if (typeof L === 'undefined') { setTimeout(function () { initMap(el); }, 300); return; }
+          var here = parseLatLng(props.value);
+          var map = L.map(el).setView(here || [2.9, 112.6], here ? 14 : 7);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19, attribution: '© OpenStreetMap'
+          }).addTo(map);
+          el._fdzMap = map;
+          el._fdzMarker = null;
+          function place(latlng) {
+            var s = latlng.lat.toFixed(6) + ', ' + latlng.lng.toFixed(6);
+            props.onChange(s);
+            if (el._fdzMarker) { el._fdzMarker.setLatLng(latlng); }
+            else {
+              el._fdzMarker = L.marker(latlng, { draggable: true }).addTo(map);
+              el._fdzMarker.on('dragend', function (e) { place(e.target.getLatLng()); });
+            }
+          }
+          if (here) place({ lat: here[0], lng: here[1] });
+          map.on('click', function (e) { place(e.latlng); });
+          setTimeout(function () { map.invalidateSize(); }, 250);
+        }
+        return h('div', {},
+          h('input', {
+            type: 'text', id: props.forID, value: props.value || '',
+            placeholder: 'Contoh: 1.551230, 110.372326',
+            onChange: function (e) { props.onChange(e.target.value); },
+            style: { width: '100%', padding: '8px 12px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.9rem', fontFamily: 'inherit', marginBottom: '8px' }
+          }),
+          h('div', {
+            ref: initMap,
+            style: { height: '320px', width: '100%', borderRadius: '6px', overflow: 'hidden', border: '1px solid #ddd', zIndex: 0 }
+          }),
+          h('p', {
+            style: { fontSize: '0.72rem', color: '#5f5e5e', marginTop: '6px', lineHeight: '1.5' }
+          }, 'Klik pada peta untuk letak penanda lokasi projek, atau seret penanda untuk laraskan. Koordinat akan diisi automatik di atas. (Menaip manual tidak menggerakkan penanda — gunakan peta untuk ketepatan.)')
+        );
+      }
+      function CoordinateMapPreview(props) {
+        return h('span', {}, props.value || '—');
+      }
+      CMS.registerWidget('coordinate-map', CoordinateMapControl, CoordinateMapPreview);
 
       // ── Shared card/item builders (accept plain JS field objects) ────────────
 

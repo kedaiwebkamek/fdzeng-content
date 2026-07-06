@@ -112,19 +112,14 @@ collections:
         hint: "Nama lokasi yang lebih spesifik daripada bahagian. Contoh: Kampung Stass, Kota Samarahan atau Jalan Oya, Sibu, Sarawak"
 
       - name: coordinates
-        label: "Koordinat GPS"
-        widget: string
+        label: "Koordinat GPS (Peta)"
+        widget: coordinate-map
         required: true
         pattern: ['^-?[0-9]+\.[0-9]+,\s*-?[0-9]+\.[0-9]+$', 'Format tidak sah. Contoh betul: 1.551230, 110.372326']
         hint: |
-          Cara cepat dapatkan koordinat dari Google Maps:
-          1. Buka maps.google.com
-          2. Cari nama lokasi projek → tekan Enter
-          3. Klik kanan tepat pada titik lokasi di peta
-          4. Baris pertama yang muncul dalam menu = koordinat (contoh: 1.551230, 110.372326)
-          5. Klik pada nombor koordinat itu — ia akan copy secara automatik
-          6. Paste terus di kotak ini
-          ⚠ Pastikan ada KOMA (,) di antara dua nombor. Contoh betul: 1.551230, 110.372326
+          KLIK pada peta di bawah untuk tetapkan lokasi projek (atau seret penanda) — koordinat diisi automatik.
+          Alternatif (taip manual): dapatkan koordinat dari Google Maps → klik kanan pada lokasi → klik nombor koordinat untuk copy → paste di kotak.
+          ⚠ Format: 1.551230, 110.372326 (mesti ada KOMA antara dua nombor).
 
       - name: accuracy
         label: "Nota Lokasi (Pilihan)"
