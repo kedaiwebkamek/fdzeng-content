@@ -29,6 +29,8 @@
         cat: 'Infrastructure',
         division: 'Kuching',
         loc: 'Kuching, Sarawak',
+        coordinates: '1.5556, 110.3397',
+        accuracy: '',
         isPilihan: true,
         paragraph: 'Projek ini melibatkan pembinaan jalan penghubung sepanjang 2.5km di kawasan pinggir bandar Kuching.',
         images: [{ src: 'https://placehold.co/600x400?text=Gambar+Projek', alt: 'Gambar projek sample' }],
@@ -381,6 +383,42 @@
         ].join('\n');
       }
 
+      // Static OpenStreetMap preview: compute the 3×3 tile block around the
+      // coordinate and place a pin at the exact spot (no JS/Leaflet in the iframe).
+      function buildProjectMap(d) {
+        var parts = String(d.coordinates || '').split(',');
+        var lat = parseFloat(parts[0]), lng = parseFloat(parts[1]);
+        var info =
+          '<div class="pv-map-info">' +
+            '<div class="pv-map-info__row"><span class="material-symbols-outlined">location_on</span>' + (d.loc || '—') + '</div>' +
+            (d.coordinates ? '<div class="pv-map-info__coord">' + d.coordinates + '</div>' : '') +
+            (d.accuracy ? '<div class="pv-map-info__note">&#9888; ' + d.accuracy + '</div>' : '') +
+          '</div>';
+        if (!isFinite(lat) || !isFinite(lng)) {
+          return '<div class="pv-map pv-map--empty">Tiada koordinat lagi — klik pada peta di medan "Koordinat GPS"</div>' + info;
+        }
+        var z = 14;
+        var txF = (lng + 180) / 360 * Math.pow(2, z);
+        var latR = lat * Math.PI / 180;
+        var tyF = (1 - Math.log(Math.tan(latR) + 1 / Math.cos(latR)) / Math.PI) / 2 * Math.pow(2, z);
+        var cx = Math.floor(txF), cy = Math.floor(tyF);
+        var pinX = ((txF - (cx - 1)) / 3 * 100).toFixed(2);
+        var pinY = ((tyF - (cy - 1)) / 3 * 100).toFixed(2);
+        var tiles = '';
+        for (var ty = cy - 1; ty <= cy + 1; ty++) {
+          for (var tx = cx - 1; tx <= cx + 1; tx++) {
+            tiles += '<img src="https://tile.openstreetmap.org/' + z + '/' + tx + '/' + ty + '.png" alt="" loading="lazy">';
+          }
+        }
+        return [
+          '<div class="pv-map">',
+          '  <div class="pv-map__tiles">' + tiles + '</div>',
+          '  <div class="pv-map__pin" style="left:' + pinX + '%;top:' + pinY + '%;"><span class="material-symbols-outlined">location_on</span></div>',
+          '</div>',
+          info
+        ].join('\n');
+      }
+
       function buildProjectTableRow(d) {
         var isOngoing   = d.status === 'Ongoing';
         var dotClass    = isOngoing ? 'pf-table__dot--active' : 'pf-table__dot--done';
@@ -510,6 +548,8 @@
           description:  data.get('description') || '',
           loc:          data.get('loc')         || '',
           division:     data.get('division')    || '',
+          coordinates:  data.get('coordinates') || '',
+          accuracy:     data.get('accuracy')    || '',
           cat:          data.get('cat')         || '',
           category:     data.get('category')    || '',
           isPilihan:    data.get('isPilihan')   || false,
@@ -527,6 +567,8 @@
           description: PROJECT_SAMPLE.description,
           loc:         PROJECT_SAMPLE.loc,
           division:    PROJECT_SAMPLE.division,
+          coordinates: PROJECT_SAMPLE.coordinates,
+          accuracy:    PROJECT_SAMPLE.accuracy,
           cat:         PROJECT_SAMPLE.cat,
           category:    PROJECT_SAMPLE.category,
           isPilihan:    PROJECT_SAMPLE.isPilihan,
@@ -570,6 +612,17 @@
           '.pf-table-thumb .material-symbols-outlined{font-size:1.4rem;color:#5f5e5e;opacity:0.5;}',
           '.pf-table__desc{font-weight:600;color:#1a1c1d;line-height:1.4;max-width:280px;font-family:"Inter",sans-serif;}',
           '.pf-table__client{font-size:0.75rem;color:#5f5e5e;margin-top:2px;}',
+          '.pv-map{position:relative;width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;border:1px solid #e2e2e4;background:#e8e8ea;}',
+          '.pv-map__tiles{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);}',
+          '.pv-map__tiles img{width:100%;height:100%;display:block;}',
+          '.pv-map__pin{position:absolute;transform:translate(-50%,-100%);color:#b5000b;z-index:2;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.45));pointer-events:none;}',
+          '.pv-map__pin .material-symbols-outlined{font-size:2rem;}',
+          '.pv-map--empty{aspect-ratio:auto;height:110px;display:flex;align-items:center;justify-content:center;text-align:center;color:#9ca3af;font-size:0.78rem;padding:16px;}',
+          '.pv-map-info{margin-top:10px;}',
+          '.pv-map-info__row{display:flex;align-items:center;gap:6px;font-size:0.8rem;font-weight:600;color:#1a1c1d;}',
+          '.pv-map-info__row .material-symbols-outlined{font-size:1.05rem;color:#b5000b;}',
+          '.pv-map-info__coord{font-family:"JetBrains Mono",monospace;font-size:0.72rem;color:#5f5e5e;margin-top:4px;margin-left:23px;}',
+          '.pv-map-info__note{font-size:0.72rem;color:#92400e;background:#fff8e1;border-left:3px solid #f59e0b;border-radius:4px;padding:6px 9px;margin-top:8px;}',
           '.dyn-card{width:100%;max-width:340px;margin:0 auto;background:#ffffff;color:#1a1c1d;border:1px solid #e2e2e4;border-radius:0.5rem;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 10px 30px -12px rgba(0,0,0,.12);}',
           '.dyn-card__img-wrap{position:relative;height:160px;overflow:hidden;background:#e8e8ea;}',
           '.dyn-card__img{width:100%;height:100%;object-fit:cover;}',
@@ -599,8 +652,9 @@
 
         var html = css
           + wrapLive('&#8212; PRATONTON SEMASA &#8212;', buildProjectCard(live))
+          + wrapLive('&#8212; PIN LOKASI PETA &#8212;', buildProjectMap(live))
           + wrapLive('&#8212; PAPARAN SENARAI JADUAL &#8212;', buildProjectTableRow(live), 'pv-section--table')
-          + wrapSample(buildProjectCard(sample) + buildProjectTableRow(sample));
+          + wrapSample(buildProjectCard(sample) + buildProjectMap(sample) + buildProjectTableRow(sample));
 
         return h('div', { dangerouslySetInnerHTML: { __html: html } });
       }
