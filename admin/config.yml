@@ -36,7 +36,7 @@ collections:
       - { label: "Kumpulan: Kategori", field: cat }
       - { label: "Kumpulan: Bahagian (Division)", field: division }
       - { label: "Kumpulan: Status", field: status }
-    fields: &project_fields
+    fields:
 
       # ── Status & Tarikh ──────────────────────────────────────────────────────
       - name: status
@@ -135,11 +135,8 @@ collections:
         hint: "Kata kunci untuk memudahkan carian projek dalam CMS. Tambah satu pada satu masa. Contoh: jambatan, sekolah, bekalan air, jalan, RTP, Kapit. Kosongkan jika tidak perlu."
 
       # ── Paparan & Media ──────────────────────────────────────────────────────
-      - name: isPilihan
-        label: "Papar di Homepage (Projek Pilihan)"
-        widget: boolean
-        default: false
-        hint: "Aktifkan untuk paparkan projek ini dalam carousel Projek Pilihan di halaman utama. Jangan aktifkan lebih daripada 10 projek serentak."
+      # (Projek Pilihan / homepage carousel is now managed in the "Projek Pilihan ⭐"
+      #  tab — pick & order projects there, not via a per-project toggle.)
 
       - name: paragraph
         label: "Penerangan Lanjut"
@@ -208,20 +205,29 @@ collections:
             hint: "Salin URL penuh dari bar alamat YouTube atau platform video. Contoh: https://www.youtube.com/watch?v=xxxxxxxxx"
             pattern: ['^https?://.+', 'Mesti bermula https:// atau http://']
 
-  # ── 1b. FEATURED PROJECTS (filtered view of the same files) ─────────────────
-  - name: featured-projects
+  # ── 1b. FEATURED PROJECTS (curated homepage carousel — pick & order) ─────────
+  - name: featured-config
     label: "Projek Pilihan ⭐"
-    label_singular: "Projek Pilihan"
-    folder: content/projects
-    identifier_field: description
-    extension: json
-    format: json
-    create: false
-    filter: { field: isPilihan, value: true }
-    summary: "{{status}} · {{division}} — {{description}}"
-    sortable_fields: ['description', 'status', 'client', 'division']
-    search_fields: ['description', 'client', 'cat', 'division', 'loc', 'year', 'status', 'tags']
-    fields: *project_fields
+    files:
+      - name: featured-projects
+        label: "Susunan Projek Pilihan (Homepage)"
+        file: content/featured-projects.json
+        description: "Pilih & susun projek yang dipaparkan di carousel 'Featured Projects' di halaman utama."
+        fields:
+          - name: items
+            label: "Projek Pilihan (ikut susunan paparan)"
+            label_singular: "Projek Pilihan"
+            widget: list
+            summary: "{{fields.project}}"
+            fields:
+              - name: project
+                label: "Projek"
+                widget: relation
+                collection: projects
+                search_fields: ['description']
+                display_fields: ['description']
+                value_field: description
+                hint: "Cari nama projek dan pilih dari senarai. Seret item untuk susun semula — turutan ini menetapkan susunan di carousel halaman utama."
 
   # ── 2. CERTIFICATIONS ───────────────────────────────────────────────────────
   - name: certifications
