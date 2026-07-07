@@ -21,7 +21,7 @@ collections:
     extension: json
     format: json
     create: true
-    summary: "{{status}} — {{description}}"
+    summary: "{{status}} · {{division}} — {{description}}"
     sortable_fields: ['description', 'status', 'client', 'division']
     search_fields: ['description', 'client', 'cat', 'division', 'loc', 'year', 'status', 'accuracy']
     view_filters:
