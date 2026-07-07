@@ -52,7 +52,7 @@ collections:
         label: "Tarikh Siap"
         widget: date-conditional
         required: false
-        hint: "Diperlukan untuk projek Siap sahaja. Format: DD Bulan YYYY — contoh: 29 Jan 2019. Bulan (BM): Jan Feb Mac Apr Mei Jun Jul Ogo Sep Okt Nov Dis"
+        hint: "Diperlukan untuk projek Siap sahaja. PILIH tarikh dari kalendar — ia diisi automatik dalam format 29 Jan 2019. (Medan ini disembunyikan automatik untuk projek Sedang Berjalan.)"
 
       # ── Maklumat Projek ──────────────────────────────────────────────────────
       - name: description

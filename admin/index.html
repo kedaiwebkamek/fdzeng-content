@@ -222,11 +222,42 @@
 
       CMS.registerWidget('year-conditional', YearConditionalControl);
 
+      // Convert between the stored "DD MMM YYYY" (English) string and ISO for the
+      // native calendar picker. "Ongoing" (and anything unparseable) yields ''.
+      var FDZ_MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      function fdzDateToISO(v) {
+        var m = /(\d{1,2})\s+([A-Za-z]{3})[A-Za-z]*\s+(\d{4})/.exec(v || '');
+        if (!m) return '';
+        var mi = FDZ_MON.indexOf(m[2].slice(0, 3));
+        if (mi < 0) return '';
+        return m[3] + '-' + String(mi + 1).padStart(2, '0') + '-' + String(parseInt(m[1], 10)).padStart(2, '0');
+      }
+      function fdzISOToDate(iso) {
+        var m = /(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
+        if (!m) return '';
+        return String(parseInt(m[3], 10)).padStart(2, '0') + ' ' + FDZ_MON[parseInt(m[2], 10) - 1] + ' ' + m[1];
+      }
+
       function DateConditionalControl(props) {
         var isOngoing = getEntryStatus(props) === 'Ongoing';
+        var picker = h('input', {
+          type: 'date',
+          value: fdzDateToISO(props.value),
+          title: 'Pilih tarikh dari kalendar',
+          onChange: function (e) { var s = fdzISOToDate(e.target.value); if (s) props.onChange(s); },
+          style: { padding: '7px 10px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.9rem', fontFamily: 'inherit', flexShrink: '0', height: '38px' }
+        });
+        var text = h('input', {
+          type: 'text', id: props.forID, value: props.value || '',
+          placeholder: 'Contoh: 29 Jan 2019',
+          onChange: function (e) { props.onChange(e.target.value); },
+          style: { flex: '1', minWidth: '130px', padding: '8px 12px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.9rem', fontFamily: 'inherit', height: '38px' }
+        });
         return h('div', {},
           isOngoing ? conditionalBanner() : null,
-          conditionalInput(props, 'Contoh: 29 Jan 2019')
+          h('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' } }, picker, text),
+          h('p', { style: { fontSize: '0.72rem', color: '#5f5e5e', marginTop: '5px', lineHeight: '1.5' } },
+            'Pilih tarikh dari kalendar (kiri) — ia diisi automatik dalam format "29 Jan 2019". Atau taip terus di kotak kanan.')
         );
       }
 
