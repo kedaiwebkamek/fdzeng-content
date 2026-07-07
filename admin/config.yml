@@ -23,7 +23,7 @@ collections:
     create: true
     summary: "{{status}} · {{division}} — {{description}}"
     sortable_fields: ['description', 'status', 'client', 'division']
-    search_fields: ['description', 'client', 'cat', 'division', 'loc', 'year', 'status', 'accuracy']
+    search_fields: ['description', 'client', 'cat', 'division', 'loc', 'year', 'status', 'accuracy', 'tags']
     view_filters:
       - { label: "Sedang Berjalan", field: status, pattern: Ongoing }
       - { label: "Siap", field: status, pattern: Completed }
@@ -126,6 +126,13 @@ collections:
         widget: string
         required: false
         hint: "Kosongkan jika koordinat adalah lokasi tepat tapak projek. Isi jika koordinat hanya anggaran. Contoh: Sekitar Kampung Asajaya, koordinat bukan lokasi tepat tapak projek"
+
+      - name: tags
+        label: "Kata Kunci Carian (Pilihan)"
+        widget: list
+        required: false
+        field: { name: tag, label: "Kata Kunci", widget: string }
+        hint: "Kata kunci untuk memudahkan carian projek dalam CMS. Tambah satu pada satu masa. Contoh: jambatan, sekolah, bekalan air, jalan, RTP, Kapit. Kosongkan jika tidak perlu."
 
       # ── Paparan & Media ──────────────────────────────────────────────────────
       - name: isPilihan
