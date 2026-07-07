@@ -351,36 +351,36 @@
       }
 
       function buildProjectTableRow(d) {
-        var isOngoing = d.status === 'Ongoing';
-        var statusHtml = isOngoing
-          ? '<span style="display:inline-flex;align-items:center;gap:4px;color:#16a34a;font-weight:600;font-size:0.7rem"><span style="width:7px;height:7px;border-radius:50%;background:#16a34a;display:inline-block;"></span>Ongoing</span>'
-          : '<span style="color:#6b7280;font-size:0.7rem;font-weight:600;">Completed</span>';
+        var isOngoing   = d.status === 'Ongoing';
+        var dotClass    = isOngoing ? 'pf-table__dot--active' : 'pf-table__dot--done';
+        var badgeClass  = isOngoing ? 'pf-table__badge--active' : 'pf-table__badge--done';
+        var statusLabel = isOngoing ? 'Ongoing' : 'Completed';
+        var yr = isOngoing ? '—' : ((/(?:19|20)\d{2}/.exec(String(d.date || '')) || [])[0] || d.date || '—');
+        var thumb = (d.imgSrc && d.imgSrc !== '')
+          ? '<img src="' + d.imgSrc + '" alt="">'
+          : '<span class="material-symbols-outlined">' + (CAT_ICON[d.cat] || 'folder_open') + '</span>';
         return [
-          '<div style="overflow-x:auto;width:100%;">',
-          '<table style="width:100%;border-collapse:collapse;font-size:0.72rem;font-family:Inter,sans-serif;">',
-          '  <thead>',
-          '    <tr style="background:#f3f4f6;border-bottom:2px solid #e5e7eb;">',
-          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;">Description</th>',
-          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Location</th>',
-          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Client</th>',
-          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Date</th>',
-          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Category</th>',
-          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Value</th>',
-          '      <th style="padding:8px 10px;text-align:left;font-weight:700;color:#374151;white-space:nowrap;">Status</th>',
-          '    </tr>',
-          '  </thead>',
-          '  <tbody>',
-          '    <tr style="border-bottom:1px solid #e5e7eb;background:#fff;">',
-          '      <td style="padding:8px 10px;color:#111827;font-weight:600;max-width:200px;">' + (d.description || '—') + '</td>',
-          '      <td style="padding:8px 10px;color:#374151;white-space:nowrap;">' + (d.loc || '—') + '</td>',
-          '      <td style="padding:8px 10px;color:#374151;white-space:nowrap;">' + (d.client || '—') + '</td>',
-          '      <td style="padding:8px 10px;color:#374151;white-space:nowrap;">' + (d.date || '—') + '</td>',
-          '      <td style="padding:8px 10px;color:#374151;white-space:nowrap;">' + (CAT_BM[d.cat] || d.cat || '—') + '</td>',
-          '      <td style="padding:8px 10px;color:#374151;white-space:nowrap;font-weight:600;">' + formatAmount(d.amount) + '</td>',
-          '      <td style="padding:8px 10px;">' + statusHtml + '</td>',
-          '    </tr>',
-          '  </tbody>',
-          '</table>',
+          '<div class="pf-table-wrap">',
+          '  <table class="pf-table">',
+          '    <thead><tr>',
+          '      <th class="pf-col-num">#</th>',
+          '      <th>Status</th>',
+          '      <th>Year</th>',
+          '      <th>Project &amp; Client</th>',
+          '      <th>Category</th>',
+          '      <th>Division</th>',
+          '      <th>Project Value</th>',
+          '    </tr></thead>',
+          '    <tbody><tr>',
+          '      <td class="pf-col-num">1</td>',
+          '      <td><span class="pf-table__badge ' + badgeClass + '"><span class="pf-table__dot ' + dotClass + '"></span>' + statusLabel + '</span></td>',
+          '      <td><span class="pf-table__year">' + yr + '</span></td>',
+          '      <td><div class="pf-td-proj"><div class="pf-table-thumb">' + thumb + '</div><div><div class="pf-table__desc">' + (d.description || '—') + '</div><div class="pf-table__client">' + (d.client || '') + '</div></div></div></td>',
+          '      <td><span class="pf-table__cat">' + (CAT_BM[d.cat] || d.cat || '—') + '</span></td>',
+          '      <td><span class="pf-table__cat">' + (d.division || '—') + '</span></td>',
+          '      <td><span class="pf-table__amt">' + formatAmount(d.amount) + '</span></td>',
+          '    </tr></tbody>',
+          '  </table>',
           '</div>'
         ].join('\n');
       }
@@ -440,9 +440,9 @@
 
       // ── Shared section wrapper helpers ────────────────────────────────────────
 
-      function wrapLive(label, content) {
+      function wrapLive(label, content, cls) {
         return [
-          '<div class="pv-section">',
+          '<div class="pv-section ' + (cls || '') + '">',
           '  <p class="pv-label">' + label + '</p>',
           content,
           '</div>'
@@ -478,6 +478,7 @@
           date:         data.get('date')        || '',
           description:  data.get('description') || '',
           loc:          data.get('loc')         || '',
+          division:     data.get('division')    || '',
           cat:          data.get('cat')         || '',
           category:     data.get('category')    || '',
           isPilihan:    data.get('isPilihan')   || false,
@@ -494,6 +495,7 @@
           date:        PROJECT_SAMPLE.date,
           description: PROJECT_SAMPLE.description,
           loc:         PROJECT_SAMPLE.loc,
+          division:    PROJECT_SAMPLE.division,
           cat:         PROJECT_SAMPLE.cat,
           category:    PROJECT_SAMPLE.category,
           isPilihan:    PROJECT_SAMPLE.isPilihan,
@@ -504,18 +506,40 @@
 
         var css = [
           '<link rel="preconnect" href="https://fonts.googleapis.com">',
-          '<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">',
+          '<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">',
           '<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">',
           '<style>',
           '*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}',
           'body{font-family:"Inter",sans-serif;background:#f0f0f2;padding:32px;display:flex;flex-direction:column;align-items:center;}',
-          '.pv-section{margin-bottom:24px;width:340px;}',
+          '.pv-section{margin-bottom:24px;width:100%;max-width:360px;}',
+          '.pv-section--table{max-width:640px;}',
           '.pv-section--sample{opacity:0.7;border:1.5px dashed #9ca3af;border-radius:0.5rem;padding:16px;position:relative;}',
           '.pv-label{font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#6b7280;text-align:center;margin-bottom:12px;}',
           '.pv-sample-badge{position:absolute;top:0;right:0;background:#6b7280;color:#fff;font-size:0.5rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:0 0.5rem 0 0.25rem;}',
-          '.pv-divider{width:340px;margin:4px 0 20px;text-align:center;}',
+          '.pv-divider{width:100%;max-width:360px;margin:4px 0 20px;text-align:center;}',
           '.pv-divider__note{font-size:0.62rem;color:#9ca3af;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:16px;}',
-          '.dyn-card{width:100%;background:#ffffff;color:#1a1c1d;border:1px solid #e2e2e4;border-radius:0.5rem;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 10px 30px -12px rgba(0,0,0,.12);}',
+          '.pf-table-wrap{width:100%;overflow-x:auto;background:#fff;border-radius:12px;border:1px solid #e8e4dc;box-shadow:0 2px 16px rgba(0,0,0,0.06);}',
+          '.pf-table{width:100%;border-collapse:collapse;font-size:0.82rem;background:#fff;}',
+          '.pf-table thead th{padding:11px 14px;text-align:left;font-family:"Barlow",sans-serif;font-size:0.62rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap;border-bottom:3px solid #b5000b;background:#141518;color:#fff;}',
+          '.pf-table thead th.pf-col-num{width:36px;text-align:center;}',
+          '.pf-table tbody td{padding:11px 14px;vertical-align:middle;background:#fff;}',
+          '.pf-table tbody td.pf-col-num{text-align:center;color:#b5000b;font-family:"Barlow",sans-serif;font-weight:900;font-size:0.75rem;}',
+          '.pf-table__badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:99px;font-size:0.68rem;font-weight:700;white-space:nowrap;}',
+          '.pf-table__badge--done{background:rgba(37,211,102,0.10);color:#15a34a;border:1px solid rgba(37,211,102,0.22);}',
+          '.pf-table__badge--active{background:rgba(245,158,11,0.12);color:#b45309;border:1px solid rgba(245,158,11,0.28);}',
+          '.pf-table__dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}',
+          '.pf-table__dot--done{background:#25d366;}',
+          '.pf-table__dot--active{background:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,0.2);}',
+          '.pf-table__year{font-family:"Inter",sans-serif;font-size:0.78rem;font-weight:500;white-space:nowrap;color:#5f5e5e;}',
+          '.pf-table__cat{font-size:0.72rem;color:#5f5e5e;white-space:nowrap;}',
+          '.pf-table__amt{font-family:"JetBrains Mono",monospace;font-size:0.78rem;font-weight:700;white-space:nowrap;color:#1a1c1d;}',
+          '.pf-td-proj{display:flex;align-items:center;gap:12px;}',
+          '.pf-table-thumb{width:44px;height:44px;flex-shrink:0;border-radius:6px;overflow:hidden;background:#eeeef0;display:flex;align-items:center;justify-content:center;}',
+          '.pf-table-thumb img{width:100%;height:100%;object-fit:cover;display:block;}',
+          '.pf-table-thumb .material-symbols-outlined{font-size:1.4rem;color:#5f5e5e;opacity:0.5;}',
+          '.pf-table__desc{font-weight:600;color:#1a1c1d;line-height:1.4;max-width:280px;font-family:"Inter",sans-serif;}',
+          '.pf-table__client{font-size:0.75rem;color:#5f5e5e;margin-top:2px;}',
+          '.dyn-card{width:100%;max-width:340px;margin:0 auto;background:#ffffff;color:#1a1c1d;border:1px solid #e2e2e4;border-radius:0.5rem;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 10px 30px -12px rgba(0,0,0,.12);}',
           '.dyn-card__img-wrap{position:relative;height:160px;overflow:hidden;background:#e8e8ea;}',
           '.dyn-card__img{width:100%;height:100%;object-fit:cover;}',
           '.dyn-card__no-img{width:100%;height:100%;background:#141518;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:24px 24px;display:flex;align-items:center;justify-content:center;}',
@@ -544,7 +568,7 @@
 
         var html = css
           + wrapLive('&#8212; PRATONTON SEMASA &#8212;', buildProjectCard(live))
-          + wrapLive('&#8212; PAPARAN SENARAI JADUAL &#8212;', buildProjectTableRow(live))
+          + wrapLive('&#8212; PAPARAN SENARAI JADUAL &#8212;', buildProjectTableRow(live), 'pv-section--table')
           + wrapSample(buildProjectCard(sample) + buildProjectTableRow(sample));
 
         return h('div', { dangerouslySetInnerHTML: { __html: html } });
