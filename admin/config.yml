@@ -36,7 +36,7 @@ collections:
       - { label: "Kumpulan: Kategori", field: cat }
       - { label: "Kumpulan: Bahagian (Division)", field: division }
       - { label: "Kumpulan: Status", field: status }
-    fields:
+    fields: &project_fields
 
       # ── Status & Tarikh ──────────────────────────────────────────────────────
       - name: status
@@ -207,6 +207,21 @@ collections:
             required: true
             hint: "Salin URL penuh dari bar alamat YouTube atau platform video. Contoh: https://www.youtube.com/watch?v=xxxxxxxxx"
             pattern: ['^https?://.+', 'Mesti bermula https:// atau http://']
+
+  # ── 1b. FEATURED PROJECTS (filtered view of the same files) ─────────────────
+  - name: featured-projects
+    label: "Projek Pilihan ⭐"
+    label_singular: "Projek Pilihan"
+    folder: content/projects
+    identifier_field: description
+    extension: json
+    format: json
+    create: false
+    filter: { field: isPilihan, value: true }
+    summary: "{{status}} · {{division}} — {{description}}"
+    sortable_fields: ['description', 'status', 'client', 'division']
+    search_fields: ['description', 'client', 'cat', 'division', 'loc', 'year', 'status', 'tags']
+    fields: *project_fields
 
   # ── 2. CERTIFICATIONS ───────────────────────────────────────────────────────
   - name: certifications
