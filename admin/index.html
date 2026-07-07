@@ -898,6 +898,47 @@
 
       CMS.registerPreviewTemplate('gallery', GalleryPreview);
 
+      // ─────────────────────────────────────────────────────────────────────────
+      // Preview for the "Projek Pilihan" tab — the ordered homepage carousel list.
+      function FeaturedPreview(props) {
+        var items = toArray(props.entry.getIn(['data']).get('items'));
+        var names = items.map(function (it) {
+          if (!it) return '';
+          if (typeof it === 'string') return it;
+          return it.project || '';
+        }).filter(Boolean);
+        var rows = names.length
+          ? names.map(function (n, i) {
+              return '<div class="fp-row"><span class="fp-num">' + (i + 1) + '</span><span class="fp-name">' + n + '</span></div>';
+            }).join('')
+          : '<div class="fp-empty">Belum ada projek pilihan.<br>Tambah projek dari senarai dropdown di sebelah kiri.</div>';
+        var css = [
+          '<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">',
+          '<style>',
+          '*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}',
+          'body{font-family:"Inter",sans-serif;background:#141518;padding:28px;min-height:100vh;}',
+          '.fp-label{font-family:"Barlow",sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:#e30613;margin-bottom:8px;}',
+          '.fp-title{font-family:"Barlow",sans-serif;font-size:1.5rem;font-weight:900;text-transform:uppercase;color:#fff;line-height:1.1;}',
+          '.fp-title .accent{color:#b5000b;}',
+          '.fp-count{display:inline-block;font-family:"Barlow",sans-serif;font-weight:900;color:#fff;background:#b5000b;font-size:0.7rem;padding:2px 10px;border-radius:99px;margin-left:8px;vertical-align:middle;}',
+          '.fp-sub{font-size:0.78rem;color:rgba(255,255,255,0.45);margin-top:8px;margin-bottom:22px;line-height:1.6;}',
+          '.fp-row{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-left:3px solid #b5000b;border-radius:8px;padding:12px 16px;margin-bottom:8px;}',
+          '.fp-num{font-family:"Barlow",sans-serif;font-weight:900;font-size:1.05rem;color:#b5000b;flex-shrink:0;min-width:22px;text-align:center;}',
+          '.fp-name{font-family:"Barlow",sans-serif;font-size:0.82rem;font-weight:700;text-transform:uppercase;color:#fff;line-height:1.35;letter-spacing:0.01em;}',
+          '.fp-empty{color:rgba(255,255,255,0.4);font-size:0.85rem;text-align:center;padding:40px 20px;border:1px dashed rgba(255,255,255,0.15);border-radius:8px;line-height:1.7;}',
+          '</style>'
+        ].join('');
+        var html = css
+          + '<div class="fp-label">Track Record</div>'
+          + '<div class="fp-title">Featured <span class="accent">Projects</span>'
+          + (names.length ? '<span class="fp-count">' + names.length + '</span>' : '')
+          + '</div>'
+          + '<p class="fp-sub">Susunan carousel projek pilihan di halaman utama — ikut turutan di bawah (seret item di sebelah kiri untuk ubah).</p>'
+          + rows;
+        return h('div', { dangerouslySetInnerHTML: { __html: html } });
+      }
+      CMS.registerPreviewTemplate('featured-config', FeaturedPreview);
+
       // ── Category auto-sync: cat (EN) ↔ category (BM) ─────────────────────────
       var CATEGORY_MAP = {
         'Building':       'Bangunan & Fasiliti',
