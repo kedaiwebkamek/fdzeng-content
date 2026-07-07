@@ -244,7 +244,7 @@ collections:
     view_groups:
       - { label: "Kumpulan: Kategori", field: category }
       - { label: "Kumpulan: Status", field: status }
-    fields:
+    fields: &cert_fields
 
       - name: num
         label: "Nombor Sijil (Dalaman — Pilihan)"
@@ -396,6 +396,21 @@ collections:
         media_library:
           config:
             max_file_size: 5242880
+
+  # ── 2b. FEATURED CERTIFICATIONS (filtered view of the same files) ───────────
+  - name: featured-certifications
+    label: "Sijil Pilihan ⭐"
+    label_singular: "Sijil Pilihan"
+    folder: content/certifications
+    identifier_field: title
+    extension: json
+    format: json
+    create: false
+    filter: { field: isFeatured, value: true }
+    summary: "{{title}} — {{issuer}}"
+    sortable_fields: ['featuredOrder', 'title', 'issuer', 'category']
+    search_fields: ['title', 'issuer', 'category', 'num', 'status', 'brief']
+    fields: *cert_fields
 
   # ── 3. GALLERY ───────────────────────────────────────────────────────────────
   - name: gallery
