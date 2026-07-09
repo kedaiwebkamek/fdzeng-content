@@ -937,7 +937,10 @@
           + rows;
         return h('div', { dangerouslySetInnerHTML: { __html: html } });
       }
+      // Decap keys file-collection previews by the FILE name ('featured-projects'),
+      // not the collection name — register both so the preview binds regardless.
       CMS.registerPreviewTemplate('featured-config', FeaturedPreview);
+      CMS.registerPreviewTemplate('featured-projects', FeaturedPreview);
 
       // ── Category auto-sync: cat (EN) ↔ category (BM) ─────────────────────────
       var CATEGORY_MAP = {
@@ -1021,7 +1024,15 @@
           "[class*='ListCard'],[class*='Card-'] { border-radius:10px !important; transition:box-shadow .2s,transform .2s,border-color .2s !important; }",
           "[class*='ListCard']:hover,[class*='Card-']:hover { border-color:#ffdad5 !important; box-shadow:0 14px 32px -14px rgba(0,0,0,0.16) !important; transform:translateY(-2px); }",
           "[class*='SidebarNavLink'][class*='active'],[class*='NavLink'][class*='active'] { background-color:#141518 !important; color:#fff !important; border-radius:7px; }",
-          "#nc-root a:focus-visible, #nc-root button:focus-visible { outline:2px solid #b5000b !important; outline-offset:2px; }"
+          "#nc-root a:focus-visible, #nc-root button:focus-visible { outline:2px solid #b5000b !important; outline-offset:2px; }",
+          // Relation widget (Projek Pilihan project picker) — project titles are long
+          // full sentences; the default fixed-height option rows made them overlap.
+          // Let each suggestion wrap and grow, and give the dropdown a proper panel.
+          ".react-autosuggest__suggestions-container--open { background:#fff !important; border:1px solid #dfdfe3 !important; border-radius:8px !important; box-shadow:0 12px 32px -8px rgba(0,0,0,0.2) !important; max-height:300px !important; overflow-y:auto !important; z-index:9999 !important; }",
+          ".react-autosuggest__suggestions-list { margin:0 !important; padding:4px !important; list-style:none !important; }",
+          ".react-autosuggest__suggestion { white-space:normal !important; height:auto !important; min-height:0 !important; line-height:1.45 !important; padding:9px 12px !important; border-radius:5px !important; border-bottom:1px solid rgba(0,0,0,0.05) !important; font-size:0.82rem !important; cursor:pointer !important; }",
+          ".react-autosuggest__suggestion:last-child { border-bottom:none !important; }",
+          ".react-autosuggest__suggestion--highlighted { background:rgba(181,0,11,0.08) !important; color:#b5000b !important; }"
         ].join('\n');
         document.head.appendChild(s);
       })();
