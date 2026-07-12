@@ -138,12 +138,6 @@ collections:
       # (Featured Projects / homepage carousel is now managed in the "Featured
       #  Projects ⭐" tab — pick & order projects there, not via a per-project toggle.)
 
-      - name: paragraph
-        label: "Detailed Description"
-        widget: text
-        required: false
-        hint: "A longer description of the project — you may include the scope of work, project significance, or technical information. It will be shown in the project details window. Can be left blank if there is no additional information."
-
       - name: images
         label: "Project Images"
         widget: list
@@ -166,6 +160,14 @@ collections:
             required: false
             default: ""
             hint: "Write a short description of this image. Helps Google recognize your image (SEO). Example: Road widening work at Jalan Oya, Sibu"
+
+      # Advanced / optional fields — collapsed by default in the editor (see the
+      # "Maklumat Tambahan" toggle wired in admin/index.html) to declutter the form.
+      - name: paragraph
+        label: "Detailed Description"
+        widget: text
+        required: false
+        hint: "A longer description of the project — you may include the scope of work, project significance, or technical information. It will be shown in the project details window. Can be left blank if there is no additional information."
 
       - name: newsList
         label: "News Links (Optional)"

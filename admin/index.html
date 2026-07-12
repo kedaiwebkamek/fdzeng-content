@@ -1139,6 +1139,52 @@
         name: 'preSave',
         handler: function(args) { /* no-op */ }
       });
+
+      // ── "Saved → site updates" confirmation toast ────────────────────────────
+      // Give the (non-technical) owner clear feedback after a save/publish, and
+      // set expectations that the live site takes ~2 minutes to rebuild. These
+      // handlers are side-effect only (no entry mutation) so they avoid the
+      // v3.3.x preSave return-value bug noted above, and are fully wrapped so a
+      // failure here can never block a save.
+      function fdzToast(msg, tone) {
+        try {
+          if (!document.getElementById('fdz-toast-style')) {
+            var st = document.createElement('style'); st.id = 'fdz-toast-style';
+            st.textContent =
+              '.fdz-toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-10px);z-index:99999;display:flex;align-items:flex-start;gap:10px;max-width:min(560px,92vw);background:#141518;color:#fff;font-family:Inter,system-ui,sans-serif;font-size:0.9rem;line-height:1.5;padding:13px 15px;border-radius:8px;border-left:4px solid #b5000b;box-shadow:0 16px 40px -12px rgba(0,0,0,0.55);opacity:0;transition:opacity .25s,transform .25s;}'
+            + '.fdz-toast.fdz-show{opacity:1;transform:translateX(-50%) translateY(0);}'
+            + '.fdz-toast--ok{border-left-color:#1f9d4d;}'
+            + '.fdz-toast__i{font-weight:700;flex:0 0 auto;}'
+            + '.fdz-toast__m{flex:1 1 auto;}'
+            + '.fdz-toast__x{flex:0 0 auto;background:none;border:none;color:rgba(255,255,255,0.55);font-size:1.15rem;line-height:1;cursor:pointer;padding:0 2px;}'
+            + '.fdz-toast__x:hover{color:#fff;}';
+            document.head.appendChild(st);
+          }
+          var t = document.createElement('div');
+          t.className = 'fdz-toast' + (tone === 'ok' ? ' fdz-toast--ok' : '');
+          var ic = document.createElement('span'); ic.className = 'fdz-toast__i'; ic.textContent = tone === 'ok' ? '✓' : 'ℹ';
+          var m = document.createElement('span'); m.className = 'fdz-toast__m'; m.textContent = msg;
+          var x = document.createElement('button'); x.className = 'fdz-toast__x'; x.setAttribute('aria-label', 'Tutup'); x.textContent = '×';
+          t.appendChild(ic); t.appendChild(m); t.appendChild(x);
+          document.body.appendChild(t);
+          requestAnimationFrame(function () { t.classList.add('fdz-show'); });
+          var kill = function () { t.classList.remove('fdz-show'); setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 300); };
+          x.addEventListener('click', kill);
+          setTimeout(kill, tone === 'ok' ? 9000 : 6500);
+        } catch (e) { /* never block a save */ }
+      }
+      CMS.registerEventListener({
+        name: 'postSave',
+        handler: function () {
+          fdzToast('Draf disimpan. Untuk menyiarkannya ke laman web, tekan butang “Publish” di penjuru atas kanan.', 'info');
+        }
+      });
+      CMS.registerEventListener({
+        name: 'postPublish',
+        handler: function () {
+          fdzToast('Berjaya disiarkan! Laman web akan dikemas kini dalam lebih kurang 2 minit — muat semula (refresh) laman web selepas itu untuk melihat perubahan.', 'ok');
+        }
+      });
     });
 
     window.addEventListener('load', function() {
@@ -1580,6 +1626,99 @@
         document.addEventListener('DOMContentLoaded', applyFeaturedOrderVisibility);
       } else {
         applyFeaturedOrderVisibility();
+      }
+    })();
+  </script>
+
+  <script>
+    /* ── Collapse advanced/optional project fields to declutter the form ───────
+       Groups "Detailed Description", "News Links" and "Video Links" under one
+       collapsible "Maklumat Tambahan (pilihan)" toggle, collapsed by default.
+       Reuses the same label-based field-wrapper lookup + MutationObserver
+       self-healing used by the conditional-visibility scripts above. Written to
+       be mutation-free once settled, so it never loops with its own observer.  */
+    (function () {
+      var TOGGLE_ID = 'fdz-adv-toggle';
+      var ADV_LABELS = ['Detailed Description', 'News Links (Optional)', 'Video Links (Optional)'];
+      var open = false;
+
+      function findFieldWrapper(labelText) {
+        var labels = document.querySelectorAll('label');
+        for (var i = 0; i < labels.length; i++) {
+          var lbl = labels[i];
+          var txt = lbl.textContent.replace(/\s*\*\s*/g, '').replace(/\s+/g, ' ').trim();
+          if (txt !== labelText) continue;
+          var el = lbl;
+          for (var k = 0; k < 6; k++) {
+            var p = el.parentElement;
+            if (!p || p === document.body) break;
+            if (p.children.length >= 2 && p.querySelector('input, select, textarea')) return p;
+            el = p;
+          }
+          return lbl.parentElement ? lbl.parentElement.parentElement : null;
+        }
+        return null;
+      }
+
+      function buildBar() {
+        var bar = document.createElement('div');
+        bar.id = TOGGLE_ID;
+        bar.setAttribute('style', [
+          'display:flex', 'align-items:center', 'gap:10px', 'cursor:pointer', 'user-select:none',
+          'margin:18px 0 4px', 'padding:11px 14px', 'border:1px dashed #cfcfd4', 'border-radius:6px',
+          'background:#fafafa', 'color:#2a2a2e', 'font-family:Inter,system-ui,sans-serif',
+          'font-size:0.85rem', 'font-weight:600'
+        ].join(';'));
+        var car = document.createElement('span');
+        car.className = 'fdz-adv-car';
+        car.setAttribute('style', 'color:#b5000b;font-size:0.8rem;width:0.8em;');
+        var txt = document.createElement('span');
+        txt.setAttribute('style', 'flex:1 1 auto;');
+        txt.textContent = 'Maklumat Tambahan (pilihan) — Penerangan Lanjut, Pautan Berita & Video';
+        var hint = document.createElement('span');
+        hint.className = 'fdz-adv-hint';
+        hint.setAttribute('style', 'color:#8a8a90;font-weight:500;font-size:0.72rem;');
+        bar.appendChild(car); bar.appendChild(txt); bar.appendChild(hint);
+        bar.addEventListener('click', function () { open = !open; apply(); });
+        return bar;
+      }
+
+      function apply() {
+        var wraps = [];
+        for (var i = 0; i < ADV_LABELS.length; i++) {
+          var w = findFieldWrapper(ADV_LABELS[i]);
+          if (w) wraps.push(w);
+        }
+        if (!wraps.length) return;                 // not on the project editor
+        var first = wraps[0];
+
+        var bar = document.getElementById(TOGGLE_ID);
+        if (!bar || !bar.parentNode) bar = buildBar();
+        if (first.parentNode && first.previousElementSibling !== bar) {
+          first.parentNode.insertBefore(bar, first);
+        }
+        if (bar._open !== open) {                   // update chrome only on change
+          bar._open = open;
+          bar.querySelector('.fdz-adv-car').textContent = open ? '▾' : '▸';
+          bar.querySelector('.fdz-adv-hint').textContent = open ? 'Klik untuk tutup' : 'Klik untuk buka';
+        }
+        var d = open ? '' : 'none';
+        for (var j = 0; j < wraps.length; j++) {
+          if (wraps[j].style.display !== d) wraps[j].style.display = d;
+        }
+      }
+
+      var debounce = null;
+      var observer = new MutationObserver(function () {
+        clearTimeout(debounce);
+        debounce = setTimeout(apply, 180);
+      });
+      observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', apply);
+      } else {
+        apply();
       }
     })();
   </script>
