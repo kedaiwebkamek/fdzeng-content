@@ -396,22 +396,7 @@ collections:
           config:
             max_file_size: 5242880
 
-  # ── 2b. FEATURED CERTIFICATIONS (filtered view of the same files) ───────────
-  - name: featured-certifications
-    label: "Featured Certificates ⭐"
-    label_singular: "Featured Certificate"
-    folder: content/certifications
-    identifier_field: title
-    extension: json
-    format: json
-    create: false
-    filter: { field: isFeatured, value: true }
-    summary: "{{title}} — {{issuer}}"
-    sortable_fields: ['title', 'issuer', 'category']
-    search_fields: ['title', 'issuer', 'category', 'num', 'status', 'brief']
-    fields: *cert_fields
-
-  # ── 2c. FEATURED CERTIFICATES ORDER (curated drag-sort, like Featured Projects) ─
+  # ── 2b. FEATURED CERTIFICATES ORDER (curated drag-sort, like Featured Projects) ─
   - name: featured-cert-config
     label: "Featured Certificates Order ⭐"
     files:
