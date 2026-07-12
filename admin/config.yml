@@ -212,9 +212,9 @@ collections:
     label: "Featured Projects ⭐"
     files:
       - name: featured-projects
-        label: "Featured Projects Order (Homepage)"
+        label: "Featured Projects Order (Homepage + Projects Page)"
         file: content/featured-projects.json
-        description: "Pick & order the projects shown in the 'Featured Projects' carousel on the homepage."
+        description: "Pick & order the projects shown in the 'Featured Projects' section. This ONE list controls BOTH the carousel on the Homepage AND the featured section on the Projects page — they always show the same projects in the same order."
         fields:
           - name: items
             label: "Featured Projects (in display order)"
@@ -229,7 +229,7 @@ collections:
                 search_fields: ['description']
                 display_fields: ['description']
                 value_field: description
-                hint: "Search for a project name and pick from the list. Drag items to reorder — this order sets the sequence in the homepage carousel."
+                hint: "Search for a project name and pick from the list. Drag items to reorder — this order sets the sequence in BOTH the homepage carousel and the projects-page featured section."
 
   # ── 2. CERTIFICATIONS ───────────────────────────────────────────────────────
   - name: certifications
@@ -336,16 +336,7 @@ collections:
         label: "Show in Featured Certificates"
         widget: boolean
         default: false
-        hint: "Enable to show this certificate in the 6 main cards at the top of the Certifications page. A maximum of 6 certificates can be selected at once — check the other certificates before enabling."
-
-      - name: featuredOrder
-        label: "Position in Grid (1–6)"
-        widget: number
-        required: false
-        default: 0
-        value_type: int
-        hint: "Set the certificate's position slot (1 = first/left, 6 = last/right). Only used if 'Show in Featured Certificates' is enabled above. Leave at 0 if not selected."
-        pattern: ['^[0-6]$', 'Numbers 0 to 6 only']
+        hint: "Enable to show this certificate in the main cards at the top of the Certifications page (recommended max 6). To set the ORDER of these cards, use the 'Featured Certificates Order ⭐' tab — add this certificate there and drag it into position."
 
       - name: featuredTitle
         label: "Replacement Title — Featured Card (Optional)"
@@ -416,9 +407,33 @@ collections:
     create: false
     filter: { field: isFeatured, value: true }
     summary: "{{title}} — {{issuer}}"
-    sortable_fields: ['featuredOrder', 'title', 'issuer', 'category']
+    sortable_fields: ['title', 'issuer', 'category']
     search_fields: ['title', 'issuer', 'category', 'num', 'status', 'brief']
     fields: *cert_fields
+
+  # ── 2c. FEATURED CERTIFICATES ORDER (curated drag-sort, like Featured Projects) ─
+  - name: featured-cert-config
+    label: "Featured Certificates Order ⭐"
+    files:
+      - name: featured-certificates
+        label: "Featured Certificates Order"
+        file: content/featured-certificates.json
+        description: "Drag to set the ORDER of the featured certificate cards at the top of the Certifications page. To choose WHICH certificates are featured, tick 'Show in Featured Certificates' on the certificate itself (Certifications tab) — then add it here and drag it into position."
+        fields:
+          - name: items
+            label: "Featured Certificates (in display order)"
+            label_singular: "Featured Certificate"
+            widget: list
+            summary: "{{fields.certificate}}"
+            fields:
+              - name: certificate
+                label: "Certificate"
+                widget: relation
+                collection: certifications
+                search_fields: ['title']
+                display_fields: ['title']
+                value_field: title
+                hint: "Search for a certificate name and pick it. Drag items to reorder — this sets the left-to-right order of the featured certificate cards."
 
   # ── 3. GALLERY ───────────────────────────────────────────────────────────────
   - name: gallery
