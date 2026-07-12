@@ -278,10 +278,14 @@
           if (!el || el._fdzMap) return;
           if (typeof L === 'undefined') { setTimeout(function () { initMap(el); }, 300); return; }
           var here = parseLatLng(props.value);
-          var map = L.map(el).setView(here || [2.9, 112.6], here ? 14 : 7);
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19, attribution: '© OpenStreetMap'
-          }).addTo(map);
+          var map = L.map(el).setView(here || [2.9, 112.6], here ? 15 : 7);
+          var gOpts = { maxZoom: 20, subdomains: ['mt0', 'mt1', 'mt2', 'mt3'] };
+          // Same Google roadmap tiles as the live project map (projects.html pmInit)
+          var roadmap = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}&hl=en&gl=MY', gOpts);
+          // Satellite + labels (hybrid) — lets the owner pinpoint the actual building.
+          var satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}&hl=en&gl=MY', gOpts);
+          roadmap.addTo(map);
+          L.control.layers({ 'Peta': roadmap, 'Satelit': satellite }, null, { position: 'topright' }).addTo(map);
           el._fdzMap = map;
           el._fdzMarker = null;
           function place(latlng) {
@@ -293,24 +297,65 @@
               el._fdzMarker.on('dragend', function (e) { place(e.target.getLatLng()); });
             }
           }
+          el._fdzPlace = place;
           if (here) place({ lat: here[0], lng: here[1] });
           map.on('click', function (e) { place(e.latlng); });
           setTimeout(function () { map.invalidateSize(); }, 250);
         }
-        return h('div', {},
+        // Geocode a typed place name (Nominatim, Malaysia-biased) → fly there & drop the pin.
+        function runSearch(ev) {
+          if (ev && ev.preventDefault) ev.preventDefault();
+          var root = ev.currentTarget.closest('.fdz-coord');
+          if (!root) return;
+          var input = root.querySelector('.fdz-coord-search-input');
+          var mapEl = root.querySelector('.fdz-coord-map');
+          var status = root.querySelector('.fdz-coord-search-status');
+          var q = ((input && input.value) || '').trim();
+          if (!q) { if (status) status.textContent = 'Taip nama tempat dahulu.'; return; }
+          if (status) status.textContent = 'Mencari…';
+          // Expand common Malay place abbreviations so Nominatim can resolve them.
+          var ABBR = { kg: 'Kampung', kpg: 'Kampung', jln: 'Jalan', jl: 'Jalan', tmn: 'Taman', lrg: 'Lorong', bkt: 'Bukit', bdr: 'Bandar', psr: 'Pasar', spg: 'Simpang' };
+          var qNorm = q.replace(/\b([A-Za-z]+)\.?/g, function (m, w) { return ABBR[w.toLowerCase()] || w; });
+          fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=my&q=' + encodeURIComponent(qNorm), { headers: { 'Accept': 'application/json' } })
+            .then(function (r) { return r.json(); })
+            .then(function (a) {
+              if (!a || !a.length) { if (status) status.textContent = '“' + q + '” tidak dijumpai. Cuba nama lain, atau klik terus pada peta.'; return; }
+              var lat = parseFloat(a[0].lat), lng = parseFloat(a[0].lon);
+              var map = mapEl && mapEl._fdzMap;
+              if (map) map.setView([lat, lng], 16);
+              if (mapEl && mapEl._fdzPlace) mapEl._fdzPlace({ lat: lat, lng: lng });
+              if (status) status.textContent = '✓ Dijumpai: ' + (a[0].display_name || q) + '. Seret penanda untuk ketepatan.';
+            })
+            .catch(function () { if (status) status.textContent = 'Ralat mencari — semak sambungan internet, atau klik terus pada peta.'; });
+        }
+        function onSearchKey(ev) { if (ev.key === 'Enter') runSearch(ev); }
+        return h('div', { className: 'fdz-coord' },
           h('input', {
             type: 'text', id: props.forID, value: props.value || '',
             placeholder: 'Contoh: 1.551230, 110.372326',
             onChange: function (e) { props.onChange(e.target.value); },
             style: { width: '100%', padding: '8px 12px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.9rem', fontFamily: 'inherit', marginBottom: '8px' }
           }),
+          h('div', { style: { display: 'flex', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' } },
+            h('input', {
+              type: 'text', className: 'fdz-coord-search-input',
+              placeholder: 'Cari nama tempat… cth: Kg. Stass, Samarahan',
+              onKeyDown: onSearchKey,
+              style: { flex: '1', minWidth: '180px', padding: '8px 12px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.9rem', fontFamily: 'inherit', height: '38px' }
+            }),
+            h('button', {
+              type: 'button', onClick: runSearch,
+              style: { padding: '8px 16px', border: 'none', borderRadius: '4px', background: '#b5000b', color: '#fff', fontSize: '0.9rem', fontWeight: '600', cursor: 'pointer', height: '38px', fontFamily: 'inherit', whiteSpace: 'nowrap' }
+            }, '🔍 Cari')
+          ),
           h('div', {
-            ref: initMap,
+            ref: initMap, className: 'fdz-coord-map',
             style: { height: '320px', width: '100%', borderRadius: '6px', overflow: 'hidden', border: '1px solid #ddd', zIndex: 0 }
           }),
+          h('p', { className: 'fdz-coord-search-status', style: { fontSize: '0.72rem', color: '#b5000b', marginTop: '6px', minHeight: '1em', lineHeight: '1.5' } }, ''),
           h('p', {
-            style: { fontSize: '0.72rem', color: '#5f5e5e', marginTop: '6px', lineHeight: '1.5' }
-          }, 'Klik pada peta untuk letak penanda lokasi projek, atau seret penanda untuk laraskan. Koordinat akan diisi automatik di atas. (Menaip manual tidak menggerakkan penanda — gunakan peta untuk ketepatan.)')
+            style: { fontSize: '0.72rem', color: '#5f5e5e', marginTop: '4px', lineHeight: '1.5' }
+          }, 'Cari nama tempat di atas, atau klik terus pada peta untuk letak penanda (seret untuk laraskan). Tukar ke “Satelit” di penjuru kanan peta untuk nampak bangunan sebenar. Koordinat diisi automatik.')
         );
       }
       function CoordinateMapPreview(props) {
@@ -433,7 +478,7 @@
         var tiles = '';
         for (var ty = cy - 1; ty <= cy + 1; ty++) {
           for (var tx = cx - 1; tx <= cx + 1; tx++) {
-            tiles += '<img src="https://tile.openstreetmap.org/' + z + '/' + tx + '/' + ty + '.png" alt="" loading="lazy">';
+            tiles += '<img src="https://mt' + (Math.abs(tx + ty) % 4) + '.google.com/vt/lyrs=m&x=' + tx + '&y=' + ty + '&z=' + z + '&hl=en&gl=MY" alt="" loading="lazy">';
           }
         }
         return [
