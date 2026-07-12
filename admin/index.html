@@ -678,9 +678,7 @@
 
       function wrapSample(content, cls) {
         return [
-          '<div class="pv-divider">',
-          '  <p class="pv-divider__note">Contoh di bawah menunjukkan paparan kad yang telah diisi sepenuhnya</p>',
-          '</div>',
+          '<div class="pv-divider"></div>',
           '<div class="pv-section pv-section--sample ' + (cls || '') + '">',
           '  <p class="pv-label">&#8212; CONTOH RUJUKAN &#8212;</p>',
           '  <div class="pv-sample-badge">CONTOH</div>',
@@ -755,8 +753,7 @@
           '.pv-section--sample{opacity:0.7;border:1.5px dashed #9ca3af;border-radius:0.5rem;padding:16px;position:relative;}',
           '.pv-label{font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#6b7280;text-align:center;margin-bottom:12px;}',
           '.pv-sample-badge{position:absolute;top:0;right:0;background:#6b7280;color:#fff;font-size:0.5rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:0 0.5rem 0 0.25rem;}',
-          '.pv-divider{width:100%;max-width:360px;margin:4px 0 20px;text-align:center;}',
-          '.pv-divider__note{font-size:0.62rem;color:#9ca3af;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:16px;}',
+          '.pv-divider{width:100%;max-width:360px;margin:20px 0;border-top:1px dashed #d1d5db;}',
           '.pf-table-wrap{width:100%;overflow-x:auto;background:#fff;border-radius:12px;border:1px solid #e8e4dc;box-shadow:0 2px 16px rgba(0,0,0,0.06);}',
           '.pf-table{width:100%;border-collapse:collapse;font-size:0.82rem;background:#fff;}',
           '.pf-table thead th{padding:11px 14px;text-align:left;font-family:"Barlow",sans-serif;font-size:0.62rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;white-space:nowrap;border-bottom:3px solid #b5000b;background:#141518;color:#fff;}',
@@ -932,8 +929,7 @@
           '.pv-section--sample{opacity:0.7;border:1.5px dashed #9ca3af;border-radius:0.5rem;padding:16px;position:relative;}',
           '.pv-label{font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#6b7280;text-align:center;margin-bottom:12px;}',
           '.pv-sample-badge{position:absolute;top:0;right:0;background:#6b7280;color:#fff;font-size:0.5rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:0 0.5rem 0 0.25rem;}',
-          '.pv-divider{margin:4px 0 20px;text-align:center;}',
-          '.pv-divider__note{font-size:0.62rem;color:#9ca3af;line-height:1.5;border-top:1px dashed #d1d5db;padding-top:16px;}',
+          '.pv-divider{margin:20px 0;border-top:1px dashed #d1d5db;}',
           '.pv-subsection{margin-bottom:16px;}',
           '.pv-sublabel{font-size:0.55rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#9ca3af;margin-bottom:8px;}',
           '.certs-grid{display:grid;grid-template-columns:1fr;gap:1px;background:#e8e8ea;border:1px solid #e8e8ea;border-radius:0.5rem;overflow:hidden;}',
@@ -1250,6 +1246,10 @@
           "[class*='ListCard'],[class*='Card-'] { border-radius:10px !important; transition:box-shadow .2s,transform .2s,border-color .2s !important; }",
           "[class*='ListCard']:hover,[class*='Card-']:hover { border-color:#ffdad5 !important; box-shadow:0 14px 32px -14px rgba(0,0,0,0.16) !important; transform:translateY(-2px); }",
           "[class*='SidebarNavLink'][class*='active'],[class*='NavLink'][class*='active'] { background-color:#141518 !important; color:#fff !important; border-radius:7px; }",
+          // Total-count badge injected next to Projects / Certifications in the sidebar
+          ".fdz-count-badge { display:inline-flex; align-items:center; justify-content:center; min-width:22px; height:20px; margin-left:auto; padding:0 7px; border-radius:999px; background:#b5000b; color:#fff !important; font-family:'JetBrains Mono','Inter',monospace; font-size:0.72rem; font-weight:700; line-height:1; }",
+          "[class*='SidebarNavLink'][class*='active'] .fdz-count-badge,[class*='NavLink'][class*='active'] .fdz-count-badge { background:#fff; color:#141518 !important; }",
+          "a:has(> .fdz-count-badge),[class*='SidebarNavLink']:has(.fdz-count-badge),[class*='NavLink']:has(.fdz-count-badge) { display:flex !important; align-items:center; }",
           "#nc-root a:focus-visible, #nc-root button:focus-visible { outline:2px solid #b5000b !important; outline-offset:2px; }",
           // Relation widget (Projek Pilihan project picker) — project titles are long
           // full sentences; the default fixed-height option rows made them overlap.
@@ -1379,6 +1379,54 @@
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') overlay.style.display = 'none'; });
       }
 
+      // ── Total-count badges (Projects / Certifications) in the sidebar ─────────
+      // Counts come from the deployed content indexes (published entries — same
+      // numbers the live site shows). Fetched once, then re-applied on re-render.
+      var fdzCounts = { projects: null, certifications: null, loaded: false, loading: false };
+
+      function loadCollectionCounts() {
+        if (fdzCounts.loaded || fdzCounts.loading) return;
+        fdzCounts.loading = true;
+        function grab(url) {
+          return fetch(url, { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.json() : []; })
+            .catch(function () { return []; });
+        }
+        Promise.all([
+          grab('/content/projects-index.json'),
+          grab('/content/certifications-index.json')
+        ]).then(function (res) {
+          fdzCounts.projects       = Array.isArray(res[0]) ? res[0].length : null;
+          fdzCounts.certifications = Array.isArray(res[1]) ? res[1].length : null;
+          fdzCounts.loaded  = true;
+          fdzCounts.loading = false;
+          injectCollectionCounts();
+        });
+      }
+
+      function injectCollectionCounts() {
+        if (!document.querySelector("[class*='AppHeader']")) return; // CMS only, not login
+        if (!fdzCounts.loaded) { loadCollectionCounts(); return; }
+        var links = document.querySelectorAll("[class*='SidebarNavLink'],[class*='NavLink']");
+        Array.prototype.forEach.call(links, function (link) {
+          var href = link.getAttribute('href') || '';
+          var m = href.match(/collections\/([^/?#]+)/);
+          if (!m) return;
+          var count = m[1] === 'projects'       ? fdzCounts.projects
+                    : m[1] === 'certifications' ? fdzCounts.certifications
+                    : null;
+          if (count == null) return;
+          var badge = link.querySelector('.fdz-count-badge');
+          if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'fdz-count-badge';
+            badge.title = 'Jumlah ' + (m[1] === 'projects' ? 'projek' : 'sijil');
+            link.appendChild(badge);
+          }
+          badge.textContent = count;
+        });
+      }
+
       function brandLogin() {
         var authPage = document.querySelector('[class*="AuthenticationPage"]');
         if (!authPage) return;
@@ -1410,7 +1458,7 @@
       }
 
       // Watch for the login page / CMS header to (re)appear and brand them
-      var enhanceObserver = new MutationObserver(function () { brandLogin(); brandHeader(); injectHelpPanel(); });
+      var enhanceObserver = new MutationObserver(function () { brandLogin(); brandHeader(); injectHelpPanel(); injectCollectionCounts(); });
       enhanceObserver.observe(document.body, {
         childList: true, subtree: true
       });
@@ -1418,6 +1466,7 @@
       brandLogin();
       brandHeader();
       injectHelpPanel();
+      injectCollectionCounts();
     });
   </script>
   <script src="https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js"></script>
