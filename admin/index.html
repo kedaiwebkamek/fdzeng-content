@@ -1251,14 +1251,19 @@
           "[class*='SidebarNavLink'][class*='active'] .fdz-count-badge,[class*='NavLink'][class*='active'] .fdz-count-badge { background:#fff; color:#141518 !important; }",
           "a:has(> .fdz-count-badge),[class*='SidebarNavLink']:has(.fdz-count-badge),[class*='NavLink']:has(.fdz-count-badge) { display:flex !important; align-items:center; }",
           "#nc-root a:focus-visible, #nc-root button:focus-visible { outline:2px solid #b5000b !important; outline-offset:2px; }",
-          // Relation widget (Projek Pilihan project picker) — project titles are long
-          // full sentences; the default fixed-height option rows made them overlap.
-          // Let each suggestion wrap and grow, and give the dropdown a proper panel.
-          ".react-autosuggest__suggestions-container--open { background:#fff !important; border:1px solid #dfdfe3 !important; border-radius:8px !important; box-shadow:0 12px 32px -8px rgba(0,0,0,0.2) !important; max-height:300px !important; overflow-y:auto !important; z-index:9999 !important; }",
-          ".react-autosuggest__suggestions-list { margin:0 !important; padding:4px !important; list-style:none !important; }",
-          ".react-autosuggest__suggestion { white-space:normal !important; height:auto !important; min-height:0 !important; line-height:1.45 !important; padding:9px 12px !important; border-radius:5px !important; border-bottom:1px solid rgba(0,0,0,0.05) !important; font-size:0.82rem !important; cursor:pointer !important; }",
-          ".react-autosuggest__suggestion:last-child { border-bottom:none !important; }",
-          ".react-autosuggest__suggestion--highlighted { background:rgba(181,0,11,0.08) !important; color:#b5000b !important; }"
+          // Relation-widget dropdown (Featured Projects / Featured Certificates
+          // pickers). Decap renders it with react-select wrapped in react-window's
+          // FixedSizeList — every option row is a FIXED 30px height, absolutely
+          // positioned. Long project descriptions wrap to 2-3 lines, overflow their
+          // 30px row and overlap the next one ("stacked text"; the hovered row just
+          // repaints on top). A fixed-height virtualized list can't grow rows, so we
+          // force each option onto ONE ellipsised line that fits 30px. SCOPED to the
+          // virtualized rows only (parent has react-window's inline position:absolute)
+          // so the normal Status/Category selects, which legitimately wrap, are
+          // untouched. react-select gives each option div an id like
+          // "react-select-2-option-0".
+          "[style*='position: absolute'] > [id*='-option-'],[style*='position:absolute'] > [id*='-option-'] { white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important; line-height:30px !important; height:30px !important; padding:0 12px !important; font-size:0.82rem !important; box-sizing:border-box !important; cursor:pointer !important; }",
+          "[style*='position: absolute'] > [id*='-option-']:hover,[style*='position:absolute'] > [id*='-option-']:hover { background:rgba(181,0,11,0.08) !important; color:#b5000b !important; }"
         ].join('\n');
         document.head.appendChild(s);
       })();
