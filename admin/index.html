@@ -1075,48 +1075,232 @@
       CMS.registerPreviewTemplate('gallery', GalleryPreview);
 
       // ─────────────────────────────────────────────────────────────────────────
-      // Preview for the "Projek Pilihan" tab — the ordered homepage carousel list.
-      function FeaturedPreview(props) {
-        var items = toArray(props.entry.getIn(['data']).get('items'));
-        var names = items.map(function (it) {
+      // Featured Projects / Featured Certificates previews.
+      // These two collections store only REFERENCES (a project's description / a
+      // cert's title). To show the REAL card visuals — like the Gallery preview
+      // does — we fetch the compiled site data (/projects-data.json,
+      // /certifications-data.json) and render the actual site cards
+      // (buildProjectCard / buildCertCard) in the chosen order. Uses Decap's global
+      // createClass so the card render can re-run once the fetch resolves; falls
+      // back to a plain ordered list if createClass isn't available.
+      var createClass = window.createClass;
+
+      var FEATURED_DATA = { projects: null, certs: null };
+      function fetchFeaturedJson(key, url) {
+        if (FEATURED_DATA[key]) return Promise.resolve(FEATURED_DATA[key]);
+        return fetch(url, { cache: 'no-store' })
+          .then(function (r) { return r.ok ? r.json() : []; })
+          .then(function (arr) { FEATURED_DATA[key] = Array.isArray(arr) ? arr : []; return FEATURED_DATA[key]; })
+          .catch(function () { FEATURED_DATA[key] = []; return FEATURED_DATA[key]; });
+      }
+      // Warm the cache early so the cards are ready by the time the tab is opened.
+      fetchFeaturedJson('projects', '/projects-data.json');
+      fetchFeaturedJson('certs', '/certifications-data.json');
+
+      function fpEsc(s) {
+        return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+      function fpRefNames(entry, field) {
+        return toArray(entry.getIn(['data']).get('items')).map(function (it) {
           if (!it) return '';
           if (typeof it === 'string') return it;
-          return it.project || '';
+          return it[field] || '';
         }).filter(Boolean);
-        var rows = names.length
-          ? names.map(function (n, i) {
-              return '<div class="fp-row"><span class="fp-num">' + (i + 1) + '</span><span class="fp-name">' + n + '</span></div>';
-            }).join('')
-          : '<div class="fp-empty">Belum ada projek pilihan.<br>Tambah projek dari senarai dropdown di sebelah kiri.</div>';
-        var css = [
-          '<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">',
-          '<style>',
-          '*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}',
-          'body{font-family:"Inter",sans-serif;background:#141518;padding:28px;min-height:100vh;}',
-          '.fp-label{font-family:"Barlow",sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:#e30613;margin-bottom:8px;}',
-          '.fp-title{font-family:"Barlow",sans-serif;font-size:1.5rem;font-weight:900;text-transform:uppercase;color:#fff;line-height:1.1;}',
-          '.fp-title .accent{color:#b5000b;}',
-          '.fp-count{display:inline-block;font-family:"Barlow",sans-serif;font-weight:900;color:#fff;background:#b5000b;font-size:0.7rem;padding:2px 10px;border-radius:99px;margin-left:8px;vertical-align:middle;}',
-          '.fp-sub{font-size:0.78rem;color:rgba(255,255,255,0.45);margin-top:8px;margin-bottom:22px;line-height:1.6;}',
-          '.fp-row{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-left:3px solid #b5000b;border-radius:8px;padding:12px 16px;margin-bottom:8px;}',
-          '.fp-num{font-family:"Barlow",sans-serif;font-weight:900;font-size:1.05rem;color:#b5000b;flex-shrink:0;min-width:22px;text-align:center;}',
-          '.fp-name{font-family:"Barlow",sans-serif;font-size:0.82rem;font-weight:700;text-transform:uppercase;color:#fff;line-height:1.35;letter-spacing:0.01em;}',
-          '.fp-empty{color:rgba(255,255,255,0.4);font-size:0.85rem;text-align:center;padding:40px 20px;border:1px dashed rgba(255,255,255,0.15);border-radius:8px;line-height:1.7;}',
-          '</style>'
-        ].join('');
-        var html = css
-          + '<div class="fp-label">Track Record</div>'
-          + '<div class="fp-title">Featured <span class="accent">Projects</span>'
-          + (names.length ? '<span class="fp-count">' + names.length + '</span>' : '')
-          + '</div>'
-          + '<p class="fp-sub">Susunan carousel projek pilihan di halaman utama — ikut turutan di bawah (seret item di sebelah kiri untuk ubah).</p>'
-          + rows;
-        return h('div', { dangerouslySetInnerHTML: { __html: html } });
       }
-      // Decap keys file-collection previews by the FILE name ('featured-projects'),
-      // not the collection name — register both so the preview binds regardless.
-      CMS.registerPreviewTemplate('featured-config', FeaturedPreview);
-      CMS.registerPreviewTemplate('featured-projects', FeaturedPreview);
+      function normalizeProjectRecord(p) {
+        var imgs = p.images || [];
+        var imgSrc = imgs.length ? (typeof imgs[0] === 'string' ? imgs[0] : (imgs[0].src || '')) : '';
+        return {
+          status: p.status || '', client: p.client || '', amount: p.amount || '',
+          date: p.date || '', description: p.description || '', cat: p.cat || '',
+          imgSrc: imgSrc,
+          newsListLen: (p.newsList || []).length,
+          videoListLen: (p.videoList || []).length
+        };
+      }
+      function normalizeCertRecord(c) {
+        return {
+          title: c.title || '', issuer: c.issuer || '', status: c.status || '',
+          logoSrc: (c.logoImage || '').trim(), iconName: c.iconName || '',
+          iconColor: c.iconColor || 'grey',
+          featuredTitle: c.featuredTitle || '', featuredIssuer: c.featuredIssuer || '',
+          brief: c.brief || ''
+        };
+      }
+
+      var FP_FONTS = [
+        '<link rel="preconnect" href="https://fonts.googleapis.com">',
+        '<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">',
+        '<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap" rel="stylesheet">'
+      ].join('');
+      var FP_MATERIAL = '.material-symbols-outlined{font-family:"Material Symbols Outlined";font-weight:400;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:"liga";font-feature-settings:"liga";-webkit-font-smoothing:antialiased;}';
+      // Real project-card styles (mirrors ProjectPreview so the same card renders).
+      var FP_DYN_CARD_CSS = [
+        '.dyn-card{width:100%;max-width:340px;margin:0 auto;background:#ffffff;color:#1a1c1d;border:1px solid #e2e2e4;border-radius:0.5rem;overflow:hidden;display:flex;flex-direction:column;position:relative;box-shadow:0 10px 30px -12px rgba(0,0,0,.12);}',
+        '.dyn-card__img-wrap{position:relative;height:160px;overflow:hidden;background:#e8e8ea;}',
+        '.dyn-card__img{width:100%;height:100%;object-fit:cover;}',
+        '.dyn-card__no-img{width:100%;height:100%;background:#141518;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:24px 24px;display:flex;align-items:center;justify-content:center;}',
+        '.dyn-card__no-img .material-symbols-outlined{font-size:2.2rem;color:rgba(255,255,255,0.18);}',
+        '.dyn-card__brand-watermark{position:absolute;bottom:8px;right:8px;width:70px;opacity:0.75;filter:brightness(0) invert(1);pointer-events:none;z-index:5;}',
+        '.dyn-card__badge-status{position:absolute;top:16px;left:16px;background:#141518;color:#fff;padding:4px 12px;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:.125rem;display:flex;align-items:center;gap:6px;}',
+        '.dyn-card__badge-status--active{background:#b5000b;}',
+        '.dyn-ping{display:inline-block;width:8px;height:8px;border-radius:50%;background:#28c840;box-shadow:0 0 0 0 rgba(40,200,64,0.6);animation:dyn-ping 1.5s ease infinite;}',
+        '@keyframes dyn-ping{0%{box-shadow:0 0 0 0 rgba(40,200,64,0.5);}70%{box-shadow:0 0 0 6px rgba(40,200,64,0);}100%{box-shadow:0 0 0 0 rgba(40,200,64,0);}}',
+        '.dyn-card__body{padding:20px;display:flex;flex-direction:column;flex-grow:1;border-top:3px solid transparent;}',
+        '.dyn-card__meta{display:flex;justify-content:space-between;margin-bottom:8px;align-items:center;flex-wrap:wrap;gap:8px;}',
+        '.dyn-card__meta-year{font-size:.7rem;font-weight:700;letter-spacing:.1em;color:#fff;background:#b5000b;padding:4px 8px;border-radius:4px;white-space:nowrap;display:inline-flex;align-items:center;}',
+        '.dyn-card__meta-cat{font-size:.65rem;font-weight:600;letter-spacing:.05em;color:#5f5e5e;text-transform:uppercase;}',
+        '.dyn-card__title{font-family:"Barlow",sans-serif;font-size:.9rem;font-weight:900;line-height:1.35;color:#1a1c1d;padding-bottom:16px;text-transform:uppercase;letter-spacing:-.01em;}',
+        '.dyn-card__client{font-size:.75rem;font-weight:600;color:#5f5e5e;margin-top:auto;margin-bottom:16px;padding-top:16px;border-top:1px dashed #e2e2e4;}',
+        '.dyn-card__client-name{font-weight:700;color:#1a1c1d;}',
+        '.dyn-card__footer{padding-top:12px;border-top:1px solid #e2e2e4;display:flex;flex-direction:column;gap:6px;}',
+        '.dyn-card__val-block{display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 12px;width:100%;box-sizing:border-box;margin-bottom:2px;}',
+        '.dyn-card__val-title{font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#5f5e5e;margin-bottom:2px;}',
+        '.dyn-card__val-amt{font-family:"Barlow",sans-serif;font-size:1rem;font-weight:900;color:#1a1c1d;}',
+        '.dyn-chip{display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 12px;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;border-radius:2px;width:100%;box-sizing:border-box;}',
+        '.dyn-chip--news{background:#fff;border:1px solid #1a1a1a;color:#000;}',
+        '.dyn-chip--video{background:rgba(255,0,0,.06);border:1px solid rgba(255,0,0,.3);color:#e82222;}'
+      ].join('');
+      // Real featured-certificate-card styles (mirrors CertPreview).
+      var FP_CERT_CARD_CSS = [
+        '.certs-grid{display:grid;grid-template-columns:1fr;gap:1px;background:#e8e8ea;overflow:hidden;}',
+        '.cert-card{background:#fff;padding:40px 28px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;height:100%;}',
+        '.cert-card__icon{width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:#eeeef0;border:1px solid #e8e8ea;border-radius:0.5rem;color:#b5000b;font-size:1.5rem;margin-bottom:24px;overflow:hidden;}',
+        '.cert-card__icon-img{height:32px;width:auto;object-fit:contain;}',
+        '.cert-card__title{font-family:"Barlow",sans-serif;font-size:1.0rem;font-weight:900;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:12px;color:#1a1c1d;line-height:1.25;}',
+        '.cert-card__issuer{font-size:0.72rem;color:#5f5e5e;margin-bottom:10px;opacity:0.8;flex:1;}',
+        '.cert-card__footer{display:flex;justify-content:center;gap:8px;align-items:center;padding-top:16px;border-top:1px solid #e8e8ea;width:100%;}',
+        '.cert-card__status-value{font-family:"Barlow",sans-serif;font-size:0.65rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#15803d;display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.2);padding:5px 12px;border-radius:9999px;}',
+        '.cert-card__status-value::before{content:"";width:5px;height:5px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px rgba(34,197,94,0.8);}',
+        '.cert-card__status-value--tamat{color:#b5000b;background:rgba(181,0,11,0.1);border-color:rgba(181,0,11,0.2);}',
+        '.cert-card__status-value--tamat::before{background:#b5000b;box-shadow:0 0 8px rgba(181,0,11,0.5);}',
+        '.cert-card__status-value--renewal{color:#c2410c;background:rgba(194,65,12,0.1);border-color:rgba(194,65,12,0.2);}',
+        '.cert-card__status-value--renewal::before{background:#c2410c;box-shadow:0 0 8px rgba(194,65,12,0.6);}',
+        '.cert-card__download-btn{background:none;border:none;cursor:pointer;padding:6px;display:inline-flex;align-items:center;justify-content:center;border-radius:0.25rem;margin-left:auto;}',
+        '.cert-hint-ico{display:inline-flex;align-items:center;vertical-align:middle;margin-left:6px;cursor:help;text-transform:none;font-weight:400;}',
+        '.cert-hint-ico .material-symbols-outlined{font-size:0.95rem;color:#5f5e5e;opacity:0.45;}'
+      ].join('');
+
+      function renderFeaturedProjectsHtml(records, names) {
+        var css = '<style>'
+          + '*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}'
+          + 'body{font-family:"Inter",sans-serif;background:#f0f0f2;padding:32px;}'
+          + '.fpx-head{max-width:1120px;margin:0 auto 26px;}'
+          + '.fpx-label{font-family:"Barlow",sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:#b5000b;margin-bottom:6px;}'
+          + '.fpx-title{font-family:"Barlow",sans-serif;font-size:1.6rem;font-weight:900;text-transform:uppercase;color:#1a1c1d;letter-spacing:-0.01em;}'
+          + '.fpx-title .accent{color:#b5000b;}'
+          + '.fpx-count{display:inline-block;font-family:"Barlow",sans-serif;font-weight:900;color:#fff;background:#b5000b;font-size:0.7rem;padding:2px 11px;border-radius:99px;margin-left:8px;vertical-align:middle;}'
+          + '.fpx-sub{font-size:0.8rem;color:#5f5e5e;margin-top:8px;line-height:1.6;max-width:640px;}'
+          + '.fpx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;max-width:1120px;margin:0 auto;align-items:stretch;}'
+          + '.fpx-state{max-width:640px;margin:0 auto;text-align:center;padding:44px 20px;border:1px dashed #cfcfd4;border-radius:10px;color:#6b7280;font-size:0.85rem;line-height:1.7;background:#fff;}'
+          + '.fpx-missing{min-height:220px;border:1px dashed #f0b4ae;background:#fff5f4;border-radius:0.5rem;padding:20px;color:#b5000b;font-size:0.8rem;line-height:1.5;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}'
+          + '.fpx-missing span{font-weight:800;color:#7a1a12;display:block;margin:8px 0;}'
+          + '.fpx-missing em{color:#9a5a54;font-size:0.72rem;}'
+          + FP_DYN_CARD_CSS + FP_MATERIAL
+          + '</style>';
+        var head = '<div class="fpx-head"><div class="fpx-label">Track Record</div>'
+          + '<div class="fpx-title">Featured <span class="accent">Projects</span>'
+          + (names.length ? '<span class="fpx-count">' + names.length + '</span>' : '') + '</div>'
+          + '<p class="fpx-sub">Kad projek pilihan seperti yang dipapar di laman web — ikut turutan di bawah (seret item di sebelah kiri untuk susun semula).</p></div>';
+        var body;
+        if (records === null) {
+          body = '<div class="fpx-state">Memuatkan data projek…</div>';
+        } else if (!names.length) {
+          body = '<div class="fpx-state">Belum ada projek pilihan.<br>Tambah projek dari senarai dropdown di sebelah kiri.</div>';
+        } else {
+          var byDesc = {};
+          records.forEach(function (p) { if (p && p.description) byDesc[p.description] = p; });
+          var cards = names.map(function (n, i) {
+            var p = byDesc[n];
+            if (!p) return '<div class="fpx-missing">#' + (i + 1) + ' — Projek tidak dijumpai:<span>' + fpEsc(n) + '</span><em>(tajuk projek mungkin telah diubah — pilih semula projek ini)</em></div>';
+            return buildProjectCard(normalizeProjectRecord(p));
+          }).join('');
+          body = '<div class="fpx-grid">' + cards + '</div>';
+        }
+        return FP_FONTS + css + head + body;
+      }
+
+      function renderFeaturedCertsHtml(records, names) {
+        var css = '<style>'
+          + '*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}'
+          + 'body{font-family:"Inter",sans-serif;background:#f0f0f2;padding:32px;}'
+          + '.fcx-head{max-width:1120px;margin:0 auto 26px;}'
+          + '.fcx-label{font-family:"Barlow",sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:#b5000b;margin-bottom:6px;}'
+          + '.fcx-title{font-family:"Barlow",sans-serif;font-size:1.6rem;font-weight:900;text-transform:uppercase;color:#1a1c1d;letter-spacing:-0.01em;}'
+          + '.fcx-title .accent{color:#b5000b;}'
+          + '.fcx-count{display:inline-block;font-family:"Barlow",sans-serif;font-weight:900;color:#fff;background:#b5000b;font-size:0.7rem;padding:2px 11px;border-radius:99px;margin-left:8px;vertical-align:middle;}'
+          + '.fcx-sub{font-size:0.8rem;color:#5f5e5e;margin-top:8px;line-height:1.6;max-width:640px;}'
+          + '.fcx-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;max-width:1120px;margin:0 auto;background:#e8e8ea;border:1px solid #e8e8ea;border-radius:0.5rem;overflow:hidden;}'
+          + '.fcx-row .certs-grid{border:none;border-radius:0;background:transparent;}'
+          + '.fcx-state{max-width:640px;margin:0 auto;text-align:center;padding:44px 20px;border:1px dashed #cfcfd4;border-radius:10px;color:#6b7280;font-size:0.85rem;line-height:1.7;background:#fff;}'
+          + '.fcx-missing{background:#fff5f4;padding:36px 20px;color:#b5000b;font-size:0.78rem;line-height:1.5;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}'
+          + '.fcx-missing span{font-weight:800;color:#7a1a12;display:block;margin:8px 0;}'
+          + '.fcx-missing em{color:#9a5a54;font-size:0.72rem;}'
+          + FP_CERT_CARD_CSS + FP_MATERIAL
+          + '</style>';
+        var head = '<div class="fcx-head"><div class="fcx-label">Accreditations</div>'
+          + '<div class="fcx-title">Featured <span class="accent">Certificates</span>'
+          + (names.length ? '<span class="fcx-count">' + names.length + '</span>' : '') + '</div>'
+          + '<p class="fcx-sub">Kad sijil pilihan di bahagian atas halaman Certifications — ikut turutan di bawah (seret item di sebelah kiri untuk susun semula).</p></div>';
+        var body;
+        if (records === null) {
+          body = '<div class="fcx-state">Memuatkan data sijil…</div>';
+        } else if (!names.length) {
+          body = '<div class="fcx-state">Belum ada sijil pilihan.<br>Tambah sijil dari senarai dropdown di sebelah kiri.</div>';
+        } else {
+          var byTitle = {};
+          records.forEach(function (c) { if (c && c.title) byTitle[c.title] = c; });
+          var cards = names.map(function (n, i) {
+            var c = byTitle[n];
+            if (!c) return '<div class="fcx-missing">#' + (i + 1) + ' — Sijil tidak dijumpai:<span>' + fpEsc(n) + '</span><em>(nama sijil mungkin telah diubah — pilih semula sijil ini)</em></div>';
+            return buildCertCard(normalizeCertRecord(c));
+          }).join('');
+          body = '<div class="fcx-row">' + cards + '</div>';
+        }
+        return FP_FONTS + css + head + body;
+      }
+
+      function makeFeaturedPreview(dataKey, url, refField, renderHtml) {
+        return createClass({
+          getInitialState: function () { return { records: FEATURED_DATA[dataKey] }; },
+          componentDidMount: function () {
+            var self = this; this._alive = true;
+            fetchFeaturedJson(dataKey, url).then(function (recs) {
+              if (self._alive) self.setState({ records: recs });
+            });
+          },
+          componentWillUnmount: function () { this._alive = false; },
+          render: function () {
+            var names = fpRefNames(this.props.entry, refField);
+            return h('div', { dangerouslySetInnerHTML: { __html: renderHtml(this.state.records, names) } });
+          }
+        });
+      }
+
+      // Fallback (no createClass): a plain ordered reference list — still readable.
+      function makeFeaturedFallback(refField, label) {
+        return function (props) {
+          var names = fpRefNames(props.entry, refField);
+          var rows = names.length
+            ? names.map(function (n, i) { return '<div style="padding:11px 15px;border-left:3px solid #b5000b;background:#fff;margin-bottom:7px;border-radius:6px;font-family:Barlow,sans-serif;font-weight:700;text-transform:uppercase;font-size:0.8rem;color:#1a1c1d;line-height:1.35;">' + (i + 1) + '. ' + fpEsc(n) + '</div>'; }).join('')
+            : '<div style="color:#6b7280;padding:36px;text-align:center;">Belum ada ' + label + '.</div>';
+          return h('div', { dangerouslySetInnerHTML: { __html: '<div style="font-family:Inter,sans-serif;background:#f0f0f2;padding:28px;min-height:100vh;">' + rows + '</div>' } });
+        };
+      }
+
+      var FeaturedProjectsPreview = createClass
+        ? makeFeaturedPreview('projects', '/projects-data.json', 'project', renderFeaturedProjectsHtml)
+        : makeFeaturedFallback('project', 'projek pilihan');
+      var FeaturedCertsPreview = createClass
+        ? makeFeaturedPreview('certs', '/certifications-data.json', 'certificate', renderFeaturedCertsHtml)
+        : makeFeaturedFallback('certificate', 'sijil pilihan');
+
+      // Decap keys file-collection previews by the FILE name, not the collection
+      // name — register both so the preview binds regardless.
+      CMS.registerPreviewTemplate('featured-config', FeaturedProjectsPreview);
+      CMS.registerPreviewTemplate('featured-projects', FeaturedProjectsPreview);
+      CMS.registerPreviewTemplate('featured-cert-config', FeaturedCertsPreview);
+      CMS.registerPreviewTemplate('featured-certificates', FeaturedCertsPreview);
 
       // ── Category auto-sync: cat (EN) ↔ category (BM) ─────────────────────────
       var CATEGORY_MAP = {
