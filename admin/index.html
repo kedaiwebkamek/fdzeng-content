@@ -1416,14 +1416,21 @@
                     : m[1] === 'certifications' ? fdzCounts.certifications
                     : null;
           if (count == null) return;
+          var txt = String(count);
           var badge = link.querySelector('.fdz-count-badge');
-          if (!badge) {
-            badge = document.createElement('span');
-            badge.className = 'fdz-count-badge';
-            badge.title = 'Jumlah ' + (m[1] === 'projects' ? 'projek' : 'sijil');
-            link.appendChild(badge);
+          // IMPORTANT: only mutate the DOM when something actually changes.
+          // This runs inside the MutationObserver, so writing textContent (or
+          // appending) unconditionally would re-trigger the observer and loop
+          // forever, freezing the CMS after login.
+          if (badge) {
+            if (badge.textContent !== txt) badge.textContent = txt;
+            return;
           }
-          badge.textContent = count;
+          badge = document.createElement('span');
+          badge.className = 'fdz-count-badge';
+          badge.title = 'Jumlah ' + (m[1] === 'projects' ? 'projek' : 'sijil');
+          badge.textContent = txt;
+          link.appendChild(badge);
         });
       }
 
