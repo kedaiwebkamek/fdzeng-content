@@ -229,6 +229,7 @@ collections:
                 search_fields: ['description']
                 display_fields: ['description']
                 value_field: description
+                options_length: 100
                 hint: "Search for a project name and pick from the list. Drag items to reorder — this order sets the sequence in BOTH the homepage carousel and the projects-page featured section."
 
   # ── 2. CERTIFICATIONS ───────────────────────────────────────────────────────
@@ -418,6 +419,7 @@ collections:
                 search_fields: ['title']
                 display_fields: ['title']
                 value_field: title
+                options_length: 100
                 hint: "Search for a certificate name and pick it. Drag items to reorder — this sets the left-to-right order of the featured certificate cards."
 
   # ── 3. GALLERY ───────────────────────────────────────────────────────────────
