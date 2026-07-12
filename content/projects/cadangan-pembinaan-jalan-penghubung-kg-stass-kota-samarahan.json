@@ -1,0 +1,22 @@
+{
+  "loc": "Jalan Oya, Sibu, Sarawak",
+  "client": "Jabatan Kerja Raya Sarawak",
+  "division": "Kuching",
+  "date": "15 Jul 2026",
+  "status": "Ongoing",
+  "cat": "Building",
+  "amount": "2500000",
+  "images": [
+    {
+      "src": "",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/fdz-home.jpg",
+      "alt": ""
+    }
+  ],
+  "accuracy": "Sekitar Jalan Lanang Sibu.",
+  "coordinates": "2.243338, 111.852878",
+  "description": "Cadangan Pembinaan Jalan Penghubung Kg. Stass, Kota Samarahan"
+}
