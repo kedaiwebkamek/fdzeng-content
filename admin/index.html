@@ -447,6 +447,81 @@
         ].join('\n');
       }
 
+      // The large 2-column project modal a visitor sees when they open a project
+      // (photo gallery on the left, full details on the right). Mirrors the live
+      // #project-details-modal on projects.html.
+      function buildProjectModal(d) {
+        var isOngoing = d.status === 'Ongoing';
+        var images    = d.images || [];
+        var hasImages = images.length > 0;
+        var srcOf     = function (img) { return (typeof img === 'string') ? img : (img && img.src) || ''; };
+        var catLabel  = CAT_BM[d.cat] || d.cat || '—';
+
+        var galleryHtml;
+        if (hasImages) {
+          var thumbs = '';
+          if (images.length > 1) {
+            thumbs = '<div class="pdm-thumbs">' + images.map(function (img, idx) {
+              return '<img src="' + srcOf(img) + '" class="pdm-thumb' + (idx === 0 ? ' active' : '') + '" alt="" loading="lazy">';
+            }).join('') + '</div>';
+          }
+          galleryHtml =
+            '<div class="pdm-left-col">' +
+              '<div class="pdm-gallery">' +
+                '<div class="pdm-main-img-wrap">' +
+                  '<img src="' + srcOf(images[0]) + '" class="pdm-main-img" alt="Main view">' +
+                  '<div class="pdm-expand-hint"><span class="material-symbols-outlined">open_in_full</span></div>' +
+                  '<img src="/fdzeng-logo.png" class="pdm-watermark" alt="">' +
+                '</div>' +
+              '</div>' + thumbs +
+            '</div>';
+        } else {
+          galleryHtml =
+            '<div class="pdm-left-col">' +
+              '<div class="pdm-no-img-placeholder">' +
+                '<span class="material-symbols-outlined pdm-no-img-icon">' + (CAT_ICON[d.cat] || 'folder_open') + '</span>' +
+                '<img src="/fdzeng-logo.png" class="pdm-no-img-logo" alt="FDZ Engineering">' +
+                '<p class="pdm-no-img-text">' + (d.category || catLabel) + '<br>Photos coming soon</p>' +
+              '</div>' +
+            '</div>';
+        }
+
+        var videoList = d.videoList || [];
+        var newsList  = d.newsList  || [];
+        var linkRow = function (item, cls, icon) {
+          return '<a class="pdm-link ' + cls + '"><span class="material-symbols-outlined">' + icon + '</span><span>' + (item.title || item.link || '—') + '</span></a>';
+        };
+        var videoHtml = videoList.length
+          ? '<div class="pdm-links-block"><span class="pdm-links-title">Video Coverage</span>' +
+              videoList.map(function (v) { return linkRow(v, 'pdm-link--video', 'play_circle'); }).join('') + '</div>'
+          : '';
+        var newsHtml = newsList.length
+          ? '<div class="pdm-links-block"><span class="pdm-links-title">Project News &amp; Media</span>' +
+              newsList.map(function (n) { return linkRow(n, 'pdm-link--news', 'newspaper'); }).join('') + '</div>'
+          : '';
+
+        var infoHtml =
+          '<div class="pdm-info">' +
+            '<div class="pdm-header">' +
+              '<h2 class="pdm-title">' + (d.description || '—') + '</h2>' +
+              (d.paragraph ? '<p class="pdm-paragraph">' + d.paragraph + '</p>' : '') +
+              '<div class="pdm-meta">' +
+                '<span class="pdm-tag">' + catLabel + '</span>' +
+                '<span class="pdm-tag" style="color:' + (isOngoing ? '#f59e0b' : '#25D366') + '">' + (isOngoing ? 'Ongoing' : 'Completed') + '</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="pdm-data-grid">' +
+              '<div class="pdm-data-item"><span class="pdm-data-label">Client</span><span class="pdm-data-val">' + (d.client || '—') + '</span></div>' +
+              '<div class="pdm-data-item"><span class="pdm-data-label">Date / Year</span><span class="pdm-data-val">' + (isOngoing ? 'Ongoing' : (d.date || '—')) + '</span></div>' +
+              '<div class="pdm-data-item"><span class="pdm-data-label">Project Value</span><span class="pdm-data-val" style="color:#e30613">' + formatAmount(d.amount) + '</span></div>' +
+              '<div class="pdm-data-item"><span class="pdm-data-label">Focus Location</span><span class="pdm-data-val">' + (d.loc || 'Sarawak') + '</span></div>' +
+            '</div>' +
+            videoHtml + newsHtml +
+          '</div>';
+
+        return '<div class="pdm-window-preview"><div class="pdm-body' + (hasImages ? '' : ' pdm-body--no-img') + '">' + galleryHtml + infoHtml + '</div></div>';
+      }
+
       function buildProjectTableRow(d) {
         var isOngoing   = d.status === 'Ongoing';
         var dotClass    = isOngoing ? 'pf-table__dot--active' : 'pf-table__dot--done';
@@ -546,12 +621,12 @@
         ].join('\n');
       }
 
-      function wrapSample(content) {
+      function wrapSample(content, cls) {
         return [
           '<div class="pv-divider">',
           '  <p class="pv-divider__note">Contoh di bawah menunjukkan paparan kad yang telah diisi sepenuhnya</p>',
           '</div>',
-          '<div class="pv-section pv-section--sample">',
+          '<div class="pv-section pv-section--sample ' + (cls || '') + '">',
           '  <p class="pv-label">&#8212; CONTOH RUJUKAN &#8212;</p>',
           '  <div class="pv-sample-badge">CONTOH</div>',
           content,
@@ -580,8 +655,12 @@
           accuracy:     data.get('accuracy')    || '',
           cat:          data.get('cat')         || '',
           category:     data.get('category')    || '',
+          paragraph:    data.get('paragraph')   || '',
           isPilihan:    data.get('isPilihan')   || false,
           imgSrc:       getFirstImgSrc(liveImagesVal),
+          images:       toArray(liveImagesVal),
+          newsList:     toArray(liveNewsListVal),
+          videoList:    toArray(liveVideoListVal),
           newsListLen:  liveNewsListVal  ? (liveNewsListVal.size  !== undefined ? liveNewsListVal.size  : (liveNewsListVal.length  || 0)) : 0,
           videoListLen: liveVideoListVal ? (liveVideoListVal.size !== undefined ? liveVideoListVal.size : (liveVideoListVal.length || 0)) : 0
         };
@@ -599,8 +678,12 @@
           accuracy:    PROJECT_SAMPLE.accuracy,
           cat:         PROJECT_SAMPLE.cat,
           category:    PROJECT_SAMPLE.category,
+          paragraph:   PROJECT_SAMPLE.paragraph,
           isPilihan:    PROJECT_SAMPLE.isPilihan,
           imgSrc:       PROJECT_SAMPLE.images[0].src,
+          images:       PROJECT_SAMPLE.images,
+          newsList:     PROJECT_SAMPLE.newsList,
+          videoList:    PROJECT_SAMPLE.videoList,
           newsListLen:  PROJECT_SAMPLE.newsList.length,
           videoListLen: PROJECT_SAMPLE.videoList.length
         };
@@ -683,13 +766,56 @@
           '.dyn-chip{display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 12px;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;border-radius:2px;width:100%;box-sizing:border-box;}',
           '.dyn-chip--news{background:#fff;border:1px solid #1a1a1a;color:#000;}',
           '.dyn-chip--video{background:rgba(255,0,0,.06);border:1px solid rgba(255,0,0,.3);color:#e82222;}',
+          // Project detail modal (mirrors #project-details-modal on projects.html)
+          '.pv-section--modal{max-width:680px;}',
+          '.pdm-window-preview{width:100%;max-width:680px;margin:0 auto;background:#0f1012;border:1px solid rgba(255,255,255,0.1);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,0.4);}',
+          '.pdm-body{display:grid;grid-template-columns:1.1fr 1fr;}',
+          '.pdm-body--no-img{grid-template-columns:1fr;}',
+          '.pdm-left-col{background:#000;display:flex;flex-direction:column;min-width:0;}',
+          '.pdm-gallery{position:relative;}',
+          '.pdm-main-img-wrap{position:relative;height:230px;background:#111;display:flex;align-items:center;justify-content:center;overflow:hidden;}',
+          '.pdm-main-img{width:100%;height:100%;object-fit:cover;}',
+          '.pdm-expand-hint{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.55);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:6px;display:flex;opacity:0.75;}',
+          '.pdm-expand-hint .material-symbols-outlined{font-size:1rem;color:#fff;}',
+          '.pdm-watermark{position:absolute;bottom:12px;right:12px;height:24px;opacity:0.55;filter:brightness(0) invert(1);}',
+          '.pdm-thumbs{display:flex;gap:8px;padding:10px 12px;background:#0f1012;border-top:1px solid rgba(255,255,255,0.1);overflow-x:auto;}',
+          '.pdm-thumb{width:48px;height:48px;border-radius:6px;object-fit:cover;border:2px solid transparent;opacity:0.55;flex-shrink:0;}',
+          '.pdm-thumb.active{border-color:#e30613;opacity:1;}',
+          '.pdm-no-img-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;height:100%;min-height:200px;padding:24px;background:#141518;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:24px 24px;text-align:center;}',
+          '.pdm-no-img-icon{font-size:2.4rem;color:rgba(255,255,255,0.25);}',
+          '.pdm-no-img-logo{height:26px;opacity:0.7;filter:brightness(0) invert(1);}',
+          '.pdm-no-img-text{font-size:0.72rem;color:rgba(255,255,255,0.4);line-height:1.5;}',
+          '.pdm-info{padding:24px;display:flex;flex-direction:column;gap:18px;min-width:0;}',
+          '.pdm-header{border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:14px;}',
+          '.pdm-title{font-family:"Barlow",sans-serif;font-size:1.05rem;font-weight:800;line-height:1.3;color:#fff;margin-bottom:10px;}',
+          '.pdm-paragraph{font-size:0.8rem;color:rgba(255,255,255,0.65);line-height:1.6;margin-bottom:12px;}',
+          '.pdm-meta{display:flex;gap:10px;flex-wrap:wrap;}',
+          '.pdm-tag{padding:4px 12px;border-radius:6px;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);}',
+          '.pdm-data-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}',
+          '.pdm-data-item{display:flex;flex-direction:column;gap:4px;min-width:0;}',
+          '.pdm-data-label{font-size:0.58rem;font-weight:800;text-transform:uppercase;color:rgba(255,255,255,0.3);letter-spacing:0.1em;}',
+          '.pdm-data-val{font-family:"Barlow",sans-serif;font-size:0.9rem;font-weight:900;color:#fff;line-height:1.3;word-break:break-word;}',
+          '.pdm-links-block{padding-top:14px;border-top:1px dashed rgba(255,255,255,0.12);display:flex;flex-direction:column;gap:8px;}',
+          '.pdm-links-title{font-size:0.68rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.05em;font-weight:700;}',
+          '.pdm-link{display:inline-flex;align-items:flex-start;gap:8px;padding:10px 14px;font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;border-radius:6px;text-decoration:none;line-height:1.4;}',
+          '.pdm-link .material-symbols-outlined{font-size:18px;flex-shrink:0;}',
+          '.pdm-link--news{background:#fff;border:1px solid #fff;color:#000;}',
+          '.pdm-link--video{background:rgba(255,0,0,0.06);border:1px solid rgba(255,0,0,0.25);color:#ff3333;}',
+          '@media (max-width:600px){.pdm-body{grid-template-columns:1fr;}}',
           '</style>'
         ].join('');
 
         var html = css
-          + wrapLive('&#8212; PRATONTON SEMASA &#8212;', buildProjectCard(live))
+          + wrapLive('&#8212; PRATONTON KAD &#8212;', buildProjectCard(live))
+          + wrapLive('&#8212; MODAL BUTIRAN PROJEK &#8212;', buildProjectModal(live), 'pv-section--modal')
+          + wrapLive('&#8212; POPUP PIN PETA &#8212;', buildProjectMap(live))
           + wrapLive('&#8212; PAPARAN SENARAI JADUAL &#8212;', buildProjectTableRow(live), 'pv-section--table')
-          + wrapSample(buildProjectCard(sample) + buildProjectTableRow(sample));
+          + wrapSample(
+              buildProjectCard(sample)
+              + buildProjectModal(sample)
+              + buildProjectMap(sample)
+              + buildProjectTableRow(sample),
+              'pv-section--modal');
 
         return h('div', { dangerouslySetInnerHTML: { __html: html } });
       }
