@@ -1182,26 +1182,32 @@
       ].join('');
 
       function renderFeaturedProjectsHtml(records, names) {
+        // Dark "obsidian" treatment — mirrors the homepage #projects Featured
+        // section (var(--obsidian) bg + grid + red Track Record / white title).
         var css = '<style>'
           + '*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}'
-          + 'body{font-family:"Inter",sans-serif;background:#f0f0f2;padding:32px;}'
-          + '.fpx-head{max-width:1120px;margin:0 auto 26px;}'
-          + '.fpx-label{font-family:"Barlow",sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:#b5000b;margin-bottom:6px;}'
-          + '.fpx-title{font-family:"Barlow",sans-serif;font-size:1.6rem;font-weight:900;text-transform:uppercase;color:#1a1c1d;letter-spacing:-0.01em;}'
-          + '.fpx-title .accent{color:#b5000b;}'
+          + 'body{font-family:"Inter",sans-serif;background:#141518;padding:0;min-height:100vh;}'
+          + '.fpx-sec{position:relative;overflow:hidden;background:#141518;padding:40px 32px 56px;min-height:100vh;}'
+          + '.fpx-sec__grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:32px 32px;}'
+          + '.fpx-sec__glow{position:absolute;top:-90px;right:-90px;width:320px;height:320px;pointer-events:none;background:radial-gradient(circle,rgba(181,0,11,0.14) 0%,transparent 70%);}'
+          + '.fpx-sec__g7{position:absolute;top:-26px;left:-14px;font-family:"Barlow",sans-serif;font-size:150px;font-weight:900;line-height:1;color:rgba(255,255,255,0.03);pointer-events:none;user-select:none;}'
+          + '.fpx-head{position:relative;z-index:2;max-width:1120px;margin:0 auto 28px;}'
+          + '.fpx-label{font-family:"Barlow",sans-serif;font-size:0.7rem;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:#b5000b;margin-bottom:8px;}'
+          + '.fpx-title{font-family:"Barlow",sans-serif;font-size:1.7rem;font-weight:900;text-transform:uppercase;color:#fff;letter-spacing:-0.01em;}'
+          + '.fpx-title .accent{color:#e30613;}'
           + '.fpx-count{display:inline-block;font-family:"Barlow",sans-serif;font-weight:900;color:#fff;background:#b5000b;font-size:0.7rem;padding:2px 11px;border-radius:99px;margin-left:8px;vertical-align:middle;}'
-          + '.fpx-sub{font-size:0.8rem;color:#5f5e5e;margin-top:8px;line-height:1.6;max-width:640px;}'
-          + '.fpx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;max-width:1120px;margin:0 auto;align-items:stretch;}'
-          + '.fpx-state{max-width:640px;margin:0 auto;text-align:center;padding:44px 20px;border:1px dashed #cfcfd4;border-radius:10px;color:#6b7280;font-size:0.85rem;line-height:1.7;background:#fff;}'
-          + '.fpx-missing{min-height:220px;border:1px dashed #f0b4ae;background:#fff5f4;border-radius:0.5rem;padding:20px;color:#b5000b;font-size:0.8rem;line-height:1.5;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}'
-          + '.fpx-missing span{font-weight:800;color:#7a1a12;display:block;margin:8px 0;}'
-          + '.fpx-missing em{color:#9a5a54;font-size:0.72rem;}'
+          + '.fpx-sub{font-size:0.82rem;color:rgba(255,255,255,0.45);margin-top:10px;line-height:1.7;max-width:660px;}'
+          + '.fpx-grid{position:relative;z-index:2;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;max-width:1120px;margin:0 auto;align-items:stretch;}'
+          + '.fpx-state{position:relative;z-index:2;max-width:640px;margin:0 auto;text-align:center;padding:44px 20px;border:1px dashed rgba(255,255,255,0.16);border-radius:10px;color:rgba(255,255,255,0.5);font-size:0.85rem;line-height:1.7;background:rgba(255,255,255,0.03);}'
+          + '.fpx-missing{min-height:220px;border:1px dashed rgba(255,90,80,0.5);background:rgba(181,0,11,0.12);border-radius:0.5rem;padding:20px;color:#ffb4ad;font-size:0.8rem;line-height:1.5;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}'
+          + '.fpx-missing span{font-weight:800;color:#fff;display:block;margin:8px 0;}'
+          + '.fpx-missing em{color:rgba(255,255,255,0.55);font-size:0.72rem;}'
           + FP_DYN_CARD_CSS + FP_MATERIAL
           + '</style>';
         var head = '<div class="fpx-head"><div class="fpx-label">Track Record</div>'
           + '<div class="fpx-title">Featured <span class="accent">Projects</span>'
           + (names.length ? '<span class="fpx-count">' + names.length + '</span>' : '') + '</div>'
-          + '<p class="fpx-sub">Kad projek pilihan seperti yang dipapar di laman web — ikut turutan di bawah (seret item di sebelah kiri untuk susun semula).</p></div>';
+          + '<p class="fpx-sub">Kad projek pilihan seperti yang dipapar di seksyen Featured Projects laman utama — ikut turutan di bawah (seret item di sebelah kiri untuk susun semula).</p></div>';
         var body;
         if (records === null) {
           body = '<div class="fpx-state">Memuatkan data projek…</div>';
@@ -1217,7 +1223,7 @@
           }).join('');
           body = '<div class="fpx-grid">' + cards + '</div>';
         }
-        return FP_FONTS + css + head + body;
+        return FP_FONTS + css + '<div class="fpx-sec"><div class="fpx-sec__grid"></div><div class="fpx-sec__glow"></div><div class="fpx-sec__g7">G7</div>' + head + body + '</div>';
       }
 
       function renderFeaturedCertsHtml(records, names) {
@@ -1434,6 +1440,8 @@
           ".fdz-count-badge { display:inline-flex; align-items:center; justify-content:center; min-width:22px; height:20px; margin-left:auto; padding:0 7px; border-radius:999px; background:#b5000b; color:#fff !important; font-family:'JetBrains Mono','Inter',monospace; font-size:0.72rem; font-weight:700; line-height:1; }",
           "[class*='SidebarNavLink'][class*='active'] .fdz-count-badge,[class*='NavLink'][class*='active'] .fdz-count-badge { background:#fff; color:#141518 !important; }",
           "a:has(> .fdz-count-badge),[class*='SidebarNavLink']:has(.fdz-count-badge),[class*='NavLink']:has(.fdz-count-badge) { display:flex !important; align-items:center; }",
+          // Featured (⭐) ribbon injected onto list cards of entries picked as featured
+          ".fdz-feat-star { position:absolute; top:8px; right:10px; z-index:4; display:inline-flex; align-items:center; gap:5px; font-family:'Barlow',sans-serif; font-size:0.56rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:#b5000b; background:rgba(181,0,11,0.10); border:1px solid rgba(181,0,11,0.28); padding:3px 8px 3px 6px; border-radius:999px; pointer-events:none; }",
           "#nc-root a:focus-visible, #nc-root button:focus-visible { outline:2px solid #b5000b !important; outline-offset:2px; }",
           // Relation-widget dropdown (Featured Projects / Featured Certificates
           // pickers). Decap renders it with react-select wrapped in react-window's
@@ -1623,6 +1631,62 @@
         });
       }
 
+      // ── ⭐ Featured markers on collection list cards ──────────────────────────
+      // Which projects/certs are "picked as featured" lives in the reference files
+      // (content/featured-projects.json → project descriptions; featured-
+      // certificates.json → cert titles). Load them, then tag the matching entry
+      // cards in the Projects / Certifications list with a ⭐ ribbon.
+      var FEATURED_REFS = { projects: null, certs: null, loaded: false, loading: false };
+      function loadFeaturedRefs(cb) {
+        if (FEATURED_REFS.loaded) { if (cb) cb(); return; }
+        if (FEATURED_REFS.loading) return;
+        FEATURED_REFS.loading = true;
+        function grab(url) {
+          return fetch(url, { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.json() : { items: [] }; })
+            .catch(function () { return { items: [] }; });
+        }
+        Promise.all([
+          grab('/content/featured-projects.json'),
+          grab('/content/featured-certificates.json')
+        ]).then(function (res) {
+          FEATURED_REFS.projects = (res[0] && res[0].items || []).map(function (x) { return x && x.project; }).filter(Boolean);
+          FEATURED_REFS.certs    = (res[1] && res[1].items || []).map(function (x) { return x && x.certificate; }).filter(Boolean);
+          FEATURED_REFS.loaded  = true;
+          FEATURED_REFS.loading = false;
+          if (cb) cb();
+        });
+      }
+
+      function injectFeaturedStars() {
+        if (!document.querySelector("[class*='AppHeader']")) return; // CMS only, not login
+        var m = (location.hash || '').match(/collections\/([^/?#]+)/);
+        if (!m) return;
+        var set = m[1] === 'projects'       ? (FEATURED_REFS.projects || [])
+                : m[1] === 'certifications' ? (FEATURED_REFS.certs || [])
+                : null;
+        if (set === null) return; // not a collection we mark
+        if (!FEATURED_REFS.loaded) { loadFeaturedRefs(injectFeaturedStars); return; }
+        var cards = document.querySelectorAll("[class*='ListCard']");
+        Array.prototype.forEach.call(cards, function (card) {
+          // Idempotent: only add the ribbon once, so this never re-triggers the
+          // MutationObserver into a loop (see the count-badge fix).
+          if (card.querySelector('.fdz-feat-star')) return;
+          var text = card.textContent || '';
+          var featured = false;
+          for (var i = 0; i < set.length; i++) {
+            if (set[i] && text.indexOf(set[i]) !== -1) { featured = true; break; }
+          }
+          if (!featured) return;
+          if (getComputedStyle(card).position === 'static') card.style.position = 'relative';
+          var star = document.createElement('span');
+          star.className = 'fdz-feat-star';
+          star.title = 'Dipilih sebagai Featured';
+          star.textContent = '⭐ Featured';
+          card.appendChild(star);
+        });
+      }
+
       function brandLogin() {
         var authPage = document.querySelector('[class*="AuthenticationPage"]');
         if (!authPage) return;
@@ -1654,15 +1718,18 @@
       }
 
       // Watch for the login page / CMS header to (re)appear and brand them
-      var enhanceObserver = new MutationObserver(function () { brandLogin(); brandHeader(); injectHelpPanel(); injectCollectionCounts(); });
+      var enhanceObserver = new MutationObserver(function () { brandLogin(); brandHeader(); injectHelpPanel(); injectCollectionCounts(); injectFeaturedStars(); });
       enhanceObserver.observe(document.body, {
         childList: true, subtree: true
       });
+      // Re-mark on collection navigation (list re-renders don't always fire above).
+      window.addEventListener('hashchange', injectFeaturedStars);
 
       brandLogin();
       brandHeader();
       injectHelpPanel();
       injectCollectionCounts();
+      loadFeaturedRefs(injectFeaturedStars);
     });
   </script>
   <script src="https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js"></script>
