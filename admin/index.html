@@ -1160,7 +1160,7 @@
         if (maxCount && names.length > maxCount) {
           out += '<div class="fp-notice fp-notice--warn">&#9888; <b>' + names.length + ' dipilih</b> — bahagian ini direka untuk <b>' + maxCount + '</b> kad sahaja. Buang ' + (names.length - maxCount) + ' untuk paparan terbaik.</div>';
         }
-        out += '<div class="fp-notice fp-notice--info">&#8505;&#65039; Pratonton ini menggunakan data yang telah <b>diterbitkan (Published)</b>. Item baru muncul di sini selepas anda tekan <b>Publish</b> dan laman web dikemas kini (beberapa minit).</div>';
+        out += '<div class="fp-notice fp-notice--info">&#8505;&#65039; Pratonton ini menggunakan data yang telah <b>diterbitkan</b>. Item baru muncul di sini selepas anda tekan <b>Kemas Kini Laman Web</b> dan laman web dikemas kini (beberapa minit).</div>';
         return out;
       }
 
@@ -1604,9 +1604,9 @@
         "Workflow": "Aliran Kerja",
         "New Project": "Projek Baru",
         "New Certification": "Sijil Baru",
-        "Save": "Simpan",
-        "Publish": "Terbitkan",
-        "Publishing...": "Menerbitkan...",
+        "Save": "Simpan Draf",
+        "Publish": "Kemas Kini Laman Web",
+        "Publishing...": "Mengemas kini Laman Web...",
         "Delete": "Padam",
         "Delete entry": "Padam entri",
         "Delete unpublished entry": "Padam entri belum terbit",
@@ -1616,9 +1616,9 @@
         "Draft": "Draf",
         "In review": "Dalam Semakan",
         "Ready": "Sedia",
-        "Publish now": "Terbitkan sekarang",
-        "Publish and create new": "Terbitkan & cipta baru",
-        "Publish and duplicate": "Terbitkan & gandakan",
+        "Publish now": "Kemas Kini Laman Web sekarang",
+        "Publish and create new": "Kemas Kini Laman Web & tambah baru",
+        "Publish and duplicate": "Kemas Kini Laman Web & gandakan",
         "Cancel": "Batal",
         "Filter by": "Tapis ikut",
         "Group by": "Kumpul ikut",
@@ -1649,23 +1649,37 @@
         "Fallback icon color — only relevant if no Certificate Logo is uploaded. Leave as Grey if the certificate has a logo.": "Warna ikon sandaran — hanya relevan jika tiada Logo Sijil dimuat naik. Biarkan Kelabu jika sijil mempunyai logo."
       };
 
+      // Friendlier ENGLISH relabels applied even in EN mode — Decap's "Publish"
+      // confuses first-time users, so we say "Update Website". Kept small and
+      // applied in both languages (the BM equivalents live in FDZ_I18N above).
+      var FDZ_RELABEL_EN = {
+        "Publish": "Update Website",
+        "Publish now": "Update Website now",
+        "Publish and create new": "Update Website & add another",
+        "Publish and duplicate": "Update Website & duplicate",
+        "Publishing...": "Updating Website...",
+        "Save": "Save Draft"
+      };
+
       var fdzLang = (function () {
         try { return localStorage.getItem('fdz-cms-lang') === 'bm' ? 'bm' : 'en'; }
         catch (e) { return 'en'; }
       })();
 
-      // Swap interface text EN -> BM (only when in BM mode). Idempotent: a node
-      // already in BM won't match an EN key. Skips inputs/editors/our own UI so it
-      // never touches content the user is typing.
+      // Swap interface text via the active map: full BM translation in BM mode,
+      // or just the friendlier English relabels ("Publish" -> "Update Website") in
+      // EN mode. Idempotent (a translated node no longer matches a key). Skips
+      // inputs/editors/our own UI so it never touches content the user is typing.
+      function fdzActiveMap() { return fdzLang === 'bm' ? FDZ_I18N : FDZ_RELABEL_EN; }
       function fdzTranslateTree() {
-        if (fdzLang !== 'bm') return;
+        var map = fdzActiveMap();
         var root = document.getElementById('nc-root') || document.body;
         if (!root || !document.createTreeWalker) return;
         var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
           acceptNode: function (node) {
             var v = node.nodeValue;
             if (!v) return NodeFilter.FILTER_REJECT;
-            if (!FDZ_I18N.hasOwnProperty(v.trim())) return NodeFilter.FILTER_REJECT;
+            if (!map.hasOwnProperty(v.trim())) return NodeFilter.FILTER_REJECT;
             for (var el = node.parentNode; el && el !== root; el = el.parentNode) {
               var tag = el.tagName;
               if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'SCRIPT' || tag === 'STYLE') return NodeFilter.FILTER_REJECT;
@@ -1680,11 +1694,11 @@
         while ((n = walker.nextNode())) hits.push(n);
         for (var i = 0; i < hits.length; i++) {
           var t = hits[i].nodeValue.trim();
-          var bm = FDZ_I18N[t];
-          if (bm) hits[i].nodeValue = hits[i].nodeValue.replace(t, bm);
+          var rep = map[t];
+          if (rep) hits[i].nodeValue = hits[i].nodeValue.replace(t, rep);
         }
       }
-      function translateTick() { if (fdzLang === 'bm') fdzTranslateTree(); }
+      function translateTick() { fdzTranslateTree(); }
 
       // Floating language button (stacked above the Panduan button). Toggling
       // persists the choice and reloads so each language renders cleanly.
@@ -1764,7 +1778,7 @@
                 '<li><b>Koordinat GPS:</b> KLIK pada peta untuk letak penanda lokasi (atau seret penanda). Koordinat diisi automatik.</li>' +
                 '<li>Upload <b>Gambar Projek</b> (lihat peraturan di bawah).</li>' +
                 '<li>(Pilihan) Tambah <b>Kata Kunci Carian</b> — perkataan untuk mudah cari projek nanti (contoh: jambatan, sekolah, bekalan air).</li>' +
-                '<li>Klik <b>Save</b> untuk simpan draf, kemudian <b>Publish</b> untuk terbitkan ke laman web.</li>' +
+                '<li>Klik <b>Save Draft</b> untuk simpan draf, kemudian <b>Kemas Kini Laman Web</b> untuk terbitkan ke laman web.</li>' +
               '</ol>' +
               '<div class="fh-tip">Tip: untuk projek yang serupa, buka projek sedia ada → menu tiga titik → <b>Duplicate entry</b> untuk salin, kemudian ubah butiran.</div>' +
               '<h3>🔍 Cari, Tapis & Susun Projek</h3>' +
@@ -1811,13 +1825,16 @@
               '<ul>' +
                 '<li>Nombor merah di sebelah <b>Projects</b> dan <b>Certifications</b> menunjukkan jumlah item yang telah <b>diterbitkan</b> di laman web.</li>' +
               '</ul>' +
-              '<h3>💾 Simpan & Terbit</h3>' +
+              '<h3>🔄 Aliran Kerja: Draf → Semakan → Sedia → Terbit</h3>' +
+              '<p style="margin:0 0 8px;">Sistem ini menggunakan beberapa langkah supaya hanya maklumat yang <b>tepat &amp; telah disemak</b> muncul di laman web awam. Ini amalan kerja terbaik (SOP):</p>' +
               '<ul>' +
-                '<li><b>Save</b> menyimpan sebagai draf (belum ke laman web).</li>' +
-                '<li>Guna <b>Set status</b> (Draft → In review → Ready) kemudian <b>Publish</b> untuk terbitkan.</li>' +
-                '<li>Laman web dikemas kini automatik beberapa minit selepas Publish.</li>' +
+                '<li><b>1. Draf (Draft)</b> — Simpan kerja yang belum siap secara peribadi (belum masuk laman web). Boleh sambung bila-bila masa. Tekan butang <b>Save Draft</b>.</li>' +
+                '<li><b>2. Dalam Semakan (In review)</b> — Tandakan untuk disemak. Ini masa untuk pastikan <b>nama klien, nilai projek (RM), dan tarikh adalah betul</b> sebelum tersiar kepada umum.</li>' +
+                '<li><b>3. Sedia (Ready)</b> — Telah disemak &amp; diluluskan, menunggu masa sesuai untuk diterbitkan.</li>' +
+                '<li><b>4. Kemas Kini Laman Web (dahulunya "Publish")</b> — Barulah kandungan muncul di laman web sebenar. Laman dikemas kini automatik beberapa minit selepasnya.</li>' +
               '</ul>' +
-              '<div class="fh-tip">&#8505;&#65039; <b>Penting:</b> Bilangan (badge), tanda ⭐, dan pratonton Featured menggunakan data yang telah <b>diterbitkan (Published)</b>. Projek/sijil yang baru ditambah <b>belum akan muncul</b> di situ sehingga anda tekan <b>Publish</b> dan laman web selesai dikemas kini (beberapa minit). Ini normal — bukan pepijat.</div>' +
+              '<div class="fh-tip">💡 <b>Kenapa langkah-langkah ini penting?</b> Laman web ini dilihat oleh <b>pelanggan &amp; agensi kerajaan</b>. Satu kesilapan kecil (contoh: nilai kontrak salah) boleh nampak tidak profesional. Langkah "semak dahulu" ini mengelakkan kesilapan tersiar ke umum. <b>Bekerja seorang &amp; yakin?</b> Anda boleh terus dari <b>Draf → Kemas Kini Laman Web</b> — langkah semakan hanya sebagai tabiat baik, bukan wajib.</div>' +
+              '<div class="fh-tip">&#8505;&#65039; <b>Penting:</b> Bilangan (badge), tanda ⭐, dan pratonton Featured menggunakan data yang telah <b>diterbitkan (Published)</b>. Projek/sijil yang baru ditambah <b>belum akan muncul</b> di situ sehingga anda tekan <b>Kemas Kini Laman Web</b> dan laman web selesai dikemas kini (beberapa minit). Ini normal — bukan pepijat.</div>' +
             '</div>' +
           '</div>';
 
