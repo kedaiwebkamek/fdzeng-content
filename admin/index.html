@@ -1146,6 +1146,24 @@
         '<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">',
         '<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap" rel="stylesheet">'
       ].join('');
+      // Warning/info banners shared by both Featured previews. Duplicates and the
+      // over-limit warning are conditional; the "published data" caveat is always
+      // shown so editors know why a just-added item isn't listed yet.
+      function fpNoticesHtml(names, maxCount) {
+        names = names || [];
+        var out = '';
+        var seen = {}, dups = [];
+        names.forEach(function (n) { if (seen[n]) { if (dups.indexOf(n) === -1) dups.push(n); } seen[n] = true; });
+        if (dups.length) {
+          out += '<div class="fp-notice fp-notice--warn">&#9888; Item berganda: <b>' + dups.map(fpEsc).join('</b>, <b>') + '</b> — dipilih lebih daripada sekali. Buang yang berulang di senarai sebelah kiri.</div>';
+        }
+        if (maxCount && names.length > maxCount) {
+          out += '<div class="fp-notice fp-notice--warn">&#9888; <b>' + names.length + ' dipilih</b> — bahagian ini direka untuk <b>' + maxCount + '</b> kad sahaja. Buang ' + (names.length - maxCount) + ' untuk paparan terbaik.</div>';
+        }
+        out += '<div class="fp-notice fp-notice--info">&#8505;&#65039; Pratonton ini menggunakan data yang telah <b>diterbitkan (Published)</b>. Item baru muncul di sini selepas anda tekan <b>Publish</b> dan laman web dikemas kini (beberapa minit).</div>';
+        return out;
+      }
+
       function renderFeaturedProjectsHtml(records, names) {
         // Dark "obsidian" treatment — mirrors the homepage #projects Featured
         // section (var(--obsidian) bg + grid + red Track Record / white title).
@@ -1162,6 +1180,10 @@
           + '.fpx-title .accent{color:#e30613;}'
           + '.fpx-count{display:inline-block;font-family:"Barlow",sans-serif;font-weight:900;color:#fff;background:#b5000b;font-size:0.7rem;padding:2px 11px;border-radius:99px;margin-left:8px;vertical-align:middle;}'
           + '.fpx-sub{font-size:0.82rem;color:rgba(255,255,255,0.45);margin-top:10px;line-height:1.7;max-width:660px;}'
+          + '.fp-notice{position:relative;z-index:2;max-width:1120px;margin:0 auto 14px;padding:11px 15px;border-radius:8px;font-size:0.78rem;line-height:1.5;}'
+          + '.fp-notice--warn{background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.45);color:#fcd34d;}'
+          + '.fp-notice--info{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.6);}'
+          + '.fp-notice b{color:#fff;}'
           + '.fpx-grid{position:relative;z-index:2;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;max-width:1120px;margin:0 auto;align-items:stretch;}'
           + '.fpx-state{position:relative;z-index:2;max-width:640px;margin:0 auto;text-align:center;padding:44px 20px;border:1px dashed rgba(255,255,255,0.16);border-radius:10px;color:rgba(255,255,255,0.5);font-size:0.85rem;line-height:1.7;background:rgba(255,255,255,0.03);}'
           + '.fpx-missing{min-height:220px;border:1px dashed rgba(255,90,80,0.5);background:rgba(181,0,11,0.12);border-radius:0.5rem;padding:20px;color:#ffb4ad;font-size:0.8rem;line-height:1.5;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}'
@@ -1188,7 +1210,8 @@
           }).join('');
           body = '<div class="fpx-grid">' + cards + '</div>';
         }
-        return FP_FONTS + css + '<div class="fpx-sec"><div class="fpx-sec__grid"></div><div class="fpx-sec__glow"></div><div class="fpx-sec__g7">G7</div>' + head + body + '</div>';
+        var notices = (records === null) ? '' : fpNoticesHtml(names);
+        return FP_FONTS + css + '<div class="fpx-sec"><div class="fpx-sec__grid"></div><div class="fpx-sec__glow"></div><div class="fpx-sec__g7">G7</div>' + head + notices + body + '</div>';
       }
 
       function renderFeaturedCertsHtml(records, names) {
@@ -1201,6 +1224,10 @@
           + '.fcx-title .accent{color:#b5000b;}'
           + '.fcx-count{display:inline-block;font-family:"Barlow",sans-serif;font-weight:900;color:#fff;background:#b5000b;font-size:0.7rem;padding:2px 11px;border-radius:99px;margin-left:8px;vertical-align:middle;}'
           + '.fcx-sub{font-size:0.8rem;color:#5f5e5e;margin-top:8px;line-height:1.6;max-width:640px;}'
+          + '.fp-notice{max-width:1120px;margin:0 auto 14px;padding:11px 15px;border-radius:8px;font-size:0.78rem;line-height:1.5;}'
+          + '.fp-notice--warn{background:#fff8e1;border:1px solid #f59e0b;color:#92400e;}'
+          + '.fp-notice--info{background:#eef1f5;border:1px solid #d7dde5;color:#5f5e5e;}'
+          + '.fp-notice b{color:#1a1c1d;}'
           + '.fcx-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;max-width:1120px;margin:0 auto;background:#e8e8ea;border:1px solid #e8e8ea;border-radius:0.5rem;overflow:hidden;}'
           + '.fcx-row .certs-grid{border:none;border-radius:0;background:transparent;}'
           + '.fcx-state{max-width:640px;margin:0 auto;text-align:center;padding:44px 20px;border:1px dashed #cfcfd4;border-radius:10px;color:#6b7280;font-size:0.85rem;line-height:1.7;background:#fff;}'
@@ -1228,7 +1255,8 @@
           }).join('');
           body = '<div class="fcx-row">' + cards + '</div>';
         }
-        return FP_FONTS + css + head + body;
+        var notices = (records === null) ? '' : fpNoticesHtml(names, 6);
+        return FP_FONTS + css + head + notices + body;
       }
 
       function makeFeaturedPreview(dataKey, url, refField, renderHtml) {
@@ -1522,6 +1550,7 @@
               '<ul>' +
                 '<li><b>Gambar pertama = thumbnail</b> yang dipapar pada kad projek & homepage. Susun gambar terbaik dahulu.</li>' +
                 '<li>Format JPG atau PNG, saiz maksimum <b>5MB</b> setiap gambar.</li>' +
+                '<li>&#9989; <b>Tak perlu risau saiz fail.</b> Gambar dioptimum secara automatik semasa laman diterbitkan (ditukar ke format WebP yang jauh lebih kecil & laju) — <b>tanpa menjejaskan kualiti pada skrin</b>. Upload gambar berkualiti baik sahaja.</li>' +
                 '<li><b>JANGAN guna URL dari Facebook</b> — ia akan tamat tempoh dan gambar hilang. Upload terus dari komputer.</li>' +
                 '<li>Isi <b>Alt Text</b> (penerangan ringkas gambar) untuk bantu Google (SEO).</li>' +
               '</ul>' +
@@ -1541,12 +1570,25 @@
               '<ul>' +
                 '<li>Buka <b>Galeri Foto</b> → tambah/susun item dalam senarai <b>Gallery Items</b> (seret untuk susun semula).</li>' +
               '</ul>' +
+              '<h3>⭐ Projek & Sijil Pilihan (Featured)</h3>' +
+              '<ul>' +
+                '<li>Buka tab <b>Featured Projects ⭐</b> atau <b>Featured Certificates Order ⭐</b> untuk memilih & menyusun item yang dipaparkan di bahagian utama laman.</li>' +
+                '<li><b>Cari</b> nama projek/sijil dalam dropdown, klik untuk tambah, dan <b>seret</b> untuk menyusun turutan paparan.</li>' +
+                '<li>Panel <b>pratonton di sebelah kanan</b> memaparkan <b>kad sebenar</b> mengikut susunan pilihan anda — sama seperti di laman web.</li>' +
+                '<li>Item yang dipilih akan bertanda <b>⭐ Featured</b> dalam senarai Projects / Certifications.</li>' +
+                '<li><b>Sijil Pilihan:</b> pilih <b>6 sahaja</b> — bahagian atas halaman Certifications direka untuk 6 kad. Pratonton akan beri amaran jika melebihi.</li>' +
+              '</ul>' +
+              '<h3>🔢 Bilangan (Badge) di Bar Sisi</h3>' +
+              '<ul>' +
+                '<li>Nombor merah di sebelah <b>Projects</b> dan <b>Certifications</b> menunjukkan jumlah item yang telah <b>diterbitkan</b> di laman web.</li>' +
+              '</ul>' +
               '<h3>💾 Simpan & Terbit</h3>' +
               '<ul>' +
                 '<li><b>Save</b> menyimpan sebagai draf (belum ke laman web).</li>' +
                 '<li>Guna <b>Set status</b> (Draft → In review → Ready) kemudian <b>Publish</b> untuk terbitkan.</li>' +
                 '<li>Laman web dikemas kini automatik beberapa minit selepas Publish.</li>' +
               '</ul>' +
+              '<div class="fh-tip">&#8505;&#65039; <b>Penting:</b> Bilangan (badge), tanda ⭐, dan pratonton Featured menggunakan data yang telah <b>diterbitkan (Published)</b>. Projek/sijil yang baru ditambah <b>belum akan muncul</b> di situ sehingga anda tekan <b>Publish</b> dan laman web selesai dikemas kini (beberapa minit). Ini normal — bukan pepijat.</div>' +
             '</div>' +
           '</div>';
 
