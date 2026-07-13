@@ -6,9 +6,11 @@
   <meta name="robots" content="noindex, nofollow" />
   <title>FDZ Engineering — CMS Admin</title>
   <link rel="cms-config-url" href="/admin/config.yml">
-  <!-- Leaflet for the map-based coordinate picker widget -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Leaflet for the map-based coordinate picker widget. Self-hosted (removes the
+       unpkg single-point-of-failure); falls back to the CDN only if the local copy
+       ever fails to load. -->
+  <link rel="stylesheet" href="/admin/vendor/leaflet-1.9.4.css" onerror="this.onerror=null;this.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'" />
+  <script src="/admin/vendor/leaflet-1.9.4.js" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';document.head.appendChild(s);"></script>
 </head>
 <body>
   <script>
@@ -2147,7 +2149,10 @@
       loadFeaturedRefs(injectFeaturedStars);
     });
   </script>
-  <script src="https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js"></script>
+  <!-- Decap CMS self-hosted (removes the unpkg single-point-of-failure). Falls back
+       to the CDN only if the local bundle ever fails to load. The admin init runs on
+       the window 'load' event, so a fallback load still completes in time. -->
+  <script src="/admin/vendor/decap-cms-3.3.3.js" onerror="this.onerror=null;var s=document.createElement('script');s.src='https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js';document.head.appendChild(s);"></script>
 
 
   <script>
