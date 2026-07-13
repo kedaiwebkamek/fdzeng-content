@@ -1510,6 +1510,22 @@
           "[class*='FileWidgetButton']:hover { border-color:#b5000b !important; color:#b5000b !important; background:rgba(181,0,11,0.04) !important; }",
           "[class*='FileWidgetButtonRemove'] { color:#b5000b !important; border-color:#ffdad5 !important; background:#fff !important; }",
           "[class*='FileWidgetButtonRemove']:hover { background:#b5000b !important; color:#fff !important; border-color:#b5000b !important; }",
+          // List widget 'Add' button (e.g. 'Add project images') — red-outlined
+          // secondary action so it reads apart from the solid-red header buttons.
+          "[class*='AddButton'] { font-family:'Barlow',sans-serif !important; font-weight:800 !important; font-size:0.7rem !important; letter-spacing:0.04em; text-transform:uppercase; background:#fff !important; color:#b5000b !important; border:1.5px solid #b5000b !important; border-radius:7px !important; box-shadow:0 1px 2px rgba(0,0,0,0.04) !important; transition:color .15s,background .15s !important; }",
+          "[class*='AddButton']:hover { background:#b5000b !important; color:#fff !important; }",
+          "[class*='AddButton'] svg { fill:currentColor !important; }",
+          // List item cards + their top bar (drag / collapse / remove controls)
+          "[class*='StyledListItem'] { border-radius:9px !important; }",
+          "[class*='ListItemTopBar'],[class*='StyledListItemTopBar'] { background:#f6f6f8 !important; border-radius:9px 9px 0 0 !important; }",
+          "[class*='TopBarButton'],[class*='ExpandButton'] { color:#8a8a8f !important; border-radius:6px !important; transition:color .15s,background .15s !important; }",
+          "[class*='TopBarButton']:hover,[class*='ExpandButton']:hover { color:#b5000b !important; background:rgba(181,0,11,0.08) !important; }",
+          "[class*='TopBarButton'] svg,[class*='ExpandButton'] svg { fill:currentColor !important; }",
+          "[class*='DragHandle'] { color:#c4c4c8 !important; }",
+          // Text inputs & textareas — subtle border + red focus ring. Exclude the
+          // relation dropdown's typeahead (react-select input) so it isn't boxed.
+          "#nc-root input[type='text']:not([id*='react-select']),#nc-root input[type='url'],#nc-root input[type='number'],#nc-root input[type='date'],#nc-root textarea { border:1.5px solid #e4e4e7 !important; border-radius:7px !important; transition:border-color .15s,box-shadow .15s !important; }",
+          "#nc-root input[type='text']:not([id*='react-select']):focus,#nc-root input[type='url']:focus,#nc-root input[type='number']:focus,#nc-root input[type='date']:focus,#nc-root textarea:focus { border-color:#b5000b !important; box-shadow:0 0 0 3px rgba(181,0,11,0.12) !important; outline:none !important; }",
           "#nc-root a:focus-visible, #nc-root button:focus-visible { outline:2px solid #b5000b !important; outline-offset:2px; }",
           // Relation-widget dropdown (Featured Projects / Featured Certificates
           // pickers). Decap renders it with react-select wrapped in react-window's
