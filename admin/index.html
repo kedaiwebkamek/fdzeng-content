@@ -676,17 +676,6 @@
         ].join('\n');
       }
 
-      function wrapSample(content, cls) {
-        return [
-          '<div class="pv-divider"></div>',
-          '<div class="pv-section pv-section--sample ' + (cls || '') + '">',
-          '  <p class="pv-label">&#8212; ' + fdzL('REFERENCE EXAMPLE', 'CONTOH RUJUKAN') + ' &#8212;</p>',
-          '  <div class="pv-sample-badge">' + fdzL('EXAMPLE', 'CONTOH') + '</div>',
-          content,
-          '</div>'
-        ].join('\n');
-      }
-
       // ─────────────────────────────────────────────────────────────────────────
       // ── Shared card CSS (single source of truth) ─────────────────────────────
       // These real-card styles are used by ProjectPreview/CertPreview AND the
@@ -889,13 +878,7 @@
           + wrapLive('&#8212; ' + fdzL('CARD PREVIEW', 'PRATONTON KAD') + ' &#8212;', buildProjectCard(live))
           + wrapLive('&#8212; ' + fdzL('PROJECT DETAIL MODAL', 'MODAL BUTIRAN PROJEK') + ' &#8212;', buildProjectModal(live), 'pv-section--modal')
           + wrapLive('&#8212; ' + fdzL('MAP PIN POPUP', 'POPUP PIN PETA') + ' &#8212;', buildProjectMap(live))
-          + wrapLive('&#8212; ' + fdzL('TABLE LIST VIEW', 'PAPARAN SENARAI JADUAL') + ' &#8212;', buildProjectTableRow(live), 'pv-section--table')
-          + wrapSample(
-              buildProjectCard(sample)
-              + buildProjectModal(sample)
-              + buildProjectMap(sample)
-              + buildProjectTableRow(sample),
-              'pv-section--modal');
+          + wrapLive('&#8212; ' + fdzL('TABLE LIST VIEW', 'PAPARAN SENARAI JADUAL') + ' &#8212;', buildProjectTableRow(live), 'pv-section--table');
 
         return h('div', { dangerouslySetInnerHTML: { __html: html } });
       }
@@ -998,8 +981,7 @@
         }
 
         var html = css
-          + wrapLive('&#8212; ' + fdzL('CURRENT PREVIEW', 'PRATONTON SEMASA') + ' &#8212;', certSections(live))
-          + wrapSample(certSections(sample));
+          + wrapLive('&#8212; ' + fdzL('CURRENT PREVIEW', 'PRATONTON SEMASA') + ' &#8212;', certSections(live));
 
         return h('div', { dangerouslySetInnerHTML: { __html: html } });
       }
