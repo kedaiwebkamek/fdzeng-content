@@ -1472,11 +1472,15 @@
           "[class*='CollectionTop'] h1,[class*='EntryListing'] h1,[class*='EntryListing'] h2,[class*='CollectionHeader'] { font-family:'Barlow',sans-serif !important; font-weight:900 !important; letter-spacing:-0.01em; text-transform:uppercase; }",
           "#fdz-hdr-logo { height:26px; width:auto; display:block; margin-right:10px; align-self:center; }",
           // Header nav (Contents / Workflow / Media) — scoped to the nav list only
-          "[class*='AppHeaderNavList'] a,[class*='AppHeaderNavList'] button { color:#5f5e5e !important; border-radius:6px !important; transition:color .15s,background .15s !important; }",
-          "[class*='AppHeaderNavList'] a:hover,[class*='AppHeaderNavList'] button:hover { color:#b5000b !important; background:rgba(181,0,11,0.06) !important; }",
+          "[class*='AppHeaderNavList'] { gap:5px !important; }",
+          "[class*='AppHeaderNavList'] a,[class*='AppHeaderNavList'] button { font-family:'Barlow',sans-serif !important; font-weight:800 !important; font-size:0.72rem !important; letter-spacing:0.05em !important; text-transform:uppercase !important; color:#5f5e5e !important; border-radius:8px !important; padding:8px 15px !important; transition:color .15s,background .15s,box-shadow .15s !important; }",
+          "[class*='AppHeaderNavList'] a:hover,[class*='AppHeaderNavList'] button:hover { color:#b5000b !important; background:rgba(181,0,11,0.07) !important; }",
           "[class*='AppHeaderNavList'] svg { fill:currentColor !important; }",
-          // Active nav item — stable hooks (Decap adds .header-link-active + aria-current)
-          ".header-link-active,[aria-current='page'] { color:#b5000b !important; background:rgba(181,0,11,0.08) !important; }",
+          // Active nav item — obsidian pill (matches the active sidebar item) so it
+          // stands out from the red action buttons. Stable hooks: Decap adds
+          // .header-link-active + aria-current.
+          ".header-link-active,[aria-current='page'] { color:#fff !important; background:#141518 !important; box-shadow:0 6px 16px -8px rgba(0,0,0,0.5) !important; }",
+          ".header-link-active svg,[aria-current='page'] svg { fill:#fff !important; }",
           // Primary / CTA buttons (New, Publish, Save)
           "[class*='AppHeaderActions'] a,[class*='AppHeaderQuickNew'],[class*='CollectionTop'] a[href*='/new'],button[class*='Primary'],a[class*='Primary'] { background-color:#b5000b !important; border-color:#b5000b !important; color:#fff !important; }",
           "[class*='AppHeaderActions'] a:hover,button[class*='Primary']:hover,a[class*='Primary']:hover { background-color:#e30613 !important; border-color:#e30613 !important; }",
