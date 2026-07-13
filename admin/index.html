@@ -1126,10 +1126,38 @@
         return {
           status: p.status || '', client: p.client || '', amount: p.amount || '',
           date: p.date || '', description: p.description || '', cat: p.cat || '',
+          loc: p.loc || '', division: p.division || '',
           imgSrc: imgSrc,
           newsListLen: (p.newsList || []).length,
           videoListLen: (p.videoList || []).length
         };
+      }
+
+      // Homepage Featured card (dark .feat-card) — different from the projects-page
+      // white card: it shows category + LOCATION as the title + a 3-line
+      // description, and no project value/client. Mirrors index.html renderFeatured.
+      function buildHomeFeatCard(d) {
+        var isOngoing = d.status === 'Ongoing';
+        var badgeClass = isOngoing ? ' dyn-card__badge-status--active' : '';
+        var statusHtml = isOngoing ? '<span class="dyn-ping"></span>Ongoing' : 'Completed';
+        var imgHtml = (d.imgSrc && d.imgSrc !== '')
+          ? '<img class="dyn-card__img" src="' + d.imgSrc + '" alt="Project">'
+          : '<div class="dyn-card__no-img"><span class="material-symbols-outlined">' + (CAT_ICON[d.cat] || 'folder_open') + '</span></div>';
+        var pin = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#e30613" stroke-width="2.5" style="flex-shrink:0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+        return [
+          '<div class="feat-card">',
+          '  <div class="dyn-card__img-wrap">',
+          '    ' + imgHtml,
+          '    <span class="dyn-card__badge-status' + badgeClass + '">' + statusHtml + '</span>',
+          '    <img src="/fdzeng-logo.png" class="dyn-card__brand-watermark" alt="">',
+          '  </div>',
+          '  <div class="feat-card__body">',
+          '    <span class="feat-card__cat">' + (d.cat || '—') + '</span>',
+          '    <h3 class="feat-card__title">' + pin + '<span>' + (d.loc || d.division || 'Sarawak') + '</span></h3>',
+          '    <p class="feat-card__desc">' + (d.description || '') + '</p>',
+          '  </div>',
+          '</div>'
+        ].join('\n');
       }
       function normalizeCertRecord(c) {
         return {
@@ -1190,12 +1218,23 @@
           + '.fpx-missing{min-height:220px;border:1px dashed rgba(255,90,80,0.5);background:rgba(181,0,11,0.12);border-radius:0.5rem;padding:20px;color:#ffb4ad;font-size:0.8rem;line-height:1.5;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}'
           + '.fpx-missing span{font-weight:800;color:#fff;display:block;margin:8px 0;}'
           + '.fpx-missing em{color:rgba(255,255,255,0.55);font-size:0.72rem;}'
+          + '.fpx-sublabel{position:relative;z-index:2;max-width:1120px;margin:30px auto 14px;font-family:"Barlow",sans-serif;font-size:0.82rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}'
+          + '.fpx-sublabel .tag{font-size:0.6rem;font-weight:700;letter-spacing:0.08em;color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);padding:3px 10px;border-radius:99px;text-transform:none;}'
+          + '.fpx-lightpanel{position:relative;z-index:2;max-width:1120px;margin:0 auto;background:#f0f0f2;border-radius:14px;padding:24px;}'
+          + '.fpx-lightpanel .fpx-grid{max-width:none;}'
+          // Homepage Featured card (dark) — mirrors index.html .feat-card
+          + '.feat-card{background:#16181d;border:1px solid rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.4);display:flex;flex-direction:column;position:relative;}'
+          + '.feat-card .dyn-card__img-wrap{background:#0e0f11;}'
+          + '.feat-card__body{padding:24px;display:flex;flex-direction:column;flex-grow:1;background:#16181d;color:#fff;}'
+          + '.feat-card__cat{font-size:0.68rem;font-weight:700;letter-spacing:0.08em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:10px;display:block;}'
+          + '.feat-card__title{font-family:"Barlow",sans-serif;font-size:1.05rem;font-weight:800;line-height:1.45;color:#fff;text-transform:uppercase;letter-spacing:0.02em;display:flex;align-items:center;gap:8px;margin-bottom:12px;}'
+          + '.feat-card__desc{font-size:0.72rem;color:rgba(255,255,255,0.45);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}'
           + DYN_CARD_CSS + MATERIAL_CSS
           + '</style>';
         var head = '<div class="fpx-head"><div class="fpx-label">Track Record</div>'
           + '<div class="fpx-title">Featured <span class="accent">Projects</span>'
           + (names.length ? '<span class="fpx-count">' + names.length + '</span>' : '') + '</div>'
-          + '<p class="fpx-sub">' + L('The featured project cards exactly as shown in the homepage Featured Projects section — in the order below (drag items on the left to reorder).', 'Kad projek pilihan seperti yang dipapar di seksyen Featured Projects laman utama — ikut turutan di bawah (seret item di sebelah kiri untuk susun semula).') + '</p></div>';
+          + '<p class="fpx-sub">' + L('Featured projects appear in TWO different styles on the site — the homepage carousel and the Projects page. Both are shown below in your chosen order (drag on the left to reorder).', 'Projek pilihan dipaparkan dalam DUA gaya berbeza di laman — karusel laman utama dan halaman Projek. Kedua-duanya ditunjukkan di bawah mengikut turutan pilihan anda (seret di sebelah kiri untuk susun semula).') + '</p></div>';
         var body;
         if (records === null) {
           body = '<div class="fpx-state">' + L('Loading project data…', 'Memuatkan data projek…') + '</div>';
@@ -1204,12 +1243,19 @@
         } else {
           var byDesc = {};
           records.forEach(function (p) { if (p && p.description) byDesc[p.description] = p; });
-          var cards = names.map(function (n, i) {
-            var p = byDesc[n];
-            if (!p) return '<div class="fpx-missing">#' + (i + 1) + ' — ' + L('Project not found:', 'Projek tidak dijumpai:') + '<span>' + fpEsc(n) + '</span><em>' + L('(the project title may have changed — re-pick this project)', '(tajuk projek mungkin telah diubah — pilih semula projek ini)') + '</em></div>';
-            return buildProjectCard(normalizeProjectRecord(p));
-          }).join('');
-          body = '<div class="fpx-grid">' + cards + '</div>';
+          var missingCard = function (i, n) {
+            return '<div class="fpx-missing">#' + (i + 1) + ' — ' + L('Project not found:', 'Projek tidak dijumpai:') + '<span>' + fpEsc(n) + '</span><em>' + L('(the project title may have changed — re-pick this project)', '(tajuk projek mungkin telah diubah — pilih semula projek ini)') + '</em></div>';
+          };
+          var gridOf = function (builder) {
+            return names.map(function (n, i) {
+              var p = byDesc[n];
+              return p ? builder(normalizeProjectRecord(p)) : missingCard(i, n);
+            }).join('');
+          };
+          body = '<div class="fpx-sublabel">🏠 ' + L('On the Homepage', 'Di Laman Utama') + '<span class="tag">' + L('dark auto-scrolling carousel', 'karusel gelap auto-skrol') + '</span></div>'
+            + '<div class="fpx-grid">' + gridOf(buildHomeFeatCard) + '</div>'
+            + '<div class="fpx-sublabel">📄 ' + L('On the Projects page', 'Di Halaman Projek') + '<span class="tag">' + L('detailed white cards', 'kad putih terperinci') + '</span></div>'
+            + '<div class="fpx-lightpanel"><div class="fpx-grid">' + gridOf(buildProjectCard) + '</div></div>';
         }
         var notices = (records === null) ? '' : fpNoticesHtml(names);
         return FP_FONTS + css + '<div class="fpx-sec"><div class="fpx-sec__grid"></div><div class="fpx-sec__glow"></div><div class="fpx-sec__g7">G7</div>' + head + notices + body + '</div>';
