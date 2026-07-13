@@ -473,10 +473,10 @@
       function buildProjectMap(d) {
         var parts = String(d.coordinates || '').split(',');
         var lat = parseFloat(parts[0]), lng = parseFloat(parts[1]);
-        var cap = '<p class="pv-pin-cap">&#9660; Info bila pin ditekan di peta laman web</p>';
+        var cap = '<p class="pv-pin-cap">&#9660; ' + L('Info shown when the pin is tapped on the website map', 'Info bila pin ditekan di peta laman web') + '</p>';
         var popup = buildPinPopup(d);
         if (!isFinite(lat) || !isFinite(lng)) {
-          return '<div class="pv-map pv-map--empty">Tiada koordinat lagi — klik pada peta di medan "Koordinat GPS"</div>' + cap + popup;
+          return '<div class="pv-map pv-map--empty">' + L('No coordinates yet — click on the map in the "GPS Coordinates" field', 'Tiada koordinat lagi — klik pada peta di medan "Koordinat GPS"') + '</div>' + cap + popup;
         }
         var z = 14;
         var txF = (lng + 180) / 360 * Math.pow(2, z);
@@ -680,8 +680,8 @@
         return [
           '<div class="pv-divider"></div>',
           '<div class="pv-section pv-section--sample ' + (cls || '') + '">',
-          '  <p class="pv-label">&#8212; CONTOH RUJUKAN &#8212;</p>',
-          '  <div class="pv-sample-badge">CONTOH</div>',
+          '  <p class="pv-label">&#8212; ' + L('REFERENCE EXAMPLE', 'CONTOH RUJUKAN') + ' &#8212;</p>',
+          '  <div class="pv-sample-badge">' + L('EXAMPLE', 'CONTOH') + '</div>',
           content,
           '</div>'
         ].join('\n');
@@ -886,10 +886,10 @@
         ].join('');
 
         var html = css
-          + wrapLive('&#8212; PRATONTON KAD &#8212;', buildProjectCard(live))
-          + wrapLive('&#8212; MODAL BUTIRAN PROJEK &#8212;', buildProjectModal(live), 'pv-section--modal')
-          + wrapLive('&#8212; POPUP PIN PETA &#8212;', buildProjectMap(live))
-          + wrapLive('&#8212; PAPARAN SENARAI JADUAL &#8212;', buildProjectTableRow(live), 'pv-section--table')
+          + wrapLive('&#8212; ' + L('CARD PREVIEW', 'PRATONTON KAD') + ' &#8212;', buildProjectCard(live))
+          + wrapLive('&#8212; ' + L('PROJECT DETAIL MODAL', 'MODAL BUTIRAN PROJEK') + ' &#8212;', buildProjectModal(live), 'pv-section--modal')
+          + wrapLive('&#8212; ' + L('MAP PIN POPUP', 'POPUP PIN PETA') + ' &#8212;', buildProjectMap(live))
+          + wrapLive('&#8212; ' + L('TABLE LIST VIEW', 'PAPARAN SENARAI JADUAL') + ' &#8212;', buildProjectTableRow(live), 'pv-section--table')
           + wrapSample(
               buildProjectCard(sample)
               + buildProjectModal(sample)
@@ -991,14 +991,14 @@
 
         function certSections(d) {
           var cardHtml = d.isFeatured
-            ? '<div class="pv-subsection"><p class="pv-sublabel">Kad Sijil Pilihan</p>' + buildCertCard(d) + '</div>'
+            ? '<div class="pv-subsection"><p class="pv-sublabel">' + L('Featured Certificate Card', 'Kad Sijil Pilihan') + '</p>' + buildCertCard(d) + '</div>'
             : '';
-          var listHtml = '<div class="pv-subsection"><p class="pv-sublabel">Senarai Sijil</p>' + buildCertListItem(d) + '</div>';
+          var listHtml = '<div class="pv-subsection"><p class="pv-sublabel">' + L('Certificate List', 'Senarai Sijil') + '</p>' + buildCertListItem(d) + '</div>';
           return cardHtml + listHtml;
         }
 
         var html = css
-          + wrapLive('&#8212; PRATONTON SEMASA &#8212;', certSections(live))
+          + wrapLive('&#8212; ' + L('CURRENT PREVIEW', 'PRATONTON SEMASA') + ' &#8212;', certSections(live))
           + wrapSample(certSections(sample));
 
         return h('div', { dangerouslySetInnerHTML: { __html: html } });
@@ -1026,10 +1026,10 @@
               var span = spans[i] || 3;
               var inner = src
                 ? '<img src="' + src + '" alt="' + alt + '"><span class="gm-cell__ov"></span>'
-                : '<div class="gm-empty">Tiada src</div>';
+                : '<div class="gm-empty">' + L('No src', 'Tiada src') + '</div>';
               return '<div class="gm-cell" style="grid-column:span ' + span + ';">' + inner + '</div>';
             }).join('')
-          : '<div class="gm-cell" style="grid-column:span 12;"><div class="gm-empty">Tiada gambar lagi — tambah item galeri di sebelah kiri</div></div>';
+          : '<div class="gm-cell" style="grid-column:span 12;"><div class="gm-empty">' + L('No images yet — add gallery items on the left', 'Tiada gambar lagi — tambah item galeri di sebelah kiri') + '</div></div>';
 
         var titleHtml = (title || 'Work In The Field').replace('In The Field', '<span class="accent">In The Field</span>');
 
@@ -1074,9 +1074,9 @@
           +     (desc ? '<p class="gdesc">' + desc + '</p>' : '')
           +   '</div>'
           +   '<div class="gm">' + cells + '</div>'
-          +   '<p class="gcount">' + (items.length ? items.length + ' gambar dalam galeri' : 'Tiada gambar lagi') + '</p>'
+          +   '<p class="gcount">' + (items.length ? items.length + L(' images in the gallery', ' gambar dalam galeri') : L('No images yet', 'Tiada gambar lagi')) + '</p>'
           +   '<div class="gstrip">'
-          +     '<p class="gstrip__copy">Lihat lebih banyak gambar kerja di lapangan di halaman Facebook rasmi kami.</p>'
+          +     '<p class="gstrip__copy">' + L('See more of our field work photos on our official Facebook page.', 'Lihat lebih banyak gambar kerja di lapangan di halaman Facebook rasmi kami.') + '</p>'
           +     '<a class="gcta"><img class="gcta__logo" src="/fdzeng-logo.png" alt="FDZ"><span class="gcta__divider"></span>View Our Photo Gallery</a>'
           +   '</div>'
           +   (fbUrl ? '<p class="gurl">&#128279; ' + fbUrl + '</p>' : '')
@@ -1155,12 +1155,13 @@
         var seen = {}, dups = [];
         names.forEach(function (n) { if (seen[n]) { if (dups.indexOf(n) === -1) dups.push(n); } seen[n] = true; });
         if (dups.length) {
-          out += '<div class="fp-notice fp-notice--warn">&#9888; Item berganda: <b>' + dups.map(fpEsc).join('</b>, <b>') + '</b> — dipilih lebih daripada sekali. Buang yang berulang di senarai sebelah kiri.</div>';
+          var dupNames = '<b>' + dups.map(fpEsc).join('</b>, <b>') + '</b>';
+          out += '<div class="fp-notice fp-notice--warn">&#9888; ' + L('Duplicate item: ' + dupNames + ' — picked more than once. Remove the repeats in the list on the left.', 'Item berganda: ' + dupNames + ' — dipilih lebih daripada sekali. Buang yang berulang di senarai sebelah kiri.') + '</div>';
         }
         if (maxCount && names.length > maxCount) {
-          out += '<div class="fp-notice fp-notice--warn">&#9888; <b>' + names.length + ' dipilih</b> — bahagian ini direka untuk <b>' + maxCount + '</b> kad sahaja. Buang ' + (names.length - maxCount) + ' untuk paparan terbaik.</div>';
+          out += '<div class="fp-notice fp-notice--warn">&#9888; ' + L('<b>' + names.length + ' selected</b> — this section is designed for <b>' + maxCount + '</b> cards only. Remove ' + (names.length - maxCount) + ' for the best layout.', '<b>' + names.length + ' dipilih</b> — bahagian ini direka untuk <b>' + maxCount + '</b> kad sahaja. Buang ' + (names.length - maxCount) + ' untuk paparan terbaik.') + '</div>';
         }
-        out += '<div class="fp-notice fp-notice--info">&#8505;&#65039; Pratonton ini menggunakan data yang telah <b>diterbitkan</b>. Item baru muncul di sini selepas anda tekan <b>Kemas Kini Laman Web</b> dan laman web dikemas kini (beberapa minit).</div>';
+        out += '<div class="fp-notice fp-notice--info">&#8505;&#65039; ' + L('This preview uses <b>published</b> data. A newly added item appears here after you press <b>Update Website</b> and the site finishes updating (a few minutes).', 'Pratonton ini menggunakan data yang telah <b>diterbitkan</b>. Item baru muncul di sini selepas anda tekan <b>Kemas Kini Laman Web</b> dan laman web dikemas kini (beberapa minit).') + '</div>';
         return out;
       }
 
@@ -1194,18 +1195,18 @@
         var head = '<div class="fpx-head"><div class="fpx-label">Track Record</div>'
           + '<div class="fpx-title">Featured <span class="accent">Projects</span>'
           + (names.length ? '<span class="fpx-count">' + names.length + '</span>' : '') + '</div>'
-          + '<p class="fpx-sub">Kad projek pilihan seperti yang dipapar di seksyen Featured Projects laman utama — ikut turutan di bawah (seret item di sebelah kiri untuk susun semula).</p></div>';
+          + '<p class="fpx-sub">' + L('The featured project cards exactly as shown in the homepage Featured Projects section — in the order below (drag items on the left to reorder).', 'Kad projek pilihan seperti yang dipapar di seksyen Featured Projects laman utama — ikut turutan di bawah (seret item di sebelah kiri untuk susun semula).') + '</p></div>';
         var body;
         if (records === null) {
-          body = '<div class="fpx-state">Memuatkan data projek…</div>';
+          body = '<div class="fpx-state">' + L('Loading project data…', 'Memuatkan data projek…') + '</div>';
         } else if (!names.length) {
-          body = '<div class="fpx-state">Belum ada projek pilihan.<br>Tambah projek dari senarai dropdown di sebelah kiri.</div>';
+          body = '<div class="fpx-state">' + L('No featured projects yet.<br>Add projects from the dropdown on the left.', 'Belum ada projek pilihan.<br>Tambah projek dari senarai dropdown di sebelah kiri.') + '</div>';
         } else {
           var byDesc = {};
           records.forEach(function (p) { if (p && p.description) byDesc[p.description] = p; });
           var cards = names.map(function (n, i) {
             var p = byDesc[n];
-            if (!p) return '<div class="fpx-missing">#' + (i + 1) + ' — Projek tidak dijumpai:<span>' + fpEsc(n) + '</span><em>(tajuk projek mungkin telah diubah — pilih semula projek ini)</em></div>';
+            if (!p) return '<div class="fpx-missing">#' + (i + 1) + ' — ' + L('Project not found:', 'Projek tidak dijumpai:') + '<span>' + fpEsc(n) + '</span><em>' + L('(the project title may have changed — re-pick this project)', '(tajuk projek mungkin telah diubah — pilih semula projek ini)') + '</em></div>';
             return buildProjectCard(normalizeProjectRecord(p));
           }).join('');
           body = '<div class="fpx-grid">' + cards + '</div>';
@@ -1239,18 +1240,18 @@
         var head = '<div class="fcx-head"><div class="fcx-label">Accreditations</div>'
           + '<div class="fcx-title">Featured <span class="accent">Certificates</span>'
           + (names.length ? '<span class="fcx-count">' + names.length + '</span>' : '') + '</div>'
-          + '<p class="fcx-sub">Kad sijil pilihan di bahagian atas halaman Certifications — ikut turutan di bawah (seret item di sebelah kiri untuk susun semula).</p></div>';
+          + '<p class="fcx-sub">' + L('The featured certificate cards at the top of the Certifications page — in the order below (drag items on the left to reorder).', 'Kad sijil pilihan di bahagian atas halaman Certifications — ikut turutan di bawah (seret item di sebelah kiri untuk susun semula).') + '</p></div>';
         var body;
         if (records === null) {
-          body = '<div class="fcx-state">Memuatkan data sijil…</div>';
+          body = '<div class="fcx-state">' + L('Loading certificate data…', 'Memuatkan data sijil…') + '</div>';
         } else if (!names.length) {
-          body = '<div class="fcx-state">Belum ada sijil pilihan.<br>Tambah sijil dari senarai dropdown di sebelah kiri.</div>';
+          body = '<div class="fcx-state">' + L('No featured certificates yet.<br>Add certificates from the dropdown on the left.', 'Belum ada sijil pilihan.<br>Tambah sijil dari senarai dropdown di sebelah kiri.') + '</div>';
         } else {
           var byTitle = {};
           records.forEach(function (c) { if (c && c.title) byTitle[c.title] = c; });
           var cards = names.map(function (n, i) {
             var c = byTitle[n];
-            if (!c) return '<div class="fcx-missing">#' + (i + 1) + ' — Sijil tidak dijumpai:<span>' + fpEsc(n) + '</span><em>(nama sijil mungkin telah diubah — pilih semula sijil ini)</em></div>';
+            if (!c) return '<div class="fcx-missing">#' + (i + 1) + ' — ' + L('Certificate not found:', 'Sijil tidak dijumpai:') + '<span>' + fpEsc(n) + '</span><em>' + L('(the certificate name may have changed — re-pick this certificate)', '(nama sijil mungkin telah diubah — pilih semula sijil ini)') + '</em></div>';
             return buildCertCard(normalizeCertRecord(c));
           }).join('');
           body = '<div class="fcx-row">' + cards + '</div>';
@@ -1282,17 +1283,17 @@
           var names = fpRefNames(props.entry, refField);
           var rows = names.length
             ? names.map(function (n, i) { return '<div style="padding:11px 15px;border-left:3px solid #b5000b;background:#fff;margin-bottom:7px;border-radius:6px;font-family:Barlow,sans-serif;font-weight:700;text-transform:uppercase;font-size:0.8rem;color:#1a1c1d;line-height:1.35;">' + (i + 1) + '. ' + fpEsc(n) + '</div>'; }).join('')
-            : '<div style="color:#6b7280;padding:36px;text-align:center;">Belum ada ' + label + '.</div>';
+            : '<div style="color:#6b7280;padding:36px;text-align:center;">' + L('No featured ' + label.en + ' yet.', 'Belum ada ' + label.bm + '.') + '</div>';
           return h('div', { dangerouslySetInnerHTML: { __html: '<div style="font-family:Inter,sans-serif;background:#f0f0f2;padding:28px;min-height:100vh;">' + rows + '</div>' } });
         };
       }
 
       var FeaturedProjectsPreview = createClass
         ? makeFeaturedPreview('projects', '/projects-data.json', 'project', renderFeaturedProjectsHtml)
-        : makeFeaturedFallback('project', 'projek pilihan');
+        : makeFeaturedFallback('project', { en: 'projects', bm: 'projek pilihan' });
       var FeaturedCertsPreview = createClass
         ? makeFeaturedPreview('certs', '/certifications-data.json', 'certificate', renderFeaturedCertsHtml)
-        : makeFeaturedFallback('certificate', 'sijil pilihan');
+        : makeFeaturedFallback('certificate', { en: 'certificates', bm: 'sijil pilihan' });
 
       // Decap keys file-collection previews by the FILE name, not the collection
       // name — register both so the preview binds regardless.
@@ -1666,6 +1667,13 @@
         catch (e) { return 'en'; }
       })();
 
+      // Language picker for text WE render (Panduan + preview panes + injected
+      // badges). These live outside Decap's DOM (help overlay is skipped by the
+      // translator; previews render in a separate iframe), so they can't be reached
+      // by fdzTranslateTree — they choose their own language via L(). English is the
+      // default; toggling reloads, so L() is read fresh each load.
+      function L(en, bm) { return fdzLang === 'bm' ? bm : en; }
+
       // Swap interface text via the active map: full BM translation in BM mode,
       // or just the friendlier English relabels ("Publish" -> "Update Website") in
       // EN mode. Idempotent (a translated node no longer matches a key). Skips
@@ -1730,7 +1738,78 @@
         document.body.appendChild(btn);
       }
 
-      // ── In-CMS help panel (Panduan) — Malay quick guide for the site owner ────
+      // English body for the Panduan help panel (BM version is inline in
+      // injectHelpPanel; L() picks between them). Keep the two in sync.
+      function fdzHelpEN() {
+        return '' +
+          '<h3>➕ Adding a New Project</h3>' +
+          '<ol>' +
+            '<li>Click <b>Projects</b> on the left, then the <b>New Project</b> button.</li>' +
+            '<li>Fill in <b>Status</b> (Ongoing / Completed), <b>Project Title</b>, <b>Client</b>, and <b>Project Value</b> (numbers only — e.g. <code>20000000</code>).</li>' +
+            '<li>Choose <b>Category</b> and <b>Division</b>, fill in <b>Full Location</b>.</li>' +
+            '<li><b>GPS Coordinates:</b> CLICK on the map to place the location marker (or drag it). Coordinates fill in automatically.</li>' +
+            '<li>Upload <b>Project Images</b> (see the rules below).</li>' +
+            '<li>(Optional) Add <b>Search Keywords</b> — words to find the project easily later (e.g. bridge, school, water supply).</li>' +
+            '<li>Click <b>Save Draft</b> to save a draft, then <b>Update Website</b> to publish it live.</li>' +
+          '</ol>' +
+          '<div class="fh-tip">Tip: for a similar project, open an existing one → three-dot menu → <b>Duplicate entry</b> to copy it, then edit the details.</div>' +
+          '<h3>🔍 Search, Filter &amp; Sort Projects</h3>' +
+          '<ul>' +
+            '<li><b>Search:</b> use the <b>search box in the left sidebar</b> (above the Projects list). Type a project name, client, location, year, or keyword — the list filters instantly.</li>' +
+            '<li><b>Filter by:</b> filter by status (Ongoing / Completed) or category (Building, Infrastructure, etc.).</li>' +
+            '<li><b>Group by:</b> group the list by Category, Division, or Status.</li>' +
+            '<li><b>Sort by:</b> sort by Title, Status, Client, or Division.</li>' +
+            '<li>Add <b>Search Keywords</b> to a project so it is easier to find.</li>' +
+          '</ul>' +
+          '<h3>🖼️ Image Rules</h3>' +
+          '<ul>' +
+            '<li><b>The first image = the thumbnail</b> shown on the project card &amp; homepage. Put the best image first.</li>' +
+            '<li>JPG or PNG format, maximum <b>5MB</b> per image.</li>' +
+            '<li>&#9989; <b>No need to worry about file size.</b> Images are optimized automatically when the site publishes (converted to the much smaller &amp; faster WebP format) — <b>with no on-screen quality loss</b>. Just upload good-quality images.</li>' +
+            '<li><b>DO NOT use Facebook URLs</b> — they expire and the image disappears. Upload directly from your computer.</li>' +
+            '<li>Fill in <b>Alt Text</b> (a short image description) to help Google (SEO).</li>' +
+          '</ul>' +
+          '<h3>📅 Status &amp; Date</h3>' +
+          '<ul>' +
+            '<li>Choose <b>Ongoing</b> for active projects — the Completion Date field is hidden automatically.</li>' +
+            '<li>Choose <b>Completed</b> and fill in <b>Completion Date</b> (e.g. <code>29 Jan 2019</code>) for finished projects.</li>' +
+          '</ul>' +
+          '<h3>📜 Certifications</h3>' +
+          '<ul>' +
+            '<li>Fill in <b>Certificate Name</b>, <b>Issuing Body</b>, <b>Short Description</b>, and <b>Certificate Details</b> (label–value rows).</li>' +
+            '<li><b>Expiry Date</b> is entered ONCE only (format <code>2027-04-05</code>) — the "Valid until" line shows automatically. Don\'t add it in the Details.</li>' +
+            '<li>Enable <b>Show in Featured Certificates</b> + set the position (1–6) for the 6 main cards.</li>' +
+            '<li><b>Search &amp; filter certificates</b> the same way as projects — the search box in the left sidebar, and Filter / Group by category or status.</li>' +
+          '</ul>' +
+          '<h3>📸 Photo Gallery</h3>' +
+          '<ul>' +
+            '<li>Open <b>Photo Gallery</b> → add/arrange items in the <b>Gallery Items</b> list (drag to reorder).</li>' +
+          '</ul>' +
+          '<h3>⭐ Featured Projects &amp; Certificates</h3>' +
+          '<ul>' +
+            '<li>Open the <b>Featured Projects ⭐</b> or <b>Featured Certificates Order ⭐</b> tab to choose &amp; arrange the items shown in the main section of the site.</li>' +
+            '<li><b>Search</b> the project/certificate name in the dropdown, click to add, and <b>drag</b> to arrange the display order.</li>' +
+            '<li>The <b>preview panel on the right</b> shows the <b>real cards</b> in your chosen order — just like on the website.</li>' +
+            '<li>Selected items are marked <b>⭐ Featured</b> in the Projects / Certifications list.</li>' +
+            '<li><b>Featured Certificates:</b> pick <b>6 only</b> — the top of the Certifications page is designed for 6 cards. The preview warns you if you exceed that.</li>' +
+          '</ul>' +
+          '<h3>🔢 Sidebar Count (Badge)</h3>' +
+          '<ul>' +
+            '<li>The red number next to <b>Projects</b> and <b>Certifications</b> shows how many items are <b>published</b> on the website.</li>' +
+          '</ul>' +
+          '<h3>🔄 Workflow: Draft → Review → Ready → Publish</h3>' +
+          '<p style="margin:0 0 8px;">This system uses a few steps so that only <b>accurate &amp; reviewed</b> information appears on the public website. This is best practice (SOP):</p>' +
+          '<ul>' +
+            '<li><b>1. Draft</b> — Save unfinished work privately (not on the website yet). Continue anytime. Press the <b>Save Draft</b> button.</li>' +
+            '<li><b>2. In review</b> — Mark it for checking. This is the moment to make sure <b>client names, project values (RM), and dates are correct</b> before going public.</li>' +
+            '<li><b>3. Ready</b> — Reviewed &amp; approved, waiting for the right time to publish.</li>' +
+            '<li><b>4. Update Website (formerly "Publish")</b> — Only now does the content appear on the real website. The site updates automatically a few minutes later.</li>' +
+          '</ul>' +
+          '<div class="fh-tip">💡 <b>Why do these steps matter?</b> This website is seen by <b>clients &amp; government agencies</b>. One small mistake (e.g. a wrong contract value) can look unprofessional. This "check first" step keeps mistakes from reaching the public. <b>Working solo &amp; confident?</b> You can go straight from <b>Draft → Update Website</b> — the review step is just a good habit, not mandatory.</div>' +
+          '<div class="fh-tip">&#8505;&#65039; <b>Important:</b> The count (badge), the ⭐ mark, and the Featured preview use <b>published</b> data. A newly added project/certificate <b>will not appear</b> there until you press <b>Update Website</b> and the site finishes updating (a few minutes). This is normal — not a bug.</div>';
+      }
+
+      // ── In-CMS help panel (Panduan) — bilingual quick guide for the site owner ─
       function injectHelpPanel() {
         if (document.getElementById('fdz-help-btn')) return;
         if (!document.querySelector("[class*='AppHeader']")) return; // CMS only, not the login page
@@ -1762,14 +1841,14 @@
         var btn = document.createElement('button');
         btn.id = 'fdz-help-btn';
         btn.type = 'button';
-        btn.innerHTML = '📖 Panduan';
+        btn.innerHTML = '📖 ' + L('Guide', 'Panduan');
 
         var overlay = document.createElement('div');
         overlay.id = 'fdz-help-overlay';
         overlay.innerHTML =
-          '<div id="fdz-help-modal" role="dialog" aria-label="Panduan CMS">' +
-            '<div class="fh-head"><img src="/fdzeng-logo.png" alt="FDZ"><h2>Panduan Ringkas CMS</h2><button id="fdz-help-close" aria-label="Tutup">&times;</button></div>' +
-            '<div class="fh-body">' +
+          '<div id="fdz-help-modal" role="dialog" aria-label="' + L('CMS Guide', 'Panduan CMS') + '">' +
+            '<div class="fh-head"><img src="/fdzeng-logo.png" alt="FDZ"><h2>' + L('Quick CMS Guide', 'Panduan Ringkas CMS') + '</h2><button id="fdz-help-close" aria-label="' + L('Close', 'Tutup') + '">&times;</button></div>' +
+            '<div class="fh-body">' + L(fdzHelpEN(),
               '<h3>➕ Menambah Projek Baru</h3>' +
               '<ol>' +
                 '<li>Klik <b>Projects</b> di sebelah kiri, kemudian butang <b>New Project</b>.</li>' +
@@ -1835,6 +1914,7 @@
               '</ul>' +
               '<div class="fh-tip">💡 <b>Kenapa langkah-langkah ini penting?</b> Laman web ini dilihat oleh <b>pelanggan &amp; agensi kerajaan</b>. Satu kesilapan kecil (contoh: nilai kontrak salah) boleh nampak tidak profesional. Langkah "semak dahulu" ini mengelakkan kesilapan tersiar ke umum. <b>Bekerja seorang &amp; yakin?</b> Anda boleh terus dari <b>Draf → Kemas Kini Laman Web</b> — langkah semakan hanya sebagai tabiat baik, bukan wajib.</div>' +
               '<div class="fh-tip">&#8505;&#65039; <b>Penting:</b> Bilangan (badge), tanda ⭐, dan pratonton Featured menggunakan data yang telah <b>diterbitkan (Published)</b>. Projek/sijil yang baru ditambah <b>belum akan muncul</b> di situ sehingga anda tekan <b>Kemas Kini Laman Web</b> dan laman web selesai dikemas kini (beberapa minit). Ini normal — bukan pepijat.</div>' +
+              '') +
             '</div>' +
           '</div>';
 
@@ -1942,6 +2022,10 @@
           // Idempotent: only add the ribbon once, so this never re-triggers the
           // MutationObserver into a loop (see the count-badge fix).
           if (card.querySelector('.fdz-feat-star')) return;
+          // Decap nests matching classes (ListCard > ListCard…link), so
+          // [class*='ListCard'] matches BOTH — only badge the OUTERMOST, else two
+          // ribbons stack ("2 Featured").
+          if (card.parentElement && card.parentElement.closest("[class*='ListCard']")) return;
           var text = card.textContent || '';
           var featured = false;
           for (var i = 0; i < set.length; i++) {
@@ -1951,8 +2035,8 @@
           if (getComputedStyle(card).position === 'static') card.style.position = 'relative';
           var star = document.createElement('span');
           star.className = 'fdz-feat-star';
-          star.title = 'Dipilih sebagai Featured';
-          star.textContent = '⭐ Featured';
+          star.title = L('Selected as featured', 'Dipilih sebagai pilihan');
+          star.textContent = L('⭐ Featured', '⭐ Pilihan');
           card.appendChild(star);
         });
       }
