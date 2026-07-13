@@ -1487,6 +1487,235 @@
         content.insertBefore(logo, content.firstChild);
       }
 
+      // ══ BM / EN interface language toggle ═════════════════════════════════════
+      // Translates only the CMS *interface* (field labels, hints, dropdown options,
+      // Decap buttons/nav) via an exact display-text swap — NOT the content, and NOT
+      // Decap's buggy content-i18n. English is the source (config.yml); this maps
+      // EN → BM. Toggling reloads the page (default 'en'), so each language renders
+      // cleanly with no reverse-map/restore logic. Anything not in the map stays
+      // English — never broken. Runs on the hardened enhancer observer; setting a
+      // text node's value is a characterData change, which the observer (childList
+      // only) ignores, so it can't loop.
+      // NOTE: keep this map in sync with config.yml labels/hints (fallback = EN).
+      var FDZ_I18N = {
+        // ── Collections / tabs (sidebar + nav) ──
+        "Projects": "Projek",
+        "Certifications": "Pensijilan",
+        "Gallery": "Galeri",
+        "Featured Projects ⭐": "Projek Pilihan ⭐",
+        "Featured Certificates Order ⭐": "Susunan Sijil Pilihan ⭐",
+        "Featured Projects Order (Homepage + Projects Page)": "Susunan Projek Pilihan (Laman Utama + Halaman Projek)",
+        "Featured Certificates Order": "Susunan Sijil Pilihan",
+        "Work In The Field Gallery": "Galeri Kerja Di Lapangan",
+        // ── Project field labels ──
+        "Project Status": "Status Projek",
+        "Completion Date": "Tarikh Siap",
+        "Project Title": "Tajuk Projek",
+        "Client / Employer": "Klien / Majikan",
+        "Project Value (RM)": "Nilai Projek (RM)",
+        "Project Category": "Kategori Projek",
+        "Division": "Bahagian",
+        "Full Location": "Lokasi Penuh",
+        "GPS Coordinates (Map)": "Koordinat GPS (Peta)",
+        "Location Note": "Nota Lokasi",
+        "Search Keywords": "Kata Kunci Carian",
+        "Keyword": "Kata Kunci",
+        "Project Images": "Gambar Projek",
+        "Image": "Gambar",
+        "Image Description (Alt Text)": "Penerangan Gambar (Alt Text)",
+        "Detailed Description": "Penerangan Terperinci",
+        "News Links": "Pautan Berita",
+        "Article Title": "Tajuk Artikel",
+        "Article URL": "URL Artikel",
+        "Video Links": "Pautan Video",
+        "Video Title": "Tajuk Video",
+        "Video URL": "URL Video",
+        "Project": "Projek",
+        "Featured Projects (in display order)": "Projek Pilihan (mengikut turutan paparan)",
+        // ── Certification field labels ──
+        "Certificate Number (Internal)": "Nombor Sijil (Dalaman)",
+        "Certificate Name": "Nama Sijil",
+        "Issuing Body": "Badan Pengeluar",
+        "Short Description": "Penerangan Ringkas",
+        "Certificate Category": "Kategori Sijil",
+        "Search Tags": "Tag Carian",
+        "Tag": "Tag",
+        "Certificate Status": "Status Sijil",
+        "Expiry Date": "Tarikh Luput",
+        "Certificate Details (Label & Value)": "Butiran Sijil (Label & Nilai)",
+        "Detail": "Butiran",
+        "Label": "Label",
+        "Value": "Nilai",
+        "Show in Featured Certificates": "Papar dalam Sijil Pilihan",
+        "Replacement Title — Featured Card": "Tajuk Ganti — Kad Pilihan",
+        "Replacement Issuing Body — Featured Card": "Badan Pengeluar Ganti — Kad Pilihan",
+        "Certificate Logo": "Logo Sijil",
+        "Icon Name (Fallback)": "Nama Ikon (Sandaran)",
+        "Icon Color (Fallback)": "Warna Ikon (Sandaran)",
+        "Certificate PDF File": "Fail PDF Sijil",
+        "Certificate": "Sijil",
+        "Featured Certificates (in display order)": "Sijil Pilihan (mengikut turutan paparan)",
+        // ── Gallery field labels ──
+        "Header": "Pengepala",
+        "Title": "Tajuk",
+        "Description": "Penerangan",
+        "Facebook URL": "URL Facebook",
+        "Gallery Items": "Item Galeri",
+        // ── Dropdown option labels ──
+        "Ongoing — Project still active": "Sedang Berjalan — Projek masih aktif",
+        "Completed — Project finished & handed over": "Siap — Projek selesai & diserahkan",
+        "Building — Buildings & Facilities": "Bangunan — Bangunan & Kemudahan",
+        "Infrastructure — Roads, Bridges & Drains": "Infrastruktur — Jalan, Jambatan & Longkang",
+        "Maintenance — Maintenance & Repair": "Penyelenggaraan — Penyelenggaraan & Pembaikan",
+        "Telecom — Telecommunications & Fiber Optic": "Telekom — Telekomunikasi & Gentian Optik",
+        "Utilities — Water & Electrical": "Utiliti — Air & Elektrik",
+        "Contractor — Contractor Registration (CIDB, UPKJ, TM)": "Kontraktor — Pendaftaran Kontraktor (CIDB, UPKJ, TM)",
+        "Quality — Quality & Safety (ISO, DOSH, BOMBA)": "Kualiti — Kualiti & Keselamatan (ISO, DOSH, BOMBA)",
+        "Petroleum — Oil & Gas (PETRONAS, PETROS)": "Petroleum — Minyak & Gas (PETRONAS, PETROS)",
+        "Government — Government & Business (MOF, SSM, SPAN)": "Kerajaan — Kerajaan & Perniagaan (MOF, SSM, SPAN)",
+        "Telecom — Telecommunications & Networks": "Telekom — Telekomunikasi & Rangkaian",
+        "Active — Certificate is still valid and within its period": "Aktif — Sijil masih sah dan dalam tempoh",
+        "Expired — Certificate has lapsed or was not renewed": "Tamat — Sijil telah luput atau tidak diperbaharui",
+        "Red — main or contractor certificate": "Merah — sijil utama atau kontraktor",
+        "Grey — general or inactive certificate": "Kelabu — sijil am atau tidak aktif",
+        "Green — quality or safety certificate": "Hijau — sijil kualiti atau keselamatan",
+        "Blue — government or professional certificate": "Biru — sijil kerajaan atau profesional",
+        "Orange — petroleum or energy certificate": "Jingga — sijil petroleum atau tenaga",
+        // ── List-view Filter / Group labels ──
+        "Ongoing": "Sedang Berjalan",
+        "Completed": "Siap",
+        "Active": "Aktif",
+        "Expired": "Tamat",
+        "Category: Building & Facilities": "Kategori: Bangunan & Kemudahan",
+        "Category: Infrastructure": "Kategori: Infrastruktur",
+        "Category: Maintenance": "Kategori: Penyelenggaraan",
+        "Category: Telecom": "Kategori: Telekom",
+        "Category: Utilities (Water & Electrical)": "Kategori: Utiliti (Air & Elektrik)",
+        "Category: Contractor": "Kategori: Kontraktor",
+        "Category: Quality": "Kategori: Kualiti",
+        "Category: Petroleum": "Kategori: Petroleum",
+        "Category: Government": "Kategori: Kerajaan",
+        "Group: Category": "Kumpulan: Kategori",
+        "Group: Division": "Kumpulan: Bahagian",
+        "Group: Status": "Kumpulan: Status",
+        // ── Decap chrome (buttons / nav / workflow) — best-effort, stays EN if a
+        //    Decap string differs from these; tune after seeing the live CMS. ──
+        "Contents": "Kandungan",
+        "Workflow": "Aliran Kerja",
+        "New Project": "Projek Baru",
+        "New Certification": "Sijil Baru",
+        "Save": "Simpan",
+        "Publish": "Terbitkan",
+        "Publishing...": "Menerbitkan...",
+        "Delete": "Padam",
+        "Delete entry": "Padam entri",
+        "Delete unpublished entry": "Padam entri belum terbit",
+        "Delete published entry": "Padam entri terbit",
+        "Duplicate entry": "Gandakan entri",
+        "Set status": "Tetapkan status",
+        "Draft": "Draf",
+        "In review": "Dalam Semakan",
+        "Ready": "Sedia",
+        "Publish now": "Terbitkan sekarang",
+        "Publish and create new": "Terbitkan & cipta baru",
+        "Publish and duplicate": "Terbitkan & gandakan",
+        "Cancel": "Batal",
+        "Filter by": "Tapis ikut",
+        "Group by": "Kumpul ikut",
+        "Sort by": "Susun ikut",
+        "All": "Semua",
+        "Show preview": "Papar pratonton",
+        "Hide preview": "Sembunyi pratonton",
+        "Log out": "Log keluar",
+        // ── Field hints (plain, single-line ones) ──
+        "Choose Ongoing if the project is still under construction. Choose Completed if the project has been handed over to the client.": "Pilih Sedang Berjalan jika projek masih dalam pembinaan. Pilih Siap jika projek telah diserahkan kepada klien.",
+        "A short, clear title describing the project. Example: Cadangan Pembinaan Jalan Penghubung Kg. Stass, Kota Samarahan": "Tajuk ringkas dan jelas yang menerangkan projek. Contoh: Cadangan Pembinaan Jalan Penghubung Kg. Stass, Kota Samarahan",
+        "Full name of the client or agency managing the project. Example: Jabatan Kerja Raya Sarawak, PETRONAS Carigali, Suruhanjaya Perkhidmatan Air Negeri (SPAN)": "Nama penuh klien atau agensi yang menguruskan projek. Contoh: Jabatan Kerja Raya Sarawak, PETRONAS Carigali, Suruhanjaya Perkhidmatan Air Negeri (SPAN)",
+        "Enter the contract value in NUMBERS ONLY — without RM, commas, or decimal points. Example: type 10000000 for RM 10,000,000": "Masukkan nilai kontrak dalam ANGKA SAHAJA — tanpa RM, koma, atau titik perpuluhan. Contoh: taip 10000000 untuk RM 10,000,000",
+        "Choose the Sarawak administrative division where this project is carried out.": "Pilih bahagian pentadbiran Sarawak di mana projek ini dijalankan.",
+        "A more specific location name than the division. Example: Kampung Stass, Kota Samarahan or Jalan Oya, Sibu, Sarawak": "Nama lokasi yang lebih khusus daripada bahagian. Contoh: Kampung Stass, Kota Samarahan atau Jalan Oya, Sibu, Sarawak",
+        "Leave blank if the coordinates are the exact project site location. Fill in if the coordinates are only approximate. Example: Around Kampung Asajaya, coordinates are not the exact project site": "Biarkan kosong jika koordinat adalah lokasi tapak projek yang tepat. Isi jika koordinat hanya anggaran. Contoh: Sekitar Kampung Asajaya, koordinat bukan tapak projek sebenar",
+        "Keywords to make it easier to find the project in the CMS. Add one at a time. Example: bridge, school, water supply, road, RTP, Kapit. Leave blank if not needed.": "Kata kunci untuk memudahkan carian projek dalam CMS. Tambah satu demi satu. Contoh: jambatan, sekolah, bekalan air, jalan, RTP, Kapit. Biarkan kosong jika tidak perlu.",
+        "Write a short description of this image. Helps Google recognize your image (SEO). Example: Road widening work at Jalan Oya, Sibu": "Tulis penerangan ringkas gambar ini. Membantu Google mengenali gambar anda (SEO). Contoh: Kerja menaik taraf jalan di Jalan Oya, Sibu",
+        "Add links to news articles, press releases, or reports related to this project. Leave blank if none.": "Tambah pautan artikel berita, kenyataan akhbar, atau laporan berkaitan projek ini. Biarkan kosong jika tiada.",
+        "The article or news title. Example: Handover Ceremony of the Samarahan Road Project": "Tajuk artikel atau berita. Contoh: Majlis Penyerahan Projek Jalan Samarahan",
+        "Add YouTube or other platform video links related to this project. Leave blank if none.": "Tambah pautan video YouTube atau platform lain berkaitan projek ini. Biarkan kosong jika tiada.",
+        "The video title. Example: Progress Video of the Sg. Sarawak Bridge Construction": "Tajuk video. Contoh: Video Kemajuan Pembinaan Jambatan Sg. Sarawak",
+        "Choose the category that best describes this type of certificate. This determines how certificates are grouped on the Certifications page.": "Pilih kategori yang paling sesuai menerangkan jenis sijil ini. Ini menentukan cara sijil dikumpulkan pada halaman Pensijilan.",
+        "Keywords to make certificates easier to find. Add one tag at a time. Example: G7, CIDB, ISO 9001, Bumiputera, UPKJ Class A": "Kata kunci untuk memudahkan carian sijil. Tambah satu tag pada satu masa. Contoh: G7, CIDB, ISO 9001, Bumiputera, UPKJ Kelas A",
+        "Change to Expired when the certificate lapses. Expired certificates are still shown in the list but without the green badge.": "Tukar ke Tamat apabila sijil luput. Sijil yang tamat tetap dipaparkan dalam senarai tetapi tanpa lencana hijau.",
+        "The detail name. Example: Registration No., Expiry Date, Grade B, Category": "Nama butiran. Contoh: No. Pendaftaran, Tarikh Luput, Gred B, Kategori",
+        "The detail value. Example: 0120110824-SR135974, 16/09/2029, G7/B": "Nilai butiran. Contoh: 0120110824-SR135974, 16/09/2029, G7/B",
+        "Fallback icon color — only relevant if no Certificate Logo is uploaded. Leave as Grey if the certificate has a logo.": "Warna ikon sandaran — hanya relevan jika tiada Logo Sijil dimuat naik. Biarkan Kelabu jika sijil mempunyai logo."
+      };
+
+      var fdzLang = (function () {
+        try { return localStorage.getItem('fdz-cms-lang') === 'bm' ? 'bm' : 'en'; }
+        catch (e) { return 'en'; }
+      })();
+
+      // Swap interface text EN -> BM (only when in BM mode). Idempotent: a node
+      // already in BM won't match an EN key. Skips inputs/editors/our own UI so it
+      // never touches content the user is typing.
+      function fdzTranslateTree() {
+        if (fdzLang !== 'bm') return;
+        var root = document.getElementById('nc-root') || document.body;
+        if (!root || !document.createTreeWalker) return;
+        var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode: function (node) {
+            var v = node.nodeValue;
+            if (!v) return NodeFilter.FILTER_REJECT;
+            if (!FDZ_I18N.hasOwnProperty(v.trim())) return NodeFilter.FILTER_REJECT;
+            for (var el = node.parentNode; el && el !== root; el = el.parentNode) {
+              var tag = el.tagName;
+              if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'SCRIPT' || tag === 'STYLE') return NodeFilter.FILTER_REJECT;
+              if (el.isContentEditable) return NodeFilter.FILTER_REJECT;
+              var id = el.id;
+              if (id === 'fdz-lang-btn' || id === 'fdz-help-btn' || id === 'fdz-help-overlay') return NodeFilter.FILTER_REJECT;
+            }
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        });
+        var hits = [], n;
+        while ((n = walker.nextNode())) hits.push(n);
+        for (var i = 0; i < hits.length; i++) {
+          var t = hits[i].nodeValue.trim();
+          var bm = FDZ_I18N[t];
+          if (bm) hits[i].nodeValue = hits[i].nodeValue.replace(t, bm);
+        }
+      }
+      function translateTick() { if (fdzLang === 'bm') fdzTranslateTree(); }
+
+      // Floating language button (stacked above the Panduan button). Toggling
+      // persists the choice and reloads so each language renders cleanly.
+      function injectLangToggle() {
+        if (!document.querySelector("[class*='AppHeader']")) return; // CMS only, not login
+        if (document.getElementById('fdz-lang-btn')) return;
+        if (!document.getElementById('fdz-lang-style')) {
+          var st = document.createElement('style');
+          st.id = 'fdz-lang-style';
+          st.textContent =
+            "#fdz-lang-btn{position:fixed;right:22px;bottom:74px;z-index:9998;display:inline-flex;align-items:center;gap:7px;background:#141518;color:#fff;font-family:'Barlow',sans-serif;font-weight:800;font-size:0.74rem;letter-spacing:0.04em;border:1px solid rgba(255,255,255,0.14);border-radius:999px;padding:10px 16px;box-shadow:0 8px 22px rgba(0,0,0,0.28);cursor:pointer;transition:transform .2s,background .2s;}"
+            + "#fdz-lang-btn:hover{background:#2a2c30;transform:translateY(-2px);}"
+            + "#fdz-lang-btn .fdz-lang-cur{color:#e30613;}";
+          document.head.appendChild(st);
+        }
+        var btn = document.createElement('button');
+        btn.id = 'fdz-lang-btn';
+        btn.type = 'button';
+        // Show the language you'll switch TO, so the action is obvious.
+        btn.innerHTML = fdzLang === 'bm'
+          ? '🌐 <span class="fdz-lang-cur">BM</span> &rarr; EN'
+          : '🌐 <span class="fdz-lang-cur">EN</span> &rarr; BM';
+        btn.title = 'Tukar bahasa antara muka / Switch interface language';
+        btn.addEventListener('click', function () {
+          var next = fdzLang === 'bm' ? 'en' : 'bm';
+          try { localStorage.setItem('fdz-cms-lang', next); } catch (e) {}
+          location.reload();
+        });
+        document.body.appendChild(btn);
+      }
+
       // ── In-CMS help panel (Panduan) — Malay quick guide for the site owner ────
       function injectHelpPanel() {
         if (document.getElementById('fdz-help-btn')) return;
@@ -1747,7 +1976,7 @@
       // via rAF with a runaway circuit-breaker — defence-in-depth against the class
       // of MutationObserver feedback loop that once froze the CMS after login.
       function runEnhancers() {
-        var fns = [brandLogin, brandHeader, injectHelpPanel, injectCollectionCounts, injectFeaturedStars];
+        var fns = [brandLogin, brandHeader, injectHelpPanel, injectCollectionCounts, injectFeaturedStars, injectLangToggle, translateTick];
         for (var i = 0; i < fns.length; i++) {
           try { fns[i](); }
           catch (e) { if (window.console && console.warn) console.warn('[FDZ CMS] enhancer failed:', e); }
