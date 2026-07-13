@@ -134,13 +134,6 @@ collections:
         required: false
         hint: "Leave blank if the coordinates are the exact project site location. Fill in if the coordinates are only approximate. Example: Around Kampung Asajaya, coordinates are not the exact project site"
 
-      - name: tags
-        label: "Search Keywords"
-        widget: list
-        required: false
-        field: { name: tag, label: "Keyword", widget: string }
-        hint: "Keywords to make it easier to find the project in the CMS. Add one at a time. Example: bridge, school, water supply, road, RTP, Kapit. Leave blank if not needed."
-
       # ── Display & Media ──────────────────────────────────────────────────────
       # (Featured Projects / homepage carousel is now managed in the "Featured
       #  Projects ⭐" tab — pick & order projects there, not via a per-project toggle.)
