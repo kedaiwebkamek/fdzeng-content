@@ -142,8 +142,8 @@ collections:
         label: "Project Images"
         widget: list
         required: false
-        summary: "{{fields.alt}}"
-        hint: "⭐ IMPORTANT: The FIRST image in the list = the main image (thumbnail) shown on the project card and homepage carousel. The remaining images are shown in the modal gallery. Upload directly or enter a URL. Format: JPG/PNG, maximum size 5MB per image."
+        summary: "{{fields.src}}"
+        hint: "⭐ IMPORTANT: The FIRST image in the list = the main image (thumbnail) shown on the project card and homepage carousel. The remaining images are shown in the modal gallery. Upload directly or enter a URL. Format: JPG/PNG, maximum size 5MB per image. (Image descriptions for Google/SEO are generated automatically — nothing to fill in.)"
         fields:
           - name: src
             label: "Image"
@@ -154,12 +154,6 @@ collections:
               config:
                 max_file_size: 5242880
             hint: "Upload an image from your computer OR enter a full URL starting with https://. Maximum size 5MB. ⚠ Avoid URLs from Facebook — Facebook URLs will expire and the image will not display."
-          - name: alt
-            label: "Image Description (Alt Text)"
-            widget: string
-            required: false
-            default: ""
-            hint: "Write a short description of this image. Helps Google recognize your image (SEO). Example: Road widening work at Jalan Oya, Sibu"
 
       # Advanced / optional fields — collapsed by default in the editor (see the
       # "Maklumat Tambahan" toggle wired in admin/index.html) to declutter the form.
@@ -464,12 +458,4 @@ collections:
                 media_library:
                   config:
                     max_file_size: 5242880
-                hint: "Upload a work-in-the-field image. Format: JPG/PNG. Maximum size 5MB."
-              - name: alt
-                label: Alt Text
-                widget: string
-                hint: |
-                  Alt Text = a short text description of the image.
-                  Used by Google to recognize the image (helps SEO) and by screen readers.
-                  Good example: "Bridge construction work in Sibu, Sarawak" or "Water pipe installation at the Miri project site"
-                  Avoid: "image1", "photo", or leaving it blank.
+                hint: "Upload a work-in-the-field image. Format: JPG/PNG. Maximum size 5MB. (Image description for Google/SEO is generated automatically.)"
