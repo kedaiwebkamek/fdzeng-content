@@ -1430,7 +1430,11 @@
           '[class*="AuthenticationPage"] button:hover{background:#e30613 !important;transform:translateY(-1px) !important;box-shadow:0 14px 32px rgba(227,6,19,0.45) !important;}',
           '[class*="AuthenticationPage"] p{color:rgba(255,255,255,0.55) !important;font-family:"Inter",sans-serif !important;font-size:0.78rem !important;position:relative;z-index:2;}',
           '#fdz-login-tag{font-family:"Barlow",sans-serif;font-size:0.56rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:26px;position:relative;z-index:2;}',
-          '#fdz-login-foot{position:fixed;bottom:18px;left:0;right:0;text-align:center;font-family:"Inter",sans-serif;font-size:0.62rem;letter-spacing:0.08em;color:rgba(255,255,255,0.25);z-index:2;}'
+          '#fdz-login-foot{position:fixed;bottom:18px;left:0;right:0;text-align:center;font-family:"Inter",sans-serif;font-size:0.62rem;letter-spacing:0.08em;color:rgba(255,255,255,0.25);z-index:2;line-height:1.7;}',
+          '#fdz-login-foot a{color:rgba(255,255,255,0.5);text-decoration:none;}',
+          '#fdz-login-foot a:hover{color:#e30613;}',
+          '#fdz-login-note{max-width:360px;margin-top:22px;font-family:"Inter",sans-serif;font-size:0.72rem;line-height:1.6;color:rgba(255,255,255,0.55);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 16px;position:relative;z-index:2;text-align:center;}',
+          '#fdz-login-note .en{display:block;margin-top:6px;color:rgba(255,255,255,0.35);font-size:0.66rem;}'
         ].join('\n');
         document.head.appendChild(s);
       })();
@@ -2090,6 +2094,16 @@
           '<div class="fdz-cms-sub">Panel Kandungan Laman Web Rasmi</div>';
         authPage.insertBefore(hero, authPage.firstChild);
 
+        // Reassure first-time users about the GitHub redirect (the button below is
+        // Decap's "Login with GitHub") — placed under the button, above the tag.
+        if (!document.getElementById('fdz-login-note')) {
+          var note = document.createElement('div');
+          note.id = 'fdz-login-note';
+          note.innerHTML = '&#128274; Anda akan dibawa ke GitHub untuk log masuk dengan selamat &mdash; ini normal. Gunakan akaun yang diberikan kepada anda.' +
+            '<span class="en">You&rsquo;ll be securely redirected to GitHub to sign in &mdash; this is expected.</span>';
+          authPage.appendChild(note);
+        }
+
         var tag = document.createElement('div');
         tag.id = 'fdz-login-tag';
         tag.innerHTML = 'G7 Bumiputera Contractor &bull; Sarawak';
@@ -2098,7 +2112,8 @@
         if (!document.getElementById('fdz-login-foot')) {
           var foot = document.createElement('div');
           foot.id = 'fdz-login-foot';
-          foot.innerHTML = 'Secure admin access &bull; www.fdzeng.com/admin';
+          foot.innerHTML = 'Secure admin access &bull; www.fdzeng.com/admin<br>' +
+            'Masalah log masuk? Hubungi <a href="mailto:apel@kedaiwebkamek.my">apel@kedaiwebkamek.my</a>';
           authPage.appendChild(foot);
         }
       }
