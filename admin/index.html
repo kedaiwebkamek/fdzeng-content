@@ -473,10 +473,10 @@
       function buildProjectMap(d) {
         var parts = String(d.coordinates || '').split(',');
         var lat = parseFloat(parts[0]), lng = parseFloat(parts[1]);
-        var cap = '<p class="pv-pin-cap">&#9660; ' + L('Info shown when the pin is tapped on the website map', 'Info bila pin ditekan di peta laman web') + '</p>';
+        var cap = '<p class="pv-pin-cap">&#9660; ' + fdzL('Info shown when the pin is tapped on the website map', 'Info bila pin ditekan di peta laman web') + '</p>';
         var popup = buildPinPopup(d);
         if (!isFinite(lat) || !isFinite(lng)) {
-          return '<div class="pv-map pv-map--empty">' + L('No coordinates yet — click on the map in the "GPS Coordinates" field', 'Tiada koordinat lagi — klik pada peta di medan "Koordinat GPS"') + '</div>' + cap + popup;
+          return '<div class="pv-map pv-map--empty">' + fdzL('No coordinates yet — click on the map in the "GPS Coordinates" field', 'Tiada koordinat lagi — klik pada peta di medan "Koordinat GPS"') + '</div>' + cap + popup;
         }
         var z = 14;
         var txF = (lng + 180) / 360 * Math.pow(2, z);
@@ -680,8 +680,8 @@
         return [
           '<div class="pv-divider"></div>',
           '<div class="pv-section pv-section--sample ' + (cls || '') + '">',
-          '  <p class="pv-label">&#8212; ' + L('REFERENCE EXAMPLE', 'CONTOH RUJUKAN') + ' &#8212;</p>',
-          '  <div class="pv-sample-badge">' + L('EXAMPLE', 'CONTOH') + '</div>',
+          '  <p class="pv-label">&#8212; ' + fdzL('REFERENCE EXAMPLE', 'CONTOH RUJUKAN') + ' &#8212;</p>',
+          '  <div class="pv-sample-badge">' + fdzL('EXAMPLE', 'CONTOH') + '</div>',
           content,
           '</div>'
         ].join('\n');
@@ -886,10 +886,10 @@
         ].join('');
 
         var html = css
-          + wrapLive('&#8212; ' + L('CARD PREVIEW', 'PRATONTON KAD') + ' &#8212;', buildProjectCard(live))
-          + wrapLive('&#8212; ' + L('PROJECT DETAIL MODAL', 'MODAL BUTIRAN PROJEK') + ' &#8212;', buildProjectModal(live), 'pv-section--modal')
-          + wrapLive('&#8212; ' + L('MAP PIN POPUP', 'POPUP PIN PETA') + ' &#8212;', buildProjectMap(live))
-          + wrapLive('&#8212; ' + L('TABLE LIST VIEW', 'PAPARAN SENARAI JADUAL') + ' &#8212;', buildProjectTableRow(live), 'pv-section--table')
+          + wrapLive('&#8212; ' + fdzL('CARD PREVIEW', 'PRATONTON KAD') + ' &#8212;', buildProjectCard(live))
+          + wrapLive('&#8212; ' + fdzL('PROJECT DETAIL MODAL', 'MODAL BUTIRAN PROJEK') + ' &#8212;', buildProjectModal(live), 'pv-section--modal')
+          + wrapLive('&#8212; ' + fdzL('MAP PIN POPUP', 'POPUP PIN PETA') + ' &#8212;', buildProjectMap(live))
+          + wrapLive('&#8212; ' + fdzL('TABLE LIST VIEW', 'PAPARAN SENARAI JADUAL') + ' &#8212;', buildProjectTableRow(live), 'pv-section--table')
           + wrapSample(
               buildProjectCard(sample)
               + buildProjectModal(sample)
@@ -991,14 +991,14 @@
 
         function certSections(d) {
           var cardHtml = d.isFeatured
-            ? '<div class="pv-subsection"><p class="pv-sublabel">' + L('Featured Certificate Card', 'Kad Sijil Pilihan') + '</p>' + buildCertCard(d) + '</div>'
+            ? '<div class="pv-subsection"><p class="pv-sublabel">' + fdzL('Featured Certificate Card', 'Kad Sijil Pilihan') + '</p>' + buildCertCard(d) + '</div>'
             : '';
-          var listHtml = '<div class="pv-subsection"><p class="pv-sublabel">' + L('Certificate List', 'Senarai Sijil') + '</p>' + buildCertListItem(d) + '</div>';
+          var listHtml = '<div class="pv-subsection"><p class="pv-sublabel">' + fdzL('Certificate List', 'Senarai Sijil') + '</p>' + buildCertListItem(d) + '</div>';
           return cardHtml + listHtml;
         }
 
         var html = css
-          + wrapLive('&#8212; ' + L('CURRENT PREVIEW', 'PRATONTON SEMASA') + ' &#8212;', certSections(live))
+          + wrapLive('&#8212; ' + fdzL('CURRENT PREVIEW', 'PRATONTON SEMASA') + ' &#8212;', certSections(live))
           + wrapSample(certSections(sample));
 
         return h('div', { dangerouslySetInnerHTML: { __html: html } });
@@ -1026,10 +1026,10 @@
               var span = spans[i] || 3;
               var inner = src
                 ? '<img src="' + src + '" alt="' + alt + '"><span class="gm-cell__ov"></span>'
-                : '<div class="gm-empty">' + L('No src', 'Tiada src') + '</div>';
+                : '<div class="gm-empty">' + fdzL('No src', 'Tiada src') + '</div>';
               return '<div class="gm-cell" style="grid-column:span ' + span + ';">' + inner + '</div>';
             }).join('')
-          : '<div class="gm-cell" style="grid-column:span 12;"><div class="gm-empty">' + L('No images yet — add gallery items on the left', 'Tiada gambar lagi — tambah item galeri di sebelah kiri') + '</div></div>';
+          : '<div class="gm-cell" style="grid-column:span 12;"><div class="gm-empty">' + fdzL('No images yet — add gallery items on the left', 'Tiada gambar lagi — tambah item galeri di sebelah kiri') + '</div></div>';
 
         var titleHtml = (title || 'Work In The Field').replace('In The Field', '<span class="accent">In The Field</span>');
 
@@ -1074,9 +1074,9 @@
           +     (desc ? '<p class="gdesc">' + desc + '</p>' : '')
           +   '</div>'
           +   '<div class="gm">' + cells + '</div>'
-          +   '<p class="gcount">' + (items.length ? items.length + L(' images in the gallery', ' gambar dalam galeri') : L('No images yet', 'Tiada gambar lagi')) + '</p>'
+          +   '<p class="gcount">' + (items.length ? items.length + fdzL(' images in the gallery', ' gambar dalam galeri') : fdzL('No images yet', 'Tiada gambar lagi')) + '</p>'
           +   '<div class="gstrip">'
-          +     '<p class="gstrip__copy">' + L('See more of our field work photos on our official Facebook page.', 'Lihat lebih banyak gambar kerja di lapangan di halaman Facebook rasmi kami.') + '</p>'
+          +     '<p class="gstrip__copy">' + fdzL('See more of our field work photos on our official Facebook page.', 'Lihat lebih banyak gambar kerja di lapangan di halaman Facebook rasmi kami.') + '</p>'
           +     '<a class="gcta"><img class="gcta__logo" src="/fdzeng-logo.png" alt="FDZ"><span class="gcta__divider"></span>View Our Photo Gallery</a>'
           +   '</div>'
           +   (fbUrl ? '<p class="gurl">&#128279; ' + fbUrl + '</p>' : '')
@@ -1184,12 +1184,12 @@
         names.forEach(function (n) { if (seen[n]) { if (dups.indexOf(n) === -1) dups.push(n); } seen[n] = true; });
         if (dups.length) {
           var dupNames = '<b>' + dups.map(fpEsc).join('</b>, <b>') + '</b>';
-          out += '<div class="fp-notice fp-notice--warn">&#9888; ' + L('Duplicate item: ' + dupNames + ' — picked more than once. Remove the repeats in the list on the left.', 'Item berganda: ' + dupNames + ' — dipilih lebih daripada sekali. Buang yang berulang di senarai sebelah kiri.') + '</div>';
+          out += '<div class="fp-notice fp-notice--warn">&#9888; ' + fdzL('Duplicate item: ' + dupNames + ' — picked more than once. Remove the repeats in the list on the left.', 'Item berganda: ' + dupNames + ' — dipilih lebih daripada sekali. Buang yang berulang di senarai sebelah kiri.') + '</div>';
         }
         if (maxCount && names.length > maxCount) {
-          out += '<div class="fp-notice fp-notice--warn">&#9888; ' + L('<b>' + names.length + ' selected</b> — this section is designed for <b>' + maxCount + '</b> cards only. Remove ' + (names.length - maxCount) + ' for the best layout.', '<b>' + names.length + ' dipilih</b> — bahagian ini direka untuk <b>' + maxCount + '</b> kad sahaja. Buang ' + (names.length - maxCount) + ' untuk paparan terbaik.') + '</div>';
+          out += '<div class="fp-notice fp-notice--warn">&#9888; ' + fdzL('<b>' + names.length + ' selected</b> — this section is designed for <b>' + maxCount + '</b> cards only. Remove ' + (names.length - maxCount) + ' for the best layout.', '<b>' + names.length + ' dipilih</b> — bahagian ini direka untuk <b>' + maxCount + '</b> kad sahaja. Buang ' + (names.length - maxCount) + ' untuk paparan terbaik.') + '</div>';
         }
-        out += '<div class="fp-notice fp-notice--info">&#8505;&#65039; ' + L('This preview uses <b>published</b> data. A newly added item appears here after you press <b>Update Website</b> and the site finishes updating (a few minutes).', 'Pratonton ini menggunakan data yang telah <b>diterbitkan</b>. Item baru muncul di sini selepas anda tekan <b>Kemas Kini Laman Web</b> dan laman web dikemas kini (beberapa minit).') + '</div>';
+        out += '<div class="fp-notice fp-notice--info">&#8505;&#65039; ' + fdzL('This preview uses <b>published</b> data. A newly added item appears here after you press <b>Update Website</b> and the site finishes updating (a few minutes).', 'Pratonton ini menggunakan data yang telah <b>diterbitkan</b>. Item baru muncul di sini selepas anda tekan <b>Kemas Kini Laman Web</b> dan laman web dikemas kini (beberapa minit).') + '</div>';
         return out;
       }
 
@@ -1234,17 +1234,17 @@
         var head = '<div class="fpx-head"><div class="fpx-label">Track Record</div>'
           + '<div class="fpx-title">Featured <span class="accent">Projects</span>'
           + (names.length ? '<span class="fpx-count">' + names.length + '</span>' : '') + '</div>'
-          + '<p class="fpx-sub">' + L('Featured projects appear in TWO different styles on the site — the homepage carousel and the Projects page. Both are shown below in your chosen order (drag on the left to reorder).', 'Projek pilihan dipaparkan dalam DUA gaya berbeza di laman — karusel laman utama dan halaman Projek. Kedua-duanya ditunjukkan di bawah mengikut turutan pilihan anda (seret di sebelah kiri untuk susun semula).') + '</p></div>';
+          + '<p class="fpx-sub">' + fdzL('Featured projects appear in TWO different styles on the site — the homepage carousel and the Projects page. Both are shown below in your chosen order (drag on the left to reorder).', 'Projek pilihan dipaparkan dalam DUA gaya berbeza di laman — karusel laman utama dan halaman Projek. Kedua-duanya ditunjukkan di bawah mengikut turutan pilihan anda (seret di sebelah kiri untuk susun semula).') + '</p></div>';
         var body;
         if (records === null) {
-          body = '<div class="fpx-state">' + L('Loading project data…', 'Memuatkan data projek…') + '</div>';
+          body = '<div class="fpx-state">' + fdzL('Loading project data…', 'Memuatkan data projek…') + '</div>';
         } else if (!names.length) {
-          body = '<div class="fpx-state">' + L('No featured projects yet.<br>Add projects from the dropdown on the left.', 'Belum ada projek pilihan.<br>Tambah projek dari senarai dropdown di sebelah kiri.') + '</div>';
+          body = '<div class="fpx-state">' + fdzL('No featured projects yet.<br>Add projects from the dropdown on the left.', 'Belum ada projek pilihan.<br>Tambah projek dari senarai dropdown di sebelah kiri.') + '</div>';
         } else {
           var byDesc = {};
           records.forEach(function (p) { if (p && p.description) byDesc[p.description] = p; });
           var missingCard = function (i, n) {
-            return '<div class="fpx-missing">#' + (i + 1) + ' — ' + L('Project not found:', 'Projek tidak dijumpai:') + '<span>' + fpEsc(n) + '</span><em>' + L('(the project title may have changed — re-pick this project)', '(tajuk projek mungkin telah diubah — pilih semula projek ini)') + '</em></div>';
+            return '<div class="fpx-missing">#' + (i + 1) + ' — ' + fdzL('Project not found:', 'Projek tidak dijumpai:') + '<span>' + fpEsc(n) + '</span><em>' + fdzL('(the project title may have changed — re-pick this project)', '(tajuk projek mungkin telah diubah — pilih semula projek ini)') + '</em></div>';
           };
           var gridOf = function (builder) {
             return names.map(function (n, i) {
@@ -1252,9 +1252,9 @@
               return p ? builder(normalizeProjectRecord(p)) : missingCard(i, n);
             }).join('');
           };
-          body = '<div class="fpx-sublabel">🏠 ' + L('On the Homepage', 'Di Laman Utama') + '<span class="tag">' + L('dark auto-scrolling carousel', 'karusel gelap auto-skrol') + '</span></div>'
+          body = '<div class="fpx-sublabel">🏠 ' + fdzL('On the Homepage', 'Di Laman Utama') + '<span class="tag">' + fdzL('dark auto-scrolling carousel', 'karusel gelap auto-skrol') + '</span></div>'
             + '<div class="fpx-grid">' + gridOf(buildHomeFeatCard) + '</div>'
-            + '<div class="fpx-sublabel">📄 ' + L('On the Projects page', 'Di Halaman Projek') + '<span class="tag">' + L('detailed white cards', 'kad putih terperinci') + '</span></div>'
+            + '<div class="fpx-sublabel">📄 ' + fdzL('On the Projects page', 'Di Halaman Projek') + '<span class="tag">' + fdzL('detailed white cards', 'kad putih terperinci') + '</span></div>'
             + '<div class="fpx-lightpanel"><div class="fpx-grid">' + gridOf(buildProjectCard) + '</div></div>';
         }
         var notices = (records === null) ? '' : fpNoticesHtml(names);
@@ -1286,18 +1286,18 @@
         var head = '<div class="fcx-head"><div class="fcx-label">Accreditations</div>'
           + '<div class="fcx-title">Featured <span class="accent">Certificates</span>'
           + (names.length ? '<span class="fcx-count">' + names.length + '</span>' : '') + '</div>'
-          + '<p class="fcx-sub">' + L('The featured certificate cards at the top of the Certifications page — in the order below (drag items on the left to reorder).', 'Kad sijil pilihan di bahagian atas halaman Certifications — ikut turutan di bawah (seret item di sebelah kiri untuk susun semula).') + '</p></div>';
+          + '<p class="fcx-sub">' + fdzL('The featured certificate cards at the top of the Certifications page — in the order below (drag items on the left to reorder).', 'Kad sijil pilihan di bahagian atas halaman Certifications — ikut turutan di bawah (seret item di sebelah kiri untuk susun semula).') + '</p></div>';
         var body;
         if (records === null) {
-          body = '<div class="fcx-state">' + L('Loading certificate data…', 'Memuatkan data sijil…') + '</div>';
+          body = '<div class="fcx-state">' + fdzL('Loading certificate data…', 'Memuatkan data sijil…') + '</div>';
         } else if (!names.length) {
-          body = '<div class="fcx-state">' + L('No featured certificates yet.<br>Add certificates from the dropdown on the left.', 'Belum ada sijil pilihan.<br>Tambah sijil dari senarai dropdown di sebelah kiri.') + '</div>';
+          body = '<div class="fcx-state">' + fdzL('No featured certificates yet.<br>Add certificates from the dropdown on the left.', 'Belum ada sijil pilihan.<br>Tambah sijil dari senarai dropdown di sebelah kiri.') + '</div>';
         } else {
           var byTitle = {};
           records.forEach(function (c) { if (c && c.title) byTitle[c.title] = c; });
           var cards = names.map(function (n, i) {
             var c = byTitle[n];
-            if (!c) return '<div class="fcx-missing">#' + (i + 1) + ' — ' + L('Certificate not found:', 'Sijil tidak dijumpai:') + '<span>' + fpEsc(n) + '</span><em>' + L('(the certificate name may have changed — re-pick this certificate)', '(nama sijil mungkin telah diubah — pilih semula sijil ini)') + '</em></div>';
+            if (!c) return '<div class="fcx-missing">#' + (i + 1) + ' — ' + fdzL('Certificate not found:', 'Sijil tidak dijumpai:') + '<span>' + fpEsc(n) + '</span><em>' + fdzL('(the certificate name may have changed — re-pick this certificate)', '(nama sijil mungkin telah diubah — pilih semula sijil ini)') + '</em></div>';
             return buildCertCard(normalizeCertRecord(c));
           }).join('');
           body = '<div class="fcx-row">' + cards + '</div>';
@@ -1329,7 +1329,7 @@
           var names = fpRefNames(props.entry, refField);
           var rows = names.length
             ? names.map(function (n, i) { return '<div style="padding:11px 15px;border-left:3px solid #b5000b;background:#fff;margin-bottom:7px;border-radius:6px;font-family:Barlow,sans-serif;font-weight:700;text-transform:uppercase;font-size:0.8rem;color:#1a1c1d;line-height:1.35;">' + (i + 1) + '. ' + fpEsc(n) + '</div>'; }).join('')
-            : '<div style="color:#6b7280;padding:36px;text-align:center;">' + L('No featured ' + label.en + ' yet.', 'Belum ada ' + label.bm + '.') + '</div>';
+            : '<div style="color:#6b7280;padding:36px;text-align:center;">' + fdzL('No featured ' + label.en + ' yet.', 'Belum ada ' + label.bm + '.') + '</div>';
           return h('div', { dangerouslySetInnerHTML: { __html: '<div style="font-family:Inter,sans-serif;background:#f0f0f2;padding:28px;min-height:100vh;">' + rows + '</div>' } });
         };
       }
@@ -1716,11 +1716,11 @@
       // Language picker for text WE render (Panduan + preview panes + injected
       // badges). These live outside Decap's DOM (help overlay is skipped by the
       // translator; previews render in a separate iframe), so they can't be reached
-      // by fdzTranslateTree — they choose their own language via L(). English is the
-      // default; toggling reloads, so L() is read fresh each load.
+      // by fdzTranslateTree — they choose their own language via fdzL(). English is the
+      // default; toggling reloads, so fdzL() is read fresh each load.
       // IMPORTANT: assigned to window because the preview render functions live in a
-      // SEPARATE window-load handler (earlier in this file) and must reach L() too.
-      window.L = function L(en, bm) { return fdzLang === 'bm' ? bm : en; };
+      // SEPARATE window-load handler (earlier in this file) and must reach fdzL() too.
+      window.fdzL = function fdzL(en, bm) { return fdzLang === 'bm' ? bm : en; };
 
       // Swap interface text via the active map: full BM translation in BM mode,
       // or just the friendlier English relabels ("Publish" -> "Update Website") in
@@ -1787,7 +1787,7 @@
       }
 
       // English body for the Panduan help panel (BM version is inline in
-      // injectHelpPanel; L() picks between them). Keep the two in sync.
+      // injectHelpPanel; fdzL() picks between them). Keep the two in sync.
       function fdzHelpEN() {
         return '' +
           '<h3>➕ Adding a New Project</h3>' +
@@ -1889,14 +1889,14 @@
         var btn = document.createElement('button');
         btn.id = 'fdz-help-btn';
         btn.type = 'button';
-        btn.innerHTML = '📖 ' + L('Guide', 'Panduan');
+        btn.innerHTML = '📖 ' + fdzL('Guide', 'Panduan');
 
         var overlay = document.createElement('div');
         overlay.id = 'fdz-help-overlay';
         overlay.innerHTML =
-          '<div id="fdz-help-modal" role="dialog" aria-label="' + L('CMS Guide', 'Panduan CMS') + '">' +
-            '<div class="fh-head"><img src="/fdzeng-logo.png" alt="FDZ"><h2>' + L('Quick CMS Guide', 'Panduan Ringkas CMS') + '</h2><button id="fdz-help-close" aria-label="' + L('Close', 'Tutup') + '">&times;</button></div>' +
-            '<div class="fh-body">' + L(fdzHelpEN(),
+          '<div id="fdz-help-modal" role="dialog" aria-label="' + fdzL('CMS Guide', 'Panduan CMS') + '">' +
+            '<div class="fh-head"><img src="/fdzeng-logo.png" alt="FDZ"><h2>' + fdzL('Quick CMS Guide', 'Panduan Ringkas CMS') + '</h2><button id="fdz-help-close" aria-label="' + fdzL('Close', 'Tutup') + '">&times;</button></div>' +
+            '<div class="fh-body">' + fdzL(fdzHelpEN(),
               '<h3>➕ Menambah Projek Baru</h3>' +
               '<ol>' +
                 '<li>Klik <b>Projects</b> di sebelah kiri, kemudian butang <b>New Project</b>.</li>' +
@@ -2083,8 +2083,8 @@
           if (getComputedStyle(card).position === 'static') card.style.position = 'relative';
           var star = document.createElement('span');
           star.className = 'fdz-feat-star';
-          star.title = L('Selected as featured', 'Dipilih sebagai pilihan');
-          star.textContent = L('⭐ Featured', '⭐ Pilihan');
+          star.title = fdzL('Selected as featured', 'Dipilih sebagai pilihan');
+          star.textContent = fdzL('⭐ Featured', '⭐ Pilihan');
           card.appendChild(star);
         });
       }
