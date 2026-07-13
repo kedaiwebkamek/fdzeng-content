@@ -1672,7 +1672,9 @@
       // translator; previews render in a separate iframe), so they can't be reached
       // by fdzTranslateTree — they choose their own language via L(). English is the
       // default; toggling reloads, so L() is read fresh each load.
-      function L(en, bm) { return fdzLang === 'bm' ? bm : en; }
+      // IMPORTANT: assigned to window because the preview render functions live in a
+      // SEPARATE window-load handler (earlier in this file) and must reach L() too.
+      window.L = function L(en, bm) { return fdzLang === 'bm' ? bm : en; };
 
       // Swap interface text via the active map: full BM translation in BM mode,
       // or just the friendlier English relabels ("Publish" -> "Update Website") in
