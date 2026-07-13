@@ -1487,6 +1487,16 @@
           "a:has(> .fdz-count-badge),[class*='SidebarNavLink']:has(.fdz-count-badge),[class*='NavLink']:has(.fdz-count-badge) { display:flex !important; align-items:center; }",
           // Featured (⭐) ribbon injected onto list cards of entries picked as featured
           ".fdz-feat-star { position:absolute; top:8px; right:10px; z-index:4; display:inline-flex; align-items:center; gap:5px; font-family:'Barlow',sans-serif; font-size:0.56rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:#b5000b; background:rgba(181,0,11,0.10); border:1px solid rgba(181,0,11,0.28); padding:3px 8px 3px 6px; border-radius:999px; pointer-events:none; }",
+          // Sidebar-bottom status card (content / panel / backup dates)
+          "#fdz-status-card { margin:14px 10px 10px; padding:12px 13px; border:1px solid #e2e2e4; border-radius:10px; background:#fff; box-shadow:0 6px 18px -12px rgba(0,0,0,0.14); }",
+          "#fdz-status-card .fdz-sc-h { font-family:'Barlow',sans-serif; font-weight:900; font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase; color:#b5000b; margin-bottom:9px; }",
+          "#fdz-status-card .fdz-sc-row { display:flex; align-items:center; gap:7px; font-size:0.68rem; margin-bottom:6px; }",
+          "#fdz-status-card .fdz-sc-ic { font-size:0.72rem; flex-shrink:0; }",
+          "#fdz-status-card .fdz-sc-k { color:#5f5e5e; }",
+          "#fdz-status-card .fdz-sc-v { margin-left:auto; font-weight:700; color:#1a1c1d; white-space:nowrap; }",
+          "#fdz-status-card .fdz-sc-ok { color:#15803d; font-weight:900; }",
+          "#fdz-status-card .fdz-sc-warn { color:#c2410c; font-weight:900; }",
+          "#fdz-status-card .fdz-sc-foot { margin-top:8px; padding-top:8px; border-top:1px dashed #e8e4dc; font-size:0.56rem; color:#9ca3af; line-height:1.5; }",
           "#nc-root a:focus-visible, #nc-root button:focus-visible { outline:2px solid #b5000b !important; outline-offset:2px; }",
           // Relation-widget dropdown (Featured Projects / Featured Certificates
           // pickers). Decap renders it with react-select wrapped in react-window's
@@ -2077,6 +2087,58 @@
         });
       }
 
+      // ── Status card at the bottom of the sidebar nav ─────────────────────────
+      // Shows when content + the CMS panel were last updated, and the last daily
+      // backup. Data comes from /cms-status.json (written at build; same origin —
+      // the backup date is read from the private backups/ folder at build time).
+      var FDZ_STATUS = { data: null, loaded: false, loading: false };
+      function loadCmsStatus(cb) {
+        if (FDZ_STATUS.loaded) { if (cb) cb(); return; }
+        if (FDZ_STATUS.loading) return;
+        FDZ_STATUS.loading = true;
+        fetch('/cms-status.json', { cache: 'no-store' })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .catch(function () { return null; })
+          .then(function (d) { FDZ_STATUS.data = d; FDZ_STATUS.loaded = true; FDZ_STATUS.loading = false; if (cb) cb(); });
+      }
+      function fdzFmtDate(iso) {
+        if (!iso) return '—';
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return String(iso);
+        var mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+        return d.getDate() + ' ' + mon + ' ' + d.getFullYear();
+      }
+      function fdzDaysAgo(iso) {
+        if (!iso) return Infinity;
+        var d = new Date(iso); if (isNaN(d.getTime())) return Infinity;
+        return Math.floor((Date.now() - d.getTime()) / 86400000);
+      }
+      function injectStatusCard() {
+        if (!document.querySelector("[class*='AppHeader']")) return; // CMS only
+        if (document.getElementById('fdz-status-card')) return;      // once
+        if (!FDZ_STATUS.loaded) { loadCmsStatus(injectStatusCard); return; }
+        if (!FDZ_STATUS.data) return;                                // fetch failed — no card
+        var navList = document.querySelector("[class*='SidebarNavList']");
+        var container = navList ? navList.parentElement : null;
+        if (!container) return;
+        var s = FDZ_STATUS.data;
+        var bIso = s.lastBackup ? s.lastBackup + 'T00:00:00' : '';
+        var bOk = fdzDaysAgo(bIso) <= 2; // backup runs overnight; within 2 days = healthy
+        var bBadge = s.lastBackup ? (bOk ? ' <span class="fdz-sc-ok">✓</span>' : ' <span class="fdz-sc-warn">!</span>') : '';
+        var row = function (ic, k, v) {
+          return '<div class="fdz-sc-row"><span class="fdz-sc-ic">' + ic + '</span><span class="fdz-sc-k">' + k + '</span><span class="fdz-sc-v">' + v + '</span></div>';
+        };
+        var card = document.createElement('div');
+        card.id = 'fdz-status-card';
+        card.innerHTML =
+          '<div class="fdz-sc-h">' + fdzL('Status', 'Status') + '</div>' +
+          row('📝', fdzL('Content', 'Kandungan'), fdzFmtDate(s.content && s.content.date)) +
+          row('🖥️', fdzL('CMS panel', 'Panel CMS'), fdzFmtDate(s.panel && s.panel.date)) +
+          row('🔒', fdzL('Backup', 'Backup'), (s.lastBackup ? fdzFmtDate(bIso) + bBadge : '—')) +
+          '<div class="fdz-sc-foot">' + fdzL('Auto backup daily · 30-day history', 'Backup automatik harian · simpanan 30 hari') + '</div>';
+        container.appendChild(card);
+      }
+
       function brandLogin() {
         var authPage = document.querySelector('[class*="AuthenticationPage"]');
         if (!authPage) return;
@@ -2124,7 +2186,7 @@
       // via rAF with a runaway circuit-breaker — defence-in-depth against the class
       // of MutationObserver feedback loop that once froze the CMS after login.
       function runEnhancers() {
-        var fns = [brandLogin, brandHeader, injectHelpPanel, injectCollectionCounts, injectFeaturedStars, injectLangToggle, translateTick];
+        var fns = [brandLogin, brandHeader, injectHelpPanel, injectCollectionCounts, injectFeaturedStars, injectLangToggle, injectStatusCard, translateTick];
         for (var i = 0; i < fns.length; i++) {
           try { fns[i](); }
           catch (e) { if (window.console && console.warn) console.warn('[FDZ CMS] enhancer failed:', e); }
