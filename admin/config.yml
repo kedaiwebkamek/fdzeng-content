@@ -21,6 +21,13 @@ collections:
     extension: json
     format: json
     create: true
+    # Per-project media folder: each project's uploaded images go into their own
+    # /uploads/projects/<slug>/ folder, and the media library is scoped to it —
+    # so when editing a project you only see THAT project's photos, not a giant
+    # shared pile. Leading slash = relative to the repo root (matches the existing
+    # /uploads/projects/<slug>/ structure). {{slug}} = the project's slug.
+    media_folder: "/uploads/projects/{{slug}}"
+    public_folder: "/uploads/projects/{{slug}}"
     summary: "{{status}} · {{division}} — {{description}}"
     sortable_fields: ['description', 'status', 'client', 'division']
     search_fields: ['description', 'client', 'cat', 'division', 'loc', 'year', 'status', 'accuracy', 'tags']
