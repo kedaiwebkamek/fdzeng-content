@@ -1434,7 +1434,10 @@
           '#fdz-login-foot a{color:rgba(255,255,255,0.5);text-decoration:none;}',
           '#fdz-login-foot a:hover{color:#e30613;}',
           '#fdz-login-note{max-width:360px;margin-top:22px;font-family:"Inter",sans-serif;font-size:0.72rem;line-height:1.6;color:rgba(255,255,255,0.55);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 16px;position:relative;z-index:2;text-align:center;}',
-          '#fdz-login-note .en{display:block;margin-top:6px;color:rgba(255,255,255,0.35);font-size:0.66rem;}'
+          '#fdz-login-note .add{display:block;margin-top:9px;color:rgba(255,255,255,0.6);}',
+          '#fdz-login-note .en{display:block;margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.35);font-size:0.66rem;}',
+          '#fdz-login-note a{color:#ff7a72;text-decoration:none;font-weight:600;}',
+          '#fdz-login-note a:hover{color:#fff;}'
         ].join('\n');
         document.head.appendChild(s);
       })();
@@ -2161,8 +2164,9 @@
         if (!document.getElementById('fdz-login-note')) {
           var note = document.createElement('div');
           note.id = 'fdz-login-note';
-          note.innerHTML = '&#128274; Anda akan dibawa ke GitHub untuk log masuk dengan selamat &mdash; ini normal. Gunakan akaun yang diberikan kepada anda.' +
-            '<span class="en">You&rsquo;ll be securely redirected to GitHub to sign in &mdash; this is expected.</span>';
+          note.innerHTML = '&#128274; Anda akan dibawa ke GitHub untuk log masuk dengan selamat &mdash; ini normal. Gunakan email yang telah diberi akses.' +
+            '<span class="add">Ingin menambah pengguna? Nyatakan kepada <a href="mailto:apel@kedaiwebkamek.my">apel@kedaiwebkamek.my</a>, kami akan menambah akses untuk anda.</span>' +
+            '<span class="en">You&rsquo;ll be redirected to GitHub to sign in securely &mdash; this is normal. Use the email that has been granted access. To add a user, email apel@kedaiwebkamek.my and we&rsquo;ll set it up.</span>';
           authPage.appendChild(note);
         }
 
@@ -2174,8 +2178,7 @@
         if (!document.getElementById('fdz-login-foot')) {
           var foot = document.createElement('div');
           foot.id = 'fdz-login-foot';
-          foot.innerHTML = 'Secure admin access &bull; www.fdzeng.com/admin<br>' +
-            'Masalah log masuk? Hubungi <a href="mailto:apel@kedaiwebkamek.my">apel@kedaiwebkamek.my</a>';
+          foot.innerHTML = 'Secure admin access &bull; www.fdzeng.com/admin';
           authPage.appendChild(foot);
         }
       }
