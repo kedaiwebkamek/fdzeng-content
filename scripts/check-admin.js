@@ -65,25 +65,34 @@ if (handlers !== 2) {
   warn(`Expected 2 window-load handlers (previews + enhancers); found ${handlers}. If the split changed, re-check cross-handler globals.`);
 }
 
-// ── 4. FDZ_I18N dictionary ↔ config.yml labels/options (informational) ───────
+// ── 4. FDZ_I18N dictionary ↔ config.yml labels/hints/options ────────────────
+// Anything in config.yml with no dictionary entry renders in English while the
+// rest of the panel is Malay. Hints were missing from this check for a long
+// time, which is exactly how 26 of them drifted untranslated — so check both.
 try {
   const start = html.indexOf('var FDZ_I18N = {');
   const end = html.indexOf('};', start);
   const keys = new Set();
   if (start !== -1 && end !== -1) {
     const block = html.slice(start, end);
-    let k; const kre = /"([^"]+)"\s*:/g;
-    while ((k = kre.exec(block))) keys.add(k[1]);
+    let k; const kre = /"((?:[^"\\]|\\.)*)"\s*:/g;
+    while ((k = kre.exec(block))) keys.add(k[1].replace(/\\"/g, '"'));
   }
   const cfg = fs.readFileSync(CONFIG, 'utf8');
-  const labels = [];
-  let x; const lre = /label:\s*"([^"]+)"/g;
-  while ((x = lre.exec(cfg))) labels.push(x[1]);
-  const uniq = [...new Set(labels)];
-  const missing = uniq.filter(l => !keys.has(l));
-  if (missing.length) {
-    warn(`${missing.length} config label/option string(s) not in FDZ_I18N (will stay English in BM mode): ` +
-      missing.slice(0, 8).map(s => JSON.stringify(s)).join(', ') + (missing.length > 8 ? ' …' : ''));
+  const grab = (key) => {
+    const out = [];
+    let m;
+    const quoted = new RegExp('^[ \\t]*' + key + ':[ \\t]*"((?:[^"\\\\]|\\\\.)*)"[ \\t]*$', 'gm');
+    while ((m = quoted.exec(cfg))) out.push(m[1]);
+    return out;
+  };
+  for (const [kind, strings] of [['label', grab('label')], ['hint', grab('hint')]]) {
+    const uniq = [...new Set(strings)];
+    const missing = uniq.filter(l => !keys.has(l));
+    if (missing.length) {
+      warn(`${missing.length} config ${kind} string(s) not in FDZ_I18N (will stay English in BM mode): ` +
+        missing.slice(0, 5).map(s => JSON.stringify(s.slice(0, 60))).join(', ') + (missing.length > 5 ? ' …' : ''));
+    }
   }
 } catch (e) { warn('Could not run dictionary↔config check: ' + e.message); }
 
