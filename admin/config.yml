@@ -364,33 +364,21 @@ collections:
             max_file_size: 5242880
         hint: "Logo of the issuing body to display on the featured certificate card. Recommended size: 120×80px. Format: PNG or SVG with a transparent background. Leave blank if none — a text icon will be used instead."
 
+      # Fallback icon + colour, rendered ONLY when a certificate has no logo.
+      # All 12 certificates have a logo, so these have never rendered — but the
+      # form still asked the owner to know Google Material Symbols icon names.
+      # Hidden rather than deleted: existing values survive, the code fallback
+      # still works if a logo-less certificate is ever added, and the owner never
+      # has to think about it. Defaults cover a brand-new logo-less certificate.
       - name: iconName
         label: "Icon Name (Fallback)"
-        widget: string
-        required: false
-        hint: |
-          Fallback icon — shown ONLY if no Certificate Logo is uploaded. If there is a logo, this field is ignored; it can be left blank.
-          Icon name from Google Material Symbols.
-          Recommended icons by category:
-          • Contractor : engineering, construction, domain, handyman, build
-          • Quality/ISO : verified, shield, health_and_safety, workspace_premium, fact_check
-          • Petroleum   : water_drop, local_gas_station, factory, bolt, oil_barrel
-          • Government   : account_balance, business_center, gavel, badge, policy
-          • Telecom      : cell_tower, router, cable, wifi, hub
-          See all icons at: fonts.google.com/icons — search the name and copy it exactly as shown (lowercase, underscores).
+        widget: hidden
+        default: "verified"
 
       - name: iconColor
         label: "Icon Color (Fallback)"
-        widget: select
-        required: false
+        widget: hidden
         default: "grey"
-        options:
-          - { label: "Red — main or contractor certificate", value: "red" }
-          - { label: "Grey — general or inactive certificate", value: "grey" }
-          - { label: "Green — quality or safety certificate", value: "green" }
-          - { label: "Blue — government or professional certificate", value: "blue" }
-          - { label: "Orange — petroleum or energy certificate", value: "orange" }
-        hint: "Fallback icon color — only relevant if no Certificate Logo is uploaded. Leave as Grey if the certificate has a logo."
 
       - name: downloadFile
         label: "Certificate PDF File"
