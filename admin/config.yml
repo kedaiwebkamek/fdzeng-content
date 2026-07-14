@@ -68,11 +68,14 @@ collections:
         required: true
         hint: "A short, clear title describing the project. Example: Cadangan Pembinaan Jalan Penghubung Kg. Stass, Kota Samarahan"
 
+      # Deliberately NOT required: 41 of 53 existing projects have no client yet.
+      # If this were required, opening one of those projects just to add photos
+      # would refuse to save until a client was invented.
       - name: client
         label: "Client / Employer"
         widget: string
-        required: true
-        hint: "Full name of the client or agency managing the project. Example: Jabatan Kerja Raya Sarawak, PETRONAS Carigali, Suruhanjaya Perkhidmatan Air Negeri (SPAN)"
+        required: false
+        hint: "Full name of the client or agency managing the project. Example: Jabatan Kerja Raya Sarawak, PETRONAS Carigali, Suruhanjaya Perkhidmatan Air Negeri (SPAN). Leave blank if it is not confirmed yet — you can add it later."
 
       - name: amount
         label: "Project Value (RM)"
