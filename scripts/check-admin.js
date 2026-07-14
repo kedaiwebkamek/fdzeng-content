@@ -96,6 +96,37 @@ try {
   }
 } catch (e) { warn('Could not run dictionary↔config check: ' + e.message); }
 
+// ── 5. Every config widget must exist ────────────────────────────────────────
+// config.yml leans on custom widgets registered in index.html (coordinate-map,
+// currency-myr, date-conditional …). If a widget name is typo'd, or a custom one
+// is renamed/removed, Decap silently renders a broken field — no console error.
+// A YAML parser would be nicer but this repo has no node_modules, so: regex.
+try {
+  const cfg = fs.readFileSync(CONFIG, 'utf8');
+
+  if (/^\t| \t/m.test(cfg)) {
+    err('config.yml contains a TAB character — YAML forbids tabs and Decap will fail to load.');
+  }
+
+  const BUILTIN = new Set([
+    'string', 'text', 'number', 'boolean', 'select', 'list', 'object', 'image',
+    'file', 'datetime', 'date', 'markdown', 'relation', 'hidden', 'code',
+    'color', 'map', 'uuid',
+  ]);
+  const custom = new Set(
+    [...html.matchAll(/CMS\.registerWidget\(\s*['"]([^'"]+)['"]/g)].map(m => m[1])
+  );
+  const used = new Set(
+    [...cfg.matchAll(/\bwidget:\s*["']?([A-Za-z0-9_-]+)["']?/g)].map(m => m[1])
+  );
+  const unknown = [...used].filter(w => !BUILTIN.has(w) && !custom.has(w));
+  if (unknown.length) {
+    err(`config.yml uses widget(s) that are neither Decap built-ins nor registered in admin/index.html: ` +
+      unknown.map(w => JSON.stringify(w)).join(', ') +
+      ` (registered custom widgets: ${[...custom].join(', ') || 'none'})`);
+  }
+} catch (e) { warn('Could not run widget check: ' + e.message); }
+
 // ── Report ───────────────────────────────────────────────────────────────────
 console.log(`[check-admin] scanned ${blocks} inline script block(s), ${handlers} load handler(s).`);
 warns.forEach(w => console.log('  ⚠ ' + w));

@@ -306,12 +306,20 @@ collections:
           - { label: "Expired — Certificate has lapsed or was not renewed", value: "Tamat" }
         hint: "Change to Expired when the certificate lapses. Expired certificates are still shown in the list but without the green badge."
 
+      # Calendar picker, but still STORED as ISO YYYY-MM-DD — certificates.html
+      # does `new Date(validUntil)`, so the stored format must not change.
+      # `format` governs what is written to the JSON; `date_format` is only what
+      # the owner sees in the picker.
       - name: validUntil
         label: "Expiry Date"
-        widget: string
+        widget: datetime
         required: false
-        pattern: ['^$|^\d{4}-\d{2}-\d{2}$', 'Empty or ISO format YYYY-MM-DD. Example: 2027-04-05']
-        hint: "The ONLY place to set the expiry date. ISO format YYYY-MM-DD (example: 2027-04-05). The 'Valid until' line will be shown & colored automatically on the website — DO NOT add an expiry date line in the Certificate Details below. Leave blank if the certificate does not expire (example: SSM)."
+        default: ""
+        format: "YYYY-MM-DD"
+        date_format: "DD MMM YYYY"
+        time_format: false
+        picker_utc: true
+        hint: "PICK the expiry date from the calendar. This is the ONLY place to set it — the 'Valid until' line is shown and coloured automatically on the website. DO NOT add an expiry row in the Certificate Details below. Leave blank if the certificate never expires (example: SSM)."
 
       - name: meta
         label: "Certificate Details (Label & Value)"
