@@ -1546,6 +1546,10 @@
           "#fdz-announce .fdz-an-btn--ghost:hover { border-color:#b5000b; background:rgba(181,0,11,0.05); }",
           "#fdz-announce .fdz-an-btn--go { background:#b5000b; color:#fff; }",
           "#fdz-announce .fdz-an-btn--go:hover { background:#8e0009; }",
+          // Re-read button — sits directly above the red Guide pill, deliberately
+          // quieter than it so the Guide stays the primary call to action.
+          "#fdz-announce-btn { position:fixed; right:22px; bottom:74px; z-index:9998; display:inline-flex; align-items:center; gap:7px; background:#fff; color:#1a1c1d; font-family:'Barlow',sans-serif; font-weight:800; font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; border:1.5px solid #e2e2e4; border-radius:999px; padding:10px 17px; box-shadow:0 6px 18px rgba(0,0,0,0.12); cursor:pointer; transition:transform .2s,border-color .2s,color .2s; }",
+          "#fdz-announce-btn:hover { color:#b5000b; border-color:#b5000b; transform:translateY(-2px); }",
           // Relation-widget dropdown (Featured Projects / Featured Certificates
           // pickers). Decap renders it with react-select wrapped in react-window's
           // FixedSizeList — every option row is a FIXED 30px height, absolutely
@@ -2198,10 +2202,10 @@
         if (el && el.parentNode) el.parentNode.removeChild(el);
       }
 
-      function injectAnnouncement() {
-        if (!document.querySelector("[class*='AppHeader']")) return; // CMS only, not login
+      // Builds and shows the modal. Used both for the once-only auto-show and for
+      // the persistent "Notice" button, which re-opens it any time.
+      function fdzOpenAnnounce() {
         if (document.getElementById('fdz-announce')) return;         // already on screen
-        if (fdzAnnounceSeen()) return;                               // already dismissed
 
         var wrap = document.createElement('div');
         wrap.id = 'fdz-announce';
@@ -2242,6 +2246,25 @@
         if (ok) ok.addEventListener('click', fdzDismissAnnounce);
         document.body.appendChild(wrap);
         if (ok) ok.focus();
+      }
+
+      // Auto-show, once per announcement version.
+      function injectAnnouncement() {
+        if (!document.querySelector("[class*='AppHeader']")) return; // CMS only, not login
+        if (fdzAnnounceSeen()) return;                               // already dismissed
+        fdzOpenAnnounce();
+      }
+
+      // Persistent button so the notice can always be re-read after dismissal.
+      function injectAnnounceBtn() {
+        if (!document.querySelector("[class*='AppHeader']")) return; // CMS only, not login
+        if (document.getElementById('fdz-announce-btn')) return;     // once
+        var b = document.createElement('button');
+        b.id = 'fdz-announce-btn';
+        b.type = 'button';
+        b.innerHTML = '📣 ' + fdzL('Notice', 'Notis');
+        b.addEventListener('click', fdzOpenAnnounce);
+        document.body.appendChild(b);
       }
 
       document.addEventListener('keydown', function (e) {
@@ -2295,7 +2318,7 @@
       // via rAF with a runaway circuit-breaker — defence-in-depth against the class
       // of MutationObserver feedback loop that once froze the CMS after login.
       function runEnhancers() {
-        var fns = [brandLogin, brandHeader, injectHelpPanel, injectCollectionCounts, injectFeaturedStars, injectLangToggle, injectStatusCard, injectAnnouncement, translateTick];
+        var fns = [brandLogin, brandHeader, injectHelpPanel, injectCollectionCounts, injectFeaturedStars, injectLangToggle, injectStatusCard, injectAnnouncement, injectAnnounceBtn, translateTick];
         for (var i = 0; i < fns.length; i++) {
           try { fns[i](); }
           catch (e) { if (window.console && console.warn) console.warn('[FDZ CMS] enhancer failed:', e); }
