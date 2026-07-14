@@ -1546,9 +1546,10 @@
           "#fdz-announce .fdz-an-btn--ghost:hover { border-color:#b5000b; background:rgba(181,0,11,0.05); }",
           "#fdz-announce .fdz-an-btn--go { background:#b5000b; color:#fff; }",
           "#fdz-announce .fdz-an-btn--go:hover { background:#8e0009; }",
-          // Re-read button — sits directly above the red Guide pill, deliberately
-          // quieter than it so the Guide stays the primary call to action.
-          "#fdz-announce-btn { position:fixed; right:22px; bottom:74px; z-index:9998; display:inline-flex; align-items:center; gap:7px; background:#fff; color:#1a1c1d; font-family:'Barlow',sans-serif; font-weight:800; font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; border:1.5px solid #e2e2e4; border-radius:999px; padding:10px 17px; box-shadow:0 6px 18px rgba(0,0,0,0.12); cursor:pointer; transition:transform .2s,border-color .2s,color .2s; }",
+          // Third pill in the bottom-right rail. The rail is already Guide (22px)
+          // and the language toggle (74px) — keep this above both, and quieter
+          // than the red Guide so that stays the primary call to action.
+          "#fdz-announce-btn { position:fixed; right:22px; bottom:122px; z-index:9998; display:inline-flex; align-items:center; gap:7px; background:#fff; color:#1a1c1d; font-family:'Barlow',sans-serif; font-weight:800; font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; border:1.5px solid #e2e2e4; border-radius:999px; padding:10px 17px; box-shadow:0 6px 18px rgba(0,0,0,0.12); cursor:pointer; transition:transform .2s,border-color .2s,color .2s; }",
           "#fdz-announce-btn:hover { color:#b5000b; border-color:#b5000b; transform:translateY(-2px); }",
           // Relation-widget dropdown (Featured Projects / Featured Certificates
           // pickers). Decap renders it with react-select wrapped in react-window's
