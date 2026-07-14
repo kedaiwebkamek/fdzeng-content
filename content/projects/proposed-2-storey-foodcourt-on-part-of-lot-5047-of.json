@@ -1,68 +1,67 @@
 {
-    "status":  "Ongoing",
-    "year":  "Ongoing",
-    "date":  "Ongoing",
-    "amount":  "9000000",
-    "client":  "Bintulu Development Authority (BDA)",
-    "description":  "Proposed 2-Storey Foodcourt On Part of Lot 5047 Off Jalan Pantai Tanjung Batu, Block 26, Kemena Land District Bintulu",
-    "cat":  "Building",
-    "division":  "Bintulu",
-    "loc":  "Jalan Pantai Tanjung Batu, Bintulu",
-    "accuracy":  "Approximate (Off Jalan Pantai Tanjung Batu, Bintulu)",
-    "newsList":  [
-                     {
-                         "title":  "One of our ongoing project 2 storey Foodcourt along the Pantai Tanjung Batu, Bintulu",
-                         "link":  "https://www.facebook.com/permalink.php?story_fbid=pfbid02hyJgcjsjGHUpJmpDMTUzrf7aeGLtrg8M23Sd6Rnomd3LapozLWYLpdmdcwkc78CTl\u0026id=61570057791049"
-                     }
-                 ],
-    "images":  [
-                   {
-                       "src":  "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-1.png",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-2.png",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-3.png",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-4.png",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-5.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-6.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-7.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-8.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-9.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-10.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-11.jpg",
-                       "alt":  ""
-                   }
-               ],
-    "coordinates":  "3.2090, 113.0468",
-    "lat":  3.2090,
-    "lng":  113.0468,
-    "isPilihan":  true
+  "status": "Ongoing",
+  "year": "Ongoing",
+  "date": "Ongoing",
+  "amount": "9000000",
+  "client": "Bintulu Development Authority (BDA)",
+  "description": "Proposed 2-Storey Foodcourt On Part of Lot 5047 Off Jalan Pantai Tanjung Batu, Block 26, Kemena Land District Bintulu",
+  "cat": "Building",
+  "division": "Bintulu",
+  "loc": "Jalan Pantai Tanjung Batu, Bintulu",
+  "accuracy": "Approximate (Off Jalan Pantai Tanjung Batu, Bintulu)",
+  "newsList": [
+    {
+      "title": "One of our ongoing project 2 storey Foodcourt along the Pantai Tanjung Batu, Bintulu",
+      "link": "https://www.facebook.com/permalink.php?story_fbid=pfbid02hyJgcjsjGHUpJmpDMTUzrf7aeGLtrg8M23Sd6Rnomd3LapozLWYLpdmdcwkc78CTl&id=61570057791049"
+    }
+  ],
+  "images": [
+    {
+      "src": "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-1.png",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-2.png",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-3.png",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-4.png",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-5.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-6.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-7.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-8.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-9.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-10.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-2-storey-foodcourt-on-part-of-lot-5047-of/foodcourt-bintulu-11.jpg",
+      "alt": ""
+    }
+  ],
+  "coordinates": "3.2090, 113.0468",
+  "lat": 3.209,
+  "lng": 113.0468
 }

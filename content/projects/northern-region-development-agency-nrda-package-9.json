@@ -1,56 +1,55 @@
 {
-    "status":  "Ongoing",
-    "year":  "Ongoing",
-    "date":  "Ongoing",
-    "amount":  "3000000",
-    "client":  "Northern Region Development Agency (NRDA)",
-    "description":  "Northern Region Development Agency (NRDA) Package 9: Recreational Facilities in Lawas District Proposed Patarikan Tourism Facilities at Kampung Patarikan, Lawas District, Limbang Division (Remaining Works)",
-    "cat":  "Building",
-    "division":  "Limbang",
-    "loc":  "Kampung Patarikan, Lawas",
-    "accuracy":  "Approximate (Kg. Patarikan area, Lawas)",
-    "newsList":  [
-                     {
-                         "title":  "Currently, we are constructing Tourism Facilities at Kampung Patarikan, Lawas.",
-                         "link":  "https://www.facebook.com/permalink.php?story_fbid=pfbid026jYip1mMkvnnWWKu1B7B2k2adNVGXu8msHEHkegvWULbz2uXA9j9EwRhKDLt5ctLl\u0026id=61570057791049"
-                     }
-                 ],
-    "images":  [
-                   {
-                       "src":  "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-1.png",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-2.png",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-3.png",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-4.png",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-5.png",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-6.png",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-7.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-8.jpg",
-                       "alt":  ""
-                   }
-               ],
-    "coordinates":  "4.861, 115.4033",
-    "lat":  4.861,
-    "lng":  115.4033,
-    "isPilihan":  true
+  "status": "Ongoing",
+  "year": "Ongoing",
+  "date": "Ongoing",
+  "amount": "3000000",
+  "client": "Northern Region Development Agency (NRDA)",
+  "description": "Northern Region Development Agency (NRDA) Package 9: Recreational Facilities in Lawas District Proposed Patarikan Tourism Facilities at Kampung Patarikan, Lawas District, Limbang Division (Remaining Works)",
+  "cat": "Building",
+  "division": "Limbang",
+  "loc": "Kampung Patarikan, Lawas",
+  "accuracy": "Approximate (Kg. Patarikan area, Lawas)",
+  "newsList": [
+    {
+      "title": "Currently, we are constructing Tourism Facilities at Kampung Patarikan, Lawas.",
+      "link": "https://www.facebook.com/permalink.php?story_fbid=pfbid026jYip1mMkvnnWWKu1B7B2k2adNVGXu8msHEHkegvWULbz2uXA9j9EwRhKDLt5ctLl&id=61570057791049"
+    }
+  ],
+  "images": [
+    {
+      "src": "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-1.png",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-2.png",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-3.png",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-4.png",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-5.png",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-6.png",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-7.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/northern-region-development-agency-nrda-package-9/nrda-patarikan-8.jpg",
+      "alt": ""
+    }
+  ],
+  "coordinates": "4.861, 115.4033",
+  "lat": 4.861,
+  "lng": 115.4033
 }

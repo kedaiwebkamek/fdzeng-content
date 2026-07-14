@@ -1,73 +1,72 @@
 {
-    "id": "O8",
-    "status":  "Ongoing",
-    "year":  "Ongoing",
-    "date":  "Ongoing",
-    "amount":  "20000000",
-    "client":  "Persatuan Kebangsaan Melayu Sarawak (PKMS)",
-    "description":  "Proposed Dewan PKMS on Lot 123, Section 3, Kuching Town Land District, Kuching, Sarawak.",
-    "cat":  "Building",
-    "division":  "Kuching",
-    "loc":  "Lot 123, Section 3, Kuching (PKMS, Jln Haji Taha)",
-    "accuracy":  "Approximate (PKMS area, Jln Haji Taha, Kuching old town)",
-    "newsList":  [
-                     {
-                         "title":  "Contract Signing Ceremony between PKMS and FDZ Engineering held at PKMS HQ.",
-                         "link":  "https://www.facebook.com/permalink.php?story_fbid=pfbid0229cxFHM3LRdS2AkVbRfntbfgFLWxphy4YV2uCs1yEXMFVxb8nB6nNVpsbKWm2kRrl\u0026id=61570057791049"
-                     }
-                 ],
-    "images":  [
-                   {
-                       "src":  "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-1.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-2.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-3.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-4.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-5.jpeg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-6.jpeg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-7.jpeg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-8.jpeg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-9.jpeg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-10.jpeg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-11.jpeg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-12.jpeg",
-                       "alt":  ""
-                   }
-               ],
-    "coordinates":  "1.5556, 110.3397",
-    "lat":  1.5556,
-    "lng":  110.3397,
-    "isPilihan":  true
+  "id": "O8",
+  "status": "Ongoing",
+  "year": "Ongoing",
+  "date": "Ongoing",
+  "amount": "20000000",
+  "client": "Persatuan Kebangsaan Melayu Sarawak (PKMS)",
+  "description": "Proposed Dewan PKMS on Lot 123, Section 3, Kuching Town Land District, Kuching, Sarawak.",
+  "cat": "Building",
+  "division": "Kuching",
+  "loc": "Lot 123, Section 3, Kuching (PKMS, Jln Haji Taha)",
+  "accuracy": "Approximate (PKMS area, Jln Haji Taha, Kuching old town)",
+  "newsList": [
+    {
+      "title": "Contract Signing Ceremony between PKMS and FDZ Engineering held at PKMS HQ.",
+      "link": "https://www.facebook.com/permalink.php?story_fbid=pfbid0229cxFHM3LRdS2AkVbRfntbfgFLWxphy4YV2uCs1yEXMFVxb8nB6nNVpsbKWm2kRrl&id=61570057791049"
+    }
+  ],
+  "images": [
+    {
+      "src": "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-1.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-2.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-3.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-4.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-5.jpeg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-6.jpeg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-7.jpeg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-8.jpeg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-9.jpeg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-10.jpeg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-11.jpeg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/proposed-dewan-pkms-on-lot-123-section-3-kuching-t/dewan-pkms-12.jpeg",
+      "alt": ""
+    }
+  ],
+  "coordinates": "1.5556, 110.3397",
+  "lat": 1.5556,
+  "lng": 110.3397
 }

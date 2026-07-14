@@ -30,7 +30,7 @@ collections:
     public_folder: "/uploads/projects/{{slug}}"
     summary: "{{status}} · {{division}} — {{description}}"
     sortable_fields: ['description', 'status', 'client', 'division']
-    search_fields: ['description', 'client', 'cat', 'division', 'loc', 'year', 'status', 'accuracy', 'tags']
+    search_fields: ['description', 'client', 'cat', 'division', 'loc', 'year', 'status', 'accuracy']
     view_filters:
       - { label: "Ongoing", field: status, pattern: Ongoing }
       - { label: "Completed", field: status, pattern: Completed }

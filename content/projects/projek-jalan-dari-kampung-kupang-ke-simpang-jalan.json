@@ -1,82 +1,81 @@
 {
-    "status":  "Ongoing",
-    "year":  "Ongoing",
-    "date":  "Ongoing",
-    "amount":  "110000000",
-    "client":  "Kementerian Kemajuan Desa Dan Wilayah (KKDW)",
-    "description":  "Projek Jalan Dari Kampung Kupang Ke Simpang Jalan Bajau, Saratok, Sarawak.",
-    "cat":  "Infrastructure",
-    "division":  "Betong",
-    "loc":  "Kampung Kupang, Saratok",
-    "accuracy":  "Approximate (Kg. Kupang, Saratok)",
-    "newsList":  [
-                     {
-                         "title":  "DPM to officiate road project, visit longhouse",
-                         "link":  "https://www.sarawaktribune.com/dpm-to-officiate-road-project-visit-longhouse/"
-                     },
-                     {
-                         "title":  "MAJLIS PECAH TANAH PROJEK JALAN KUPANG KE SIMPANG JALAN BAJAU",
-                         "link":  "https://www.facebook.com/jkrsarawak/posts/pfbid02W2oapPTidkWLV33MJRu4Jf4bm8fxrLQpVh3aNTCLtkZ1NjtHV8PZ8oZWLagNx28wl"
-                     },
-                     {
-                         "title":  "Congratulations! Another great news to our company.",
-                         "link":  "https://www.facebook.com/permalink.php?story_fbid=pfbid0VyRJrZby8GavZmWjhzHNSENguyKJzS6PgwXs3yJRdqfNa1NvPQrQjDFBLpadfNjyl\u0026id=61570057791049"
-                     },
-                     {
-                         "title":  "Our project Projek Jalan Kupang Ke Simpang Jalan Bajau",
-                         "link":  "https://www.facebook.com/permalink.php?story_fbid=pfbid02XRwtEyEGQqLPBnZfLTu3UXqxqcwS6AuxJEpdZCkB7Zd4A71XDChKuQhNJMr4WLLul\u0026id=61570057791049"
-                     }
-                 ],
-    "images":  [
-                   {
-                       "src":  "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-1.png",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-2.png",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-3.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-4.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-5.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-6.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-7.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-8.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-9.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-10.jpg",
-                       "alt":  ""
-                   }
-               ],
-    "videoList":  [
-                      {
-                          "title":  "JALAN BAJAU-KUPANG: FDZ ENGINEERING DIAMANAH SIAPKAN PROJEK",
-                          "link":  "https://www.facebook.com/beritasuarasarawak/videos/jalan-bajau-kupang-fdz-engineering-diamanah-siapkan-projek-32-bulan-anak-tidal-b/1138903004613296/"
-                      }
-                  ],
-    "coordinates":  "1.7433, 111.3417",
-    "lat":  1.7433,
-    "lng":  111.3417,
-    "isPilihan":  true
+  "status": "Ongoing",
+  "year": "Ongoing",
+  "date": "Ongoing",
+  "amount": "110000000",
+  "client": "Kementerian Kemajuan Desa Dan Wilayah (KKDW)",
+  "description": "Projek Jalan Dari Kampung Kupang Ke Simpang Jalan Bajau, Saratok, Sarawak.",
+  "cat": "Infrastructure",
+  "division": "Betong",
+  "loc": "Kampung Kupang, Saratok",
+  "accuracy": "Approximate (Kg. Kupang, Saratok)",
+  "newsList": [
+    {
+      "title": "DPM to officiate road project, visit longhouse",
+      "link": "https://www.sarawaktribune.com/dpm-to-officiate-road-project-visit-longhouse/"
+    },
+    {
+      "title": "MAJLIS PECAH TANAH PROJEK JALAN KUPANG KE SIMPANG JALAN BAJAU",
+      "link": "https://www.facebook.com/jkrsarawak/posts/pfbid02W2oapPTidkWLV33MJRu4Jf4bm8fxrLQpVh3aNTCLtkZ1NjtHV8PZ8oZWLagNx28wl"
+    },
+    {
+      "title": "Congratulations! Another great news to our company.",
+      "link": "https://www.facebook.com/permalink.php?story_fbid=pfbid0VyRJrZby8GavZmWjhzHNSENguyKJzS6PgwXs3yJRdqfNa1NvPQrQjDFBLpadfNjyl&id=61570057791049"
+    },
+    {
+      "title": "Our project Projek Jalan Kupang Ke Simpang Jalan Bajau",
+      "link": "https://www.facebook.com/permalink.php?story_fbid=pfbid02XRwtEyEGQqLPBnZfLTu3UXqxqcwS6AuxJEpdZCkB7Zd4A71XDChKuQhNJMr4WLLul&id=61570057791049"
+    }
+  ],
+  "images": [
+    {
+      "src": "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-1.png",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-2.png",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-3.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-4.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-5.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-6.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-7.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-8.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-9.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/projek-jalan-dari-kampung-kupang-ke-simpang-jalan/jalan-kupang-10.jpg",
+      "alt": ""
+    }
+  ],
+  "videoList": [
+    {
+      "title": "JALAN BAJAU-KUPANG: FDZ ENGINEERING DIAMANAH SIAPKAN PROJEK",
+      "link": "https://www.facebook.com/beritasuarasarawak/videos/jalan-bajau-kupang-fdz-engineering-diamanah-siapkan-projek-32-bulan-anak-tidal-b/1138903004613296/"
+    }
+  ],
+  "coordinates": "1.7433, 111.3417",
+  "lat": 1.7433,
+  "lng": 111.3417
 }

@@ -1,52 +1,51 @@
 {
-    "status":  "Completed",
-    "year":  "2023",
-    "date":  "21 Feb 2023",
-    "amount":  "10000000",
-    "client":  "",
-    "description":  "Cadangan Pembinaan Gantian Bangunan Pentadbiran Dan Lain-lain Kemudahan Serta Naiktaraf Bangunan Akademik Sedia Ada Di Sekolah Kebangsaan Merpati Jepang Di Atas Lot 30 47 Section 2 Kuching Town Land District, Jalan Muhibbah, Kuching, Sarawak.",
-    "cat":  "Building",
-    "division":  "Kuching",
-    "loc":  "SK Merpati Jepang, Jln Patinggi Ali, Kuching",
-    "accuracy":  "Approximate (SK Merpati Jepang, Jln Patinggi Ali, Kg Sungai Lajim, Kuching)",
-    "isPilihan":  true,
-    "newsList":  [
-                     {
-                         "title":  "One of our completed project is newly upgraded SK Merpati Jepang completed in early 2023.",
-                         "link":  "https://www.facebook.com/permalink.php?story_fbid=pfbid02fNV9XcwsM1vxrqHPtGqb2PF15UBgyq6CgTsJhHK1tavJ179cRhNnEVfMy5JZmcnhl\u0026id=61570057791049"
-                     }
-                 ],
-    "images":  [
-                   {
-                       "src":  "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-1.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-2.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-3.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-4.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-5.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-6.jpg",
-                       "alt":  ""
-                   },
-                   {
-                       "src":  "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-7.jpg",
-                       "alt":  ""
-                   }
-               ],
-    "coordinates":  "1.5630, 110.3307",
-    "lat":  1.5630,
-    "lng":  110.3307
+  "status": "Completed",
+  "year": "2023",
+  "date": "21 Feb 2023",
+  "amount": "10000000",
+  "client": "",
+  "description": "Cadangan Pembinaan Gantian Bangunan Pentadbiran Dan Lain-lain Kemudahan Serta Naiktaraf Bangunan Akademik Sedia Ada Di Sekolah Kebangsaan Merpati Jepang Di Atas Lot 30 47 Section 2 Kuching Town Land District, Jalan Muhibbah, Kuching, Sarawak.",
+  "cat": "Building",
+  "division": "Kuching",
+  "loc": "SK Merpati Jepang, Jln Patinggi Ali, Kuching",
+  "accuracy": "Approximate (SK Merpati Jepang, Jln Patinggi Ali, Kg Sungai Lajim, Kuching)",
+  "newsList": [
+    {
+      "title": "One of our completed project is newly upgraded SK Merpati Jepang completed in early 2023.",
+      "link": "https://www.facebook.com/permalink.php?story_fbid=pfbid02fNV9XcwsM1vxrqHPtGqb2PF15UBgyq6CgTsJhHK1tavJ179cRhNnEVfMy5JZmcnhl&id=61570057791049"
+    }
+  ],
+  "images": [
+    {
+      "src": "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-1.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-2.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-3.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-4.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-5.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-6.jpg",
+      "alt": ""
+    },
+    {
+      "src": "/uploads/projects/cadangan-pembinaan-gantian-bangunan-pentadbiran-da/sekolah-merpati-7.jpg",
+      "alt": ""
+    }
+  ],
+  "coordinates": "1.5630, 110.3307",
+  "lat": 1.563,
+  "lng": 110.3307
 }
