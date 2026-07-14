@@ -975,9 +975,14 @@
         ].join('');
 
         function certSections(d) {
-          var cardHtml = d.isFeatured
-            ? '<div class="pv-subsection"><p class="pv-sublabel">' + fdzL('Featured Certificate Card', 'Kad Sijil Pilihan') + '</p>' + buildCertCard(d) + '</div>'
-            : '';
+          // Featured status now lives in the "Featured Certificates ⭐" tab, not on
+          // the entry — so the preview can't know it from `d`. Always show the card
+          // (it's the only place featuredTitle / featuredIssuer / logoImage appear)
+          // and say plainly when it will actually be used.
+          var cardHtml = '<div class="pv-subsection"><p class="pv-sublabel">' +
+            fdzL('Featured Certificate Card — appears only if this certificate is added to the "Featured Certificates ⭐" tab',
+                 'Kad Sijil Pilihan — dipaparkan hanya jika sijil ini ditambah ke tab "Sijil Pilihan ⭐"') +
+            '</p>' + buildCertCard(d) + '</div>';
           var listHtml = '<div class="pv-subsection"><p class="pv-sublabel">' + fdzL('Certificate List', 'Senarai Sijil') + '</p>' + buildCertListItem(d) + '</div>';
           return cardHtml + listHtml;
         }
@@ -1601,9 +1606,8 @@
         "Certifications": "Pensijilan",
         "Gallery": "Galeri",
         "Featured Projects ⭐": "Projek Pilihan ⭐",
-        "Featured Certificates Order ⭐": "Susunan Sijil Pilihan ⭐",
+        "Featured Certificates ⭐": "Sijil Pilihan ⭐",
         "Featured Projects Order (Homepage + Projects Page)": "Susunan Projek Pilihan (Laman Utama + Halaman Projek)",
-        "Featured Certificates Order": "Susunan Sijil Pilihan",
         "Work In The Field Gallery": "Galeri Kerja Di Lapangan",
         // ── Project field labels ──
         "Project Status": "Status Projek",
@@ -1642,7 +1646,6 @@
         "Detail": "Butiran",
         "Label": "Label",
         "Value": "Nilai",
-        "Show in Featured Certificates": "Papar dalam Sijil Pilihan",
         "Replacement Title — Featured Card": "Tajuk Ganti — Kad Pilihan",
         "Replacement Issuing Body — Featured Card": "Badan Pengeluar Ganti — Kad Pilihan",
         "Certificate Logo": "Logo Sijil",
@@ -1743,6 +1746,11 @@
         "The detail name. Example: Registration No., Expiry Date, Grade B, Category": "Nama butiran. Contoh: No. Pendaftaran, Tarikh Luput, Gred B, Kategori",
         "The detail value. Example: 0120110824-SR135974, 16/09/2029, G7/B": "Nilai butiran. Contoh: 0120110824-SR135974, 16/09/2029, G7/B",
         "Fallback icon color — only relevant if no Certificate Logo is uploaded. Leave as Grey if the certificate has a logo.": "Warna ikon sandaran — hanya relevan jika tiada Logo Sijil dimuat naik. Biarkan Kelabu jika sijil mempunyai logo.",
+        // ── Collection descriptions (shown above the Featured tabs) ──
+        "Pick & order the projects shown in the 'Featured Projects' section. This ONE list controls BOTH the carousel on the Homepage AND the featured section on the Projects page — they always show the same projects in the same order.":
+          "Pilih & susun projek yang dipaparkan dalam bahagian 'Featured Projects'. SATU senarai ini mengawal KEDUA-DUA karusel di Laman Utama DAN bahagian pilihan di halaman Projek — kedua-duanya sentiasa memaparkan projek yang sama dalam susunan yang sama.",
+        "Pick & order the certificates shown as the main cards at the top of the Certifications page (recommended max 6). Adding a certificate here is what makes it featured — remove it here to un-feature it. Drag to reorder the cards left to right.":
+          "Pilih & susun sijil yang dipaparkan sebagai kad utama di bahagian atas halaman Persijilan (disyorkan maksimum 6). Menambah sijil di sini itulah yang menjadikannya pilihan — keluarkan dari sini untuk membatalkannya. Seret untuk menyusun kad dari kiri ke kanan.",
         // ── Field hints (added so BM mode has no English left over) ──
         "Required for Completed projects only. PICK a date from the calendar — it fills in automatically in the format 29 Jan 2019. (This field is hidden automatically for Ongoing projects.)": "Diperlukan untuk projek Siap sahaja. PILIH tarikh dari kalendar — ia diisi automatik dalam format 29 Jan 2019. (Medan ini disembunyikan automatik untuk projek Sedang Berjalan.)",
         "Choose the category that best describes the project's scope of work. This also determines the pin color on the project map.": "Pilih kategori yang paling menepati skop kerja projek. Ia juga menentukan warna penanda pada peta projek.",
@@ -1758,7 +1766,6 @@
         "A short description of this certificate — shown as an 'info' (ⓘ) tooltip on the certificate cards and list on the website. Explain what this certificate allows the company to do. Simple HTML tags like <em>...</em> (italic) are allowed.": "Penerangan ringkas tentang sijil ini — dipaparkan sebagai tip 'info' (ⓘ) pada kad dan senarai sijil di laman web. Terangkan apa yang sijil ini membolehkan syarikat lakukan. Tag HTML mudah seperti <em>...</em> (italik) dibenarkan.",
         "The ONLY place to set the expiry date. ISO format YYYY-MM-DD (example: 2027-04-05). The 'Valid until' line will be shown & colored automatically on the website — DO NOT add an expiry date line in the Certificate Details below. Leave blank if the certificate does not expire (example: SSM).": "Satu-satunya tempat untuk menetapkan tarikh luput. Format ISO YYYY-MM-DD (contoh: 2027-04-05). Baris 'Sah sehingga' akan dipaparkan & diwarnakan automatik di laman web — JANGAN tambah baris tarikh luput dalam Butiran Sijil di bawah. Biarkan kosong jika sijil tidak luput (contoh: SSM).",
         "Detail rows shown on the certificate (example: Registration No., Start Date, Grade). Add one row for each detail — 'Label' on the left, 'Value' on the right. NOTE: do not add a 'Valid until'/'Expiry Date' row here — it is handled by the Expiry Date field above.": "Baris butiran yang dipaparkan pada sijil (contoh: No. Pendaftaran, Tarikh Mula, Gred). Tambah satu baris untuk setiap butiran — 'Label' di kiri, 'Nilai' di kanan. NOTA: jangan tambah baris 'Sah sehingga'/'Tarikh Luput' di sini — ia dikendalikan oleh medan Tarikh Luput di atas.",
-        "Enable to show this certificate in the main cards at the top of the Certifications page (recommended max 6). To set the ORDER of these cards, use the 'Featured Certificates Order ⭐' tab — add this certificate there and drag it into position.": "Aktifkan untuk memaparkan sijil ini dalam kad utama di bahagian atas halaman Persijilan (disyorkan maksimum 6). Untuk menetapkan SUSUNAN kad ini, gunakan tab 'Featured Certificates Order ⭐' — tambah sijil ini di sana dan seret ke kedudukannya.",
         "Optional. If filled, this title replaces the 'Certificate Name' ONLY on the Featured Certificate card (usually a shorter version). Leave blank to use the regular Certificate Name.": "Jika perlu. Jika diisi, tajuk ini menggantikan 'Nama Sijil' HANYA pada kad Sijil Pilihan (biasanya versi lebih pendek). Biarkan kosong untuk guna Nama Sijil biasa.",
         "Optional. If filled, replaces the 'Issuing Body' on the Featured Certificate card only. Leave blank to use the regular Issuing Body.": "Jika perlu. Jika diisi, menggantikan 'Badan Pengeluar' pada kad Sijil Pilihan sahaja. Biarkan kosong untuk guna Badan Pengeluar biasa.",
         "Logo of the issuing body to display on the featured certificate card. Recommended size: 120×80px. Format: PNG or SVG with a transparent background. Leave blank if none — a text icon will be used instead.": "Logo badan pengeluar untuk dipaparkan pada kad sijil pilihan. Saiz disyorkan: 120×80px. Format: PNG atau SVG dengan latar belakang telus. Biarkan kosong jika tiada — ikon teks akan digunakan sebagai ganti.",
@@ -1900,7 +1907,7 @@
           '<ul>' +
             '<li>Fill in <b>Certificate Name</b>, <b>Issuing Body</b>, <b>Short Description</b>, and <b>Certificate Details</b> (label–value rows).</li>' +
             '<li><b>Expiry Date</b> is entered ONCE only (format <code>2027-04-05</code>) — the "Valid until" line shows automatically. Don\'t add it in the Details.</li>' +
-            '<li>Enable <b>Show in Featured Certificates</b> + set the position (1–6) for the 6 main cards.</li>' +
+            '<li>To feature it: open the <b>Featured Certificates ⭐</b> tab and add it there (max 6). Being in that list is what makes a certificate featured.</li>' +
             '<li><b>Search &amp; filter certificates</b> the same way as projects — the search box in the left sidebar, and Filter / Group by category or status.</li>' +
           '</ul>' +
           '<h3>📸 Photo Gallery</h3>' +
@@ -1909,7 +1916,7 @@
           '</ul>' +
           '<h3>⭐ Featured Projects &amp; Certificates</h3>' +
           '<ul>' +
-            '<li>Open the <b>Featured Projects ⭐</b> or <b>Featured Certificates Order ⭐</b> tab to choose &amp; arrange the items shown in the main section of the site.</li>' +
+            '<li>Open the <b>Featured Projects ⭐</b> or <b>Featured Certificates ⭐</b> tab to choose &amp; arrange the items shown in the main section of the site. Adding an item to the list is what features it; removing it un-features it.</li>' +
             '<li><b>Search</b> the project/certificate name in the dropdown, click to add, and <b>drag</b> to arrange the display order.</li>' +
             '<li>The <b>preview panel on the right</b> shows the <b>real cards</b> in your chosen order — just like on the website.</li>' +
             '<li>Selected items are marked <b>⭐ Featured</b> in the Projects / Certifications list.</li>' +
@@ -2005,7 +2012,7 @@
               '<ul>' +
                 '<li>Isi <b>Nama Sijil</b>, <b>Badan Pengeluar</b>, <b>Penerangan Ringkas</b>, dan <b>Butiran Sijil</b> (baris label–nilai).</li>' +
                 '<li><b>Tarikh Luput</b> diisi SEKALI sahaja (format <code>2027-04-05</code>) — baris "Sah sehingga" dipapar automatik. Jangan tambah dalam Butiran.</li>' +
-                '<li>Aktifkan <b>Papar dalam Sijil Pilihan</b> + tetapkan kedudukan (1–6) untuk 6 kad utama.</li>' +
+                '<li>Untuk jadikan pilihan: buka tab <b>Sijil Pilihan ⭐</b> dan tambah sijil itu di sana (maksimum 6). Berada dalam senarai itulah yang menjadikan sijil sebagai pilihan.</li>' +
                 '<li><b>Cari & tapis sijil</b> sama caranya seperti projek — kotak carian di bar sisi kiri, dan Filter / Group by ikut kategori atau status.</li>' +
               '</ul>' +
               '<h3>📸 Galeri Foto</h3>' +
@@ -2014,7 +2021,7 @@
               '</ul>' +
               '<h3>⭐ Projek & Sijil Pilihan (Featured)</h3>' +
               '<ul>' +
-                '<li>Buka tab <b>Featured Projects ⭐</b> atau <b>Featured Certificates Order ⭐</b> untuk memilih & menyusun item yang dipaparkan di bahagian utama laman.</li>' +
+                '<li>Buka tab <b>Featured Projects ⭐</b> atau <b>Sijil Pilihan ⭐</b> untuk memilih & menyusun item yang dipaparkan di bahagian utama laman. Menambah item ke senarai itulah yang menjadikannya pilihan; keluarkan untuk membatalkannya.</li>' +
                 '<li><b>Cari</b> nama projek/sijil dalam dropdown, klik untuk tambah, dan <b>seret</b> untuk menyusun turutan paparan.</li>' +
                 '<li>Panel <b>pratonton di sebelah kanan</b> memaparkan <b>kad sebenar</b> mengikut susunan pilihan anda — sama seperti di laman web.</li>' +
                 '<li>Item yang dipilih akan bertanda <b>⭐ Featured</b> dalam senarai Projects / Certifications.</li>' +
@@ -2502,108 +2509,6 @@
         document.addEventListener('DOMContentLoaded', setup);
       } else {
         setup();
-      }
-    })();
-  </script>
-
-  <script>
-    /* ── Featured Order conditional visibility ─────────────────────────────────
-       Hides the "Kedudukan dalam Grid" field and replaces it with an info banner
-       whenever the "Papar dalam Sijil Pilihan" toggle is OFF.                  */
-    (function () {
-      var ORDER_MSG_ID = 'fdz-cond-order-msg';
-
-      var msgStyle = [
-        'display:block',
-        'background:#f0f4ff',
-        'border-left:4px solid #6366f1',
-        'padding:12px 16px',
-        'border-radius:4px',
-        'color:#3730a3',
-        'font-size:13px',
-        'margin-top:4px'
-      ].join(';');
-
-      function findToggle() {
-        var buttons = document.querySelectorAll('button[role="switch"]');
-        for (var i = 0; i < buttons.length; i++) {
-          var btn = buttons[i];
-          var container = btn.parentElement;
-          for (var k = 0; k < 8; k++) {
-            if (!container) break;
-            var labels = container.querySelectorAll('label');
-            for (var j = 0; j < labels.length; j++) {
-              if (labels[j].textContent.indexOf('Papar dalam Sijil Pilihan') !== -1) {
-                return btn;
-              }
-            }
-            container = container.parentElement;
-          }
-        }
-        return null;
-      }
-
-      function findFieldWrapper(labelText) {
-        var labels = document.querySelectorAll('label');
-        for (var i = 0; i < labels.length; i++) {
-          var lbl = labels[i];
-          var txt = lbl.textContent.replace(/\s*\*\s*/g, '').replace(/\s+/g, ' ').trim();
-          if (txt !== labelText) continue;
-          var el = lbl;
-          for (var k = 0; k < 6; k++) {
-            var p = el.parentElement;
-            if (!p || p === document.body) break;
-            if (p.children.length >= 2 && p.querySelector('input, select, textarea')) {
-              return p;
-            }
-            el = p;
-          }
-          return lbl.parentElement ? lbl.parentElement.parentElement : null;
-        }
-        return null;
-      }
-
-      function applyFeaturedOrderVisibility() {
-        var toggle = findToggle();
-        if (!toggle) return;
-
-        var isOn = toggle.getAttribute('aria-checked') === 'true';
-
-        var old = document.getElementById(ORDER_MSG_ID);
-        if (old && old.parentNode) old.parentNode.removeChild(old);
-
-        var wrapper = findFieldWrapper('Kedudukan dalam Grid (1–6)');
-        if (!wrapper) return;
-
-        if (isOn) {
-          wrapper.style.display = '';
-        } else {
-          wrapper.style.display = 'none';
-          var div = document.createElement('div');
-          div.id = ORDER_MSG_ID;
-          div.setAttribute('style', msgStyle);
-          div.textContent = 'ℹ️ Aktifkan "Papar dalam Sijil Pilihan" dahulu untuk tetapkan kedudukan grid.';
-          wrapper.parentNode.insertBefore(div, wrapper);
-        }
-      }
-
-      var debounce = null;
-      var observer = new MutationObserver(function () {
-        clearTimeout(debounce);
-        debounce = setTimeout(applyFeaturedOrderVisibility, 150);
-      });
-
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ['aria-checked']
-      });
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', applyFeaturedOrderVisibility);
-      } else {
-        applyFeaturedOrderVisibility();
       }
     })();
   </script>

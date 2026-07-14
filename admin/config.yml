@@ -330,11 +330,10 @@ collections:
             widget: string
             hint: "The detail value. Example: 0120110824-SR135974, 16/09/2029, G7/B"
 
-      - name: isFeatured
-        label: "Show in Featured Certificates"
-        widget: boolean
-        default: false
-        hint: "Enable to show this certificate in the main cards at the top of the Certifications page (recommended max 6). To set the ORDER of these cards, use the 'Featured Certificates Order ⭐' tab — add this certificate there and drag it into position."
+      # No "Show in Featured Certificates" checkbox: a certificate is featured
+      # purely by being added to the "Featured Certificates ⭐" tab — same as
+      # Featured Projects. (Previously you had to tick a box here AND add it
+      # there; doing only one silently did nothing.)
 
       - name: featuredTitle
         label: "Replacement Title — Featured Card"
@@ -396,12 +395,12 @@ collections:
 
   # ── 2b. FEATURED CERTIFICATES ORDER (curated drag-sort, like Featured Projects) ─
   - name: featured-cert-config
-    label: "Featured Certificates Order ⭐"
+    label: "Featured Certificates ⭐"
     files:
       - name: featured-certificates
-        label: "Featured Certificates Order"
+        label: "Featured Certificates (in display order)"
         file: content/featured-certificates.json
-        description: "Drag to set the ORDER of the featured certificate cards at the top of the Certifications page. To choose WHICH certificates are featured, tick 'Show in Featured Certificates' on the certificate itself (Certifications tab) — then add it here and drag it into position."
+        description: "Pick & order the certificates shown as the main cards at the top of the Certifications page (recommended max 6). Adding a certificate here is what makes it featured — remove it here to un-feature it. Drag to reorder the cards left to right."
         fields:
           - name: items
             label: "Featured Certificates (in display order)"
