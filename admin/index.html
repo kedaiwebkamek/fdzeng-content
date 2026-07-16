@@ -1230,14 +1230,25 @@
         } else if (!names.length) {
           body = '<div class="fpx-state">' + fdzL('No featured projects yet.<br>Add projects from the dropdown on the left.', 'Belum ada projek pilihan.<br>Tambah projek dari senarai dropdown di sebelah kiri.') + '</div>';
         } else {
-          var byDesc = {};
-          records.forEach(function (p) { if (p && p.description) byDesc[p.description] = p; });
+          // featured-projects.json stores the project SLUG (value_field: {{slug}}).
+          // It used to store the title, which is why this lookup was title-only —
+          // and why the old "title may have changed" wording existed: editing a
+          // title silently broke the reference. Index both and try slug first,
+          // mirroring the matcher in projects.html; the byDesc arm keeps any
+          // pre-migration entry resolving. records come from /projects-data.json,
+          // which carries `slug` for every project (added in build-data.js).
+          var bySlug = {}, byDesc = {};
+          records.forEach(function (p) {
+            if (!p) return;
+            if (p.slug) bySlug[p.slug] = p;
+            if (p.description) byDesc[p.description] = p;
+          });
           var missingCard = function (i, n) {
-            return '<div class="fpx-missing">#' + (i + 1) + ' — ' + fdzL('Project not found:', 'Projek tidak dijumpai:') + '<span>' + fpEsc(n) + '</span><em>' + fdzL('(the project title may have changed — re-pick this project)', '(tajuk projek mungkin telah diubah — pilih semula projek ini)') + '</em></div>';
+            return '<div class="fpx-missing">#' + (i + 1) + ' — ' + fdzL('Project not found:', 'Projek tidak dijumpai:') + '<span>' + fpEsc(n) + '</span><em>' + fdzL('(re-pick this project from the list on the left)', '(pilih semula projek ini dari senarai di sebelah kiri)') + '</em></div>';
           };
           var gridOf = function (builder) {
             return names.map(function (n, i) {
-              var p = byDesc[n];
+              var p = bySlug[n] || byDesc[n];
               return p ? builder(normalizeProjectRecord(p)) : missingCard(i, n);
             }).join('');
           };
