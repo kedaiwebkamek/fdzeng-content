@@ -160,12 +160,10 @@ collections:
 
       # Advanced / optional fields — collapsed by default in the editor (see the
       # "Maklumat Tambahan" toggle wired in admin/index.html) to declutter the form.
-      - name: paragraph
-        label: "Detailed Description"
-        widget: text
-        required: false
-        hint: "A longer description of the project — you may include the scope of work, project significance, or technical information. It will be shown in the project details window. Can be left blank if there is no additional information."
-
+      #
+      # `paragraph` ("Detailed Description") was removed here: nothing on the site
+      # ever rendered it, yet its hint promised "It will be shown in the project
+      # details window." No project had ever been given one, so nothing was lost.
       - name: newsList
         label: "News Links"
         widget: list
@@ -225,7 +223,13 @@ collections:
                 collection: projects
                 search_fields: ['description']
                 display_fields: ['description']
-                value_field: description
+                # Stores the slug, NOT the title. The editor still searches and
+                # shows titles (search_fields/display_fields above) — only the
+                # saved value differs. This used to be `description`, so editing a
+                # project's title silently dropped it from the carousel: the value
+                # here kept the old title and the frontend matches by exact string.
+                # A slug never changes once the entry exists, so the link holds.
+                value_field: "{{slug}}"
                 options_length: 100
                 hint: "Search for a project name and pick from the list. Drag items to reorder — this order sets the sequence in BOTH the homepage carousel and the projects-page featured section."
 
