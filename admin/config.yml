@@ -77,11 +77,15 @@ collections:
         required: false
         hint: "Full name of the client or agency managing the project. Example: Jabatan Kerja Raya Sarawak, PETRONAS Carigali, Suruhanjaya Perkhidmatan Air Negeri (SPAN). Leave blank if it is not confirmed yet — you can add it later."
 
+      # Not required: the widget accepts digits only, so a project with no fixed
+      # contract value (e.g. an "as and when required" PO-basis contract) had no
+      # way to be saved at all — the field rejected the words and demanded a
+      # number. Blank is now a legitimate answer; the card simply shows no value.
       - name: amount
         label: "Project Value (RM)"
         widget: currency-myr
-        required: true
-        hint: "Enter the contract value in NUMBERS ONLY — without RM, commas, or decimal points. Example: type 10000000 for RM 10,000,000"
+        required: false
+        hint: "Enter the contract value in NUMBERS ONLY — without RM, commas, or decimal points. Example: type 10000000 for RM 10,000,000. Leave blank if the project has no fixed contract value."
 
       - name: cat
         label: "Project Category"
@@ -112,8 +116,12 @@ collections:
           - Bintulu
           - Miri
           - Limbang
-          - Lawas
-        hint: "Choose the Sarawak administrative division where this project is carried out."
+        # Lawas is NOT a division — it is a district inside Limbang Division, and
+        # all 9 Lawas-area projects are correctly filed under Limbang. Offering it
+        # here invited the owner to split those projects across a phantom division
+        # that the filters would then show as its own category. Removed while no
+        # project used it (verified: 0).
+        hint: "Choose the Sarawak administrative division where this project is carried out. Lawas, Ba'kelalan and Trusan are in Limbang Division."
 
       - name: loc
         label: "Full Location"
