@@ -422,7 +422,14 @@ collections:
                 collection: certifications
                 search_fields: ['title']
                 display_fields: ['title']
-                value_field: title
+                # Stores the slug, NOT the title. The editor still searches and
+                # shows titles (search_fields/display_fields above) — only the
+                # saved value differs. This used to be `title`, so renaming a
+                # certificate silently dropped it from the featured section: the
+                # value here kept the old title and the build matches by exact
+                # string. A slug never changes once the entry exists, so the link
+                # holds. Same fix as the projects relation above.
+                value_field: "{{slug}}"
                 options_length: 100
                 hint: "Search for a certificate name and pick it. Drag items to reorder — this sets the left-to-right order of the featured certificate cards."
 
