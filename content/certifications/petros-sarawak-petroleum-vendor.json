@@ -2,7 +2,7 @@
   "num": "04",
   "title": "PETROS Vendor Registration",
   "issuer": "Petroleum Sarawak Berhad",
-  "brief": "Vendor registration with <em>Petroleum Sarawak Berhad</em> (PETROS) and its group of companies, including exploration & production, gas distribution, and <em>niaga</em> subsidiaries. Covers three service categories: civil, structural, scaffolding & building maintenance (SC2); offshore & onshore facilities construction (SO2); and electrical engineering & maintenance (SE1).",
+  "brief": "Vendor registration with <em>Petroleum Sarawak Berhad</em> (PETROS) and its group of companies, including exploration & production, gas distribution, and <em>niaga</em> subsidiaries.",
   "category": "petroleum",
   "tags": [
     "PETROS",
@@ -25,10 +25,6 @@
     {
       "label": "Certificate Validity",
       "value": "10 September 2026 to 10 September 2029"
-    },
-    {
-      "label": "Categories",
-      "value": "SC2 · SO2 · SE1"
     }
   ]
 }
