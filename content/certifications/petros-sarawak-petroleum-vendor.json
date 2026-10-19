@@ -4,17 +4,31 @@
   "issuer": "Petroleum Sarawak Berhad",
   "brief": "Vendor registration with <em>Petroleum Sarawak Berhad</em> (PETROS) and its group of companies, including exploration & production, gas distribution, and <em>niaga</em> subsidiaries. Covers three service categories: civil, structural, scaffolding & building maintenance (SC2); offshore & onshore facilities construction (SO2); and electrical engineering & maintenance (SE1).",
   "category": "petroleum",
-  "tags": ["PETROS", "Sarawak", "Tenaga"],
+  "tags": [
+    "PETROS",
+    "Sarawak",
+    "Tenaga"
+  ],
   "status": "Aktif",
+  "validUntil": "2029-09-10",
   "isFeatured": false,
   "featuredOrder": 11,
   "iconName": "oil_barrel",
   "iconColor": "green",
   "logoImage": "/uploads/petros.jpg",
-  "downloadFile": "",
-  "validUntil": "",
+  "downloadFile": "/uploads/VendorCertificate_VDR2026-00760-FDZ-PETROS.pdf",
   "meta": [
-    { "label": "Ref. no.", "value": "P220037-S" },
-    { "label": "Categories", "value": "SC2 · SO2 · SE1" }
+    {
+      "label": "Certificate Reference No.",
+      "value": "P2600298-S"
+    },
+    {
+      "label": "Certificate Validity",
+      "value": "10 September 2026 to 10 September 2029"
+    },
+    {
+      "label": "Categories",
+      "value": "SC2 · SO2 · SE1"
+    }
   ]
 }
