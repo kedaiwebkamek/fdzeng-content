@@ -1918,6 +1918,15 @@
         "Published": "Diterbitkan",
         "Unpublish": "Nyahterbit",
         "Duplicate": "Salin Entri",
+        // Draft-state toolbar + Workflow board (verified on screen 2026-11-21)
+        "Status: Draft": "Status: Draf",
+        "Status: In review": "Status: Dalam Semakan",
+        "Status: Ready": "Status: Sedia",
+        "Delete unpublished changes": "Padam perubahan belum terbit",
+        "Delete changes": "Padam perubahan",
+        "Publish changes": "Kemas Kini Laman Web",
+        "Editorial Workflow": "Aliran Kerja",
+        "New Post": "Entri Baru",
         // Workflow board column headings (title-case, unlike the status menu)
         "Drafts": "Draf",
         "In Review": "Dalam Semakan",
@@ -2100,6 +2109,7 @@
         "Publish now": "Update Website now",
         "Publish and create new": "Update Website & add another",
         "Publish and duplicate": "Update Website & duplicate",
+        "Publish changes": "Update Website",
         "Publishing...": "Updating Website...",
         "Save": "Save Draft"
       };
@@ -2123,6 +2133,21 @@
       // EN mode. Idempotent (a translated node no longer matches a key). Skips
       // inputs/editors/our own UI so it never touches content the user is typing.
       function fdzActiveMap() { return fdzLang === 'bm' ? FDZ_I18N : FDZ_RELABEL_EN; }
+      // Sentences with changing numbers can't be exact-match keys. BM only.
+      // Each result no longer matches its pattern, so re-runs are no-ops.
+      var FDZ_I18N_PATTERNS = [
+        // Workflow board summary (Decap: "0 entries waiting for review, 1 ready to go live.")
+        { re: /^(\d+) entr(?:y|ies) waiting for review, (\d+) ready to go live\.$/, to: '$1 menunggu semakan, $2 sedia untuk dipapar.' },
+        // Workflow column counts ("0 ENTRIES" / "1 ENTRY" — upper-cased by CSS)
+        { re: /^(\d+) entr(?:y|ies)$/i, to: '$1 entri' }
+      ];
+      function fdzPatternFor(text) {
+        if (fdzLang !== 'bm') return null;
+        for (var i = 0; i < FDZ_I18N_PATTERNS.length; i++) {
+          if (FDZ_I18N_PATTERNS[i].re.test(text)) return FDZ_I18N_PATTERNS[i];
+        }
+        return null;
+      }
       function fdzTranslateTree() {
         var map = fdzActiveMap();
         var root = document.getElementById('nc-root') || document.body;
@@ -2131,7 +2156,7 @@
           acceptNode: function (node) {
             var v = node.nodeValue;
             if (!v) return NodeFilter.FILTER_REJECT;
-            if (!map.hasOwnProperty(v.trim())) return NodeFilter.FILTER_REJECT;
+            if (!map.hasOwnProperty(v.trim()) && !fdzPatternFor(v.trim())) return NodeFilter.FILTER_REJECT;
             for (var el = node.parentNode; el && el !== root; el = el.parentNode) {
               var tag = el.tagName;
               if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'SCRIPT' || tag === 'STYLE') return NodeFilter.FILTER_REJECT;
@@ -2147,7 +2172,8 @@
         for (var i = 0; i < hits.length; i++) {
           var t = hits[i].nodeValue.trim();
           var rep = map[t];
-          if (rep) hits[i].nodeValue = hits[i].nodeValue.replace(t, rep);
+          if (!rep) { var pat = fdzPatternFor(t); if (pat) rep = t.replace(pat.re, pat.to); }
+          if (rep && rep !== t) hits[i].nodeValue = hits[i].nodeValue.replace(t, rep);
         }
       }
       function translateTick() { fdzTranslateTree(); }
@@ -2186,6 +2212,25 @@
       // injectHelpPanel; fdzL() picks between them). Keep the two in sync.
       function fdzHelpEN() {
         return '' +
+          '<h3>💾 Save Draft vs Update Website (read this first)</h3>' +
+          '<p style="margin:0 0 6px;">There are <b>two buttons</b> at the top, and they do different things:</p>' +
+          '<ul>' +
+            '<li><b>Save Draft</b> — saves your work <b>privately</b>. Nothing changes on the website. If you are editing something that is already on the website, visitors <b>keep seeing the old version</b> until you click Update Website.</li>' +
+            '<li><b>Update Website</b> — puts your changes <b>on the public website</b>. Takes about <b>1–2 minutes</b>; the <b>Status</b> box (bottom-left) shows ⏳ <b>Publishing…</b> then ✅.</li>' +
+          '</ul>' +
+          '<p style="margin:8px 0 6px;"><b>Why two steps?</b> The website is seen by clients and government agencies. Saving a draft first lets you finish, check, or come back tomorrow, without a half-done or wrong entry (a wrong RM value, a typo in a client name) going public.</p>' +
+          '<p style="margin:0 0 6px;"><b>Usual way:</b> edit → <b>Save Draft</b> (as often as you like) → <b>Update Website</b> when it is right.</p>' +
+          '<p style="margin:10px 0 6px;"><b>The Workflow tab</b> (top of the screen) is the list of everything saved as a draft but <b>not on the website yet</b> — so nothing gets forgotten. It has three columns:</p>' +
+          '<ul>' +
+            '<li><b>Drafts</b> — still being worked on.</li>' +
+            '<li><b>In Review</b> — finished; waiting for someone (e.g. a manager) to check names, RM values and dates.</li>' +
+            '<li><b>Ready</b> — checked, waiting to go live.</li>' +
+          '</ul>' +
+          '<ul>' +
+            '<li><b>Move a draft between columns:</b> open it → click <b>Status: Draft</b> at the top → choose <b>In review</b> or <b>Ready</b>.</li>' +
+            '<li><b>On the Workflow board</b>, point at a card to see <b>Update Website</b> (put it live) and <b>Delete changes</b> (throw the draft away — the website stays as it was). Click the card to open it.</li>' +
+            '<li><b>Working alone?</b> The columns are optional — you can click <b>Update Website</b> straight from Draft.</li>' +
+          '</ul>' +
           '<h3>➕ Adding a New Project</h3>' +
           '<ol>' +
             '<li>Click <b>Projects</b> on the left → <b>New Project</b>.</li>' +
@@ -2264,13 +2309,6 @@
             '<li>Certificates: <b>6 at most</b> — the page is designed for 6 cards.</li>' +
             '<li>Featured items get a <b>⭐ Featured</b> mark in the Projects / Certifications lists.</li>' +
           '</ul>' +
-          '<h3>🔄 Saving &amp; Publishing</h3>' +
-          '<ul>' +
-            '<li><b>Save Draft</b> = saved, but <b>not on the website yet</b>.</li>' +
-            '<li><b>Update Website</b> = put it live. It takes about <b>1–2 minutes</b>; the <b>Status</b> box (bottom-left) shows ⏳ <b>Publishing…</b> then ✅ <b>live</b>.</li>' +
-            '<li>Unfinished work is in the <b>Workflow</b> tab (top of the screen), in three columns: <b>Drafts</b>, <b>In Review</b>, <b>Ready</b>. Click a card to carry on.</li>' +
-            '<li>Want someone to check names, RM values and dates first? Move it to <b>In Review</b>. Working alone? Go straight to <b>Update Website</b>.</li>' +
-          '</ul>' +
           '<div class="fh-tip">&#8505;&#65039; The red numbers next to <b>Projects</b>, <b>Certifications</b> and <b>Careers</b>, the ⭐ marks and the Featured previews show the <b>live</b> website — a new item appears there once the Status box says ✅.</div>' +
           '<div class="fh-tip">🆘 Stuck? <a href="' + FDZ_WA + '" target="_blank" rel="noopener"><b>WhatsApp us</b></a> — we\'ll sort it out right away.</div>';
       }
@@ -2324,6 +2362,25 @@
           '<div id="fdz-help-modal" role="dialog" aria-label="' + fdzL('CMS Guide', 'Panduan CMS') + '">' +
             '<div class="fh-head"><img src="/fdzeng-logo.png" alt="FDZ"><h2>' + fdzL('Quick CMS Guide', 'Panduan Ringkas CMS') + '</h2><button id="fdz-help-close" aria-label="' + fdzL('Close', 'Tutup') + '">&times;</button></div>' +
             '<div class="fh-body">' + fdzL(fdzHelpEN(),
+              '<h3>💾 Simpan Draf vs Kemas Kini Laman Web (baca dahulu)</h3>' +
+              '<p style="margin:0 0 6px;">Ada <b>dua butang</b> di bahagian atas, dan fungsinya berbeza:</p>' +
+              '<ul>' +
+                '<li><b>Simpan Draf</b> — menyimpan kerja anda <b>secara peribadi</b>. Laman web tidak berubah. Jika anda sedang mengubah sesuatu yang sudah ada di laman web, pelawat <b>masih nampak versi lama</b> sehingga anda klik Kemas Kini Laman Web.</li>' +
+                '<li><b>Kemas Kini Laman Web</b> — memaparkan perubahan anda <b>di laman web awam</b>. Ambil masa kira-kira <b>1–2 minit</b>; kotak <b>Status</b> (kiri bawah) tunjuk ⏳ <b>Sedang menerbitkan…</b> kemudian ✅.</li>' +
+              '</ul>' +
+              '<p style="margin:8px 0 6px;"><b>Kenapa dua langkah?</b> Laman web ini dilihat oleh pelanggan dan agensi kerajaan. Simpan draf dahulu supaya anda boleh siapkan, semak, atau sambung esok — tanpa entri yang separuh siap atau salah (nilai RM salah, nama klien tersilap) tersiar kepada umum.</p>' +
+              '<p style="margin:0 0 6px;"><b>Cara biasa:</b> ubah → <b>Simpan Draf</b> (berapa kali pun) → <b>Kemas Kini Laman Web</b> bila sudah betul.</p>' +
+              '<p style="margin:10px 0 6px;"><b>Tab Aliran Kerja</b> (atas skrin) ialah senarai semua yang sudah disimpan sebagai draf tetapi <b>belum masuk laman web</b> — supaya tiada yang terlupa. Ada tiga lajur:</p>' +
+              '<ul>' +
+                '<li><b>Draf</b> — masih sedang dibuat.</li>' +
+                '<li><b>Dalam Semakan</b> — sudah siap; menunggu seseorang (contoh pengurus) semak nama, nilai RM dan tarikh.</li>' +
+                '<li><b>Sedia</b> — sudah disemak, menunggu untuk dipapar.</li>' +
+              '</ul>' +
+              '<ul>' +
+                '<li><b>Pindah draf ke lajur lain:</b> buka draf itu → klik <b>Status: Draf</b> di atas → pilih <b>Dalam Semakan</b> atau <b>Sedia</b>.</li>' +
+                '<li><b>Di papan Aliran Kerja</b>, letak tetikus pada kad untuk nampak <b>Kemas Kini Laman Web</b> (paparkan di laman web) dan <b>Padam perubahan</b> (buang draf — laman web kekal seperti asal). Klik kad untuk membukanya.</li>' +
+                '<li><b>Bekerja seorang?</b> Lajur-lajur ini tidak wajib — anda boleh terus klik <b>Kemas Kini Laman Web</b> dari Draf.</li>' +
+              '</ul>' +
               '<h3>➕ Menambah Projek Baru</h3>' +
               '<ol>' +
                 '<li>Klik <b>Projek</b> di kiri → <b>Projek Baru</b>.</li>' +
@@ -2401,13 +2458,6 @@
               '<ul>' +
                 '<li>Sijil: <b>maksimum 6</b> — halaman itu direka untuk 6 kad.</li>' +
                 '<li>Item pilihan ditanda <b>⭐ Pilihan</b> dalam senarai Projek / Pensijilan.</li>' +
-              '</ul>' +
-              '<h3>🔄 Simpan &amp; Terbit</h3>' +
-              '<ul>' +
-                '<li><b>Simpan Draf</b> = disimpan, tetapi <b>belum masuk laman web</b>.</li>' +
-                '<li><b>Kemas Kini Laman Web</b> = terbitkan. Ambil masa kira-kira <b>1–2 minit</b>; kotak <b>Status</b> (kiri bawah) tunjuk ⏳ <b>Sedang menerbitkan…</b> kemudian ✅ <b>sudah dipapar</b>.</li>' +
-                '<li>Kerja yang belum siap ada dalam tab <b>Aliran Kerja</b> (atas skrin), dalam tiga lajur: <b>Draf</b>, <b>Dalam Semakan</b>, <b>Sedia</b>. Klik kad untuk sambung.</li>' +
-                '<li>Mahu orang lain semak nama, nilai RM dan tarikh dahulu? Pindah ke <b>Dalam Semakan</b>. Bekerja seorang? Terus <b>Kemas Kini Laman Web</b>.</li>' +
               '</ul>' +
               '<div class="fh-tip">&#8505;&#65039; Nombor merah di sebelah <b>Projek</b>, <b>Pensijilan</b> dan <b>Kerjaya</b>, tanda ⭐ dan pratonton Pilihan menunjukkan laman web yang <b>sudah dipapar</b> — item baharu muncul di situ selepas kotak Status tunjuk ✅.</div>' +
               '<div class="fh-tip">🆘 Ada masalah? <a href="' + FDZ_WA + '" target="_blank" rel="noopener"><b>WhatsApp kami</b></a> — kami akan selesaikan dengan segera.</div>' +
@@ -2762,6 +2812,8 @@
       // language, what the owner can now DO, both languages. Newest first.
       var FDZ_UPDATES = [
         { date: '21 Nov 2026', items: [
+          ['The Guide now starts with <b>Save Draft vs Update Website</b> — why there are two steps, and what the <b>Workflow</b> tab is for. The Workflow board and draft buttons are now in BM too.',
+           'Panduan kini bermula dengan <b>Simpan Draf vs Kemas Kini Laman Web</b> — kenapa ada dua langkah, dan apa fungsi tab <b>Aliran Kerja</b>. Papan Aliran Kerja dan butang draf kini dalam BM juga.'],
           ['<b>Featured Projects / Certificates</b> lists now show each item\'s real title instead of a short code.',
            'Senarai <b>Projek / Sijil Pilihan</b> kini memaparkan tajuk sebenar setiap item, bukan kod pendek.'],
           ['<b>Guide rewritten as simple steps</b> with examples, for every section. All buttons now show in BM too (e.g. <b>Tambah Gambar Projek</b>, <b>Tukar Gambar</b>).',
