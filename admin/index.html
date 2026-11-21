@@ -1910,6 +1910,8 @@
         // Workflow board column headings (title-case, unlike the status menu)
         "Drafts": "Draf",
         "In Review": "Dalam Semakan",
+        // List "add row" button under Certificate Details (label_singular: Detail)
+        "Add detail": "Tambah Butiran",
         // Decap's login button
         "Login with GitHub": "Log Masuk dengan GitHub",
         // Sidebar search dropdown
@@ -2180,11 +2182,19 @@
             '<li><b>Remove from the website:</b> open the entry → <b>Published</b> → <b>Unpublish</b> (keeps it as a draft), or <b>Delete published entry</b> (red button) to delete it for good.</li>' +
           '</ul>' +
           '<h3>📜 Certifications</h3>' +
+          '<p style="margin:0 0 6px;"><b>Adding a certificate:</b></p>' +
+          '<ol>' +
+            '<li>Click <b>Certifications</b> on the left → <b>New Certification</b>.</li>' +
+            '<li><b>Certificate Name</b> — e.g. <i>CIDB G7</i>. <b>Issuing Body</b> — who issued it, e.g. <i>CIDB Malaysia</i>.</li>' +
+            '<li><b>Short Description</b> — one sentence on what this certificate lets the company do. Visitors see it when they point at the ⓘ icon.</li>' +
+            '<li><b>Certificate Details</b> — extra information, <b>one row per item</b>. Click <b>Add Detail</b>, then fill in <b>Label</b> (what it is) and <b>Value</b> (the answer).<br>e.g. <code>Registration No.</code> → <code>0120110824-SR135974</code></li>' +
+            '<li><b>Expiry Date</b> — pick it from the calendar. The website writes "Valid until …" for you: <b style="color:#15803d">green</b> while valid, <b style="color:#c2410c">orange</b> in the last 6 months, <b style="color:#b5000b">red</b> once expired. <b>So don\'t type the expiry date again</b> in Certificate Details.</li>' +
+            '<li><b>Certificate PDF File</b> (optional) — upload a copy if visitors may download it. They must type their name and company first.</li>' +
+            '<li>Click <b>Save Draft</b> → <b>Update Website</b>.</li>' +
+          '</ol>' +
           '<ul>' +
-            '<li>Fill in <b>Certificate Name</b>, <b>Issuing Body</b>, <b>Short Description</b> and <b>Certificate Details</b> (label–value rows).</li>' +
-            '<li><b>Expiry Date:</b> pick it from the calendar, once. The "Valid until" line appears and is coloured automatically — don\'t add it in the Details.</li>' +
-            '<li><b>Certificate PDF File</b> (optional): visitors enter their name and organisation before they can download it.</li>' +
-            '<li>To feature a certificate, add it in the <b>Featured Certificates ⭐</b> tab (max 6).</li>' +
+            '<li><b>Certificate expired and not renewed?</b> Open it → set <b>Certificate Status</b> to <b>Expired</b>.</li>' +
+            '<li><b>Show it in the big cards at the top</b> of the Certifications page: open the <b>Featured Certificates ⭐</b> tab and add it there (6 at most).</li>' +
           '</ul>' +
           '<h3>📸 Gallery</h3>' +
           '<ul>' +
@@ -2301,11 +2311,19 @@
                 '<li><b>Buang dari laman web:</b> buka entri → <b>Diterbitkan</b> → <b>Nyahterbit</b> (disimpan sebagai draf), atau <b>Padam entri terbit</b> (butang merah) untuk padam terus.</li>' +
               '</ul>' +
               '<h3>📜 Sijil (Certifications)</h3>' +
+              '<p style="margin:0 0 6px;"><b>Cara tambah sijil:</b></p>' +
+              '<ol>' +
+                '<li>Klik <b>Pensijilan</b> di kiri → <b>Sijil Baru</b>.</li>' +
+                '<li><b>Nama Sijil</b> — contoh: <i>CIDB G7</i>. <b>Badan Pengeluar</b> — siapa yang keluarkan sijil, contoh: <i>CIDB Malaysia</i>.</li>' +
+                '<li><b>Penerangan Ringkas</b> — satu ayat tentang apa sijil ini benarkan syarikat buat. Pelawat nampak ayat ini bila letak tetikus pada ikon ⓘ.</li>' +
+                '<li><b>Butiran Sijil</b> — maklumat tambahan, <b>satu baris untuk satu maklumat</b>. Klik <b>Tambah Butiran</b>, kemudian isi <b>Label</b> (nama maklumat) dan <b>Nilai</b> (jawapannya).<br>Contoh: <code>No. Pendaftaran</code> → <code>0120110824-SR135974</code></li>' +
+                '<li><b>Tarikh Luput</b> — pilih dari kalendar. Laman web akan tulis "Valid until …" sendiri: <b style="color:#15803d">hijau</b> bila masih sah, <b style="color:#c2410c">oren</b> bila tinggal 6 bulan, <b style="color:#b5000b">merah</b> bila sudah tamat. <b>Jadi jangan taip tarikh luput sekali lagi</b> dalam Butiran Sijil.</li>' +
+                '<li><b>Fail PDF Sijil</b> (tidak wajib) — muat naik salinan sijil jika pelawat boleh muat turun. Pelawat perlu isi nama dan syarikat dahulu.</li>' +
+                '<li>Klik <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>.</li>' +
+              '</ol>' +
               '<ul>' +
-                '<li>Isi <b>Nama Sijil</b>, <b>Badan Pengeluar</b>, <b>Penerangan Ringkas</b> dan <b>Butiran Sijil</b> (baris label–nilai).</li>' +
-                '<li><b>Tarikh Luput:</b> pilih dari kalendar, sekali sahaja. Baris "Sah sehingga" dipapar dan diwarnakan automatik — jangan tambah dalam Butiran.</li>' +
-                '<li><b>Fail PDF Sijil</b> (jika perlu): pelawat perlu isi nama dan organisasi sebelum boleh memuat turun.</li>' +
-                '<li>Untuk jadikan sijil pilihan, tambah dalam tab <b>Sijil Pilihan ⭐</b> (maksimum 6).</li>' +
+                '<li><b>Sijil sudah tamat dan tidak diperbaharui?</b> Buka sijil itu → tukar <b>Status Sijil</b> kepada <b>Tamat</b>.</li>' +
+                '<li><b>Mahu sijil keluar dalam kad besar di atas</b> halaman Sijil? Buka tab <b>Sijil Pilihan ⭐</b> dan tambah di sana (maksimum 6).</li>' +
               '</ul>' +
               '<h3>📸 Galeri</h3>' +
               '<ul>' +
