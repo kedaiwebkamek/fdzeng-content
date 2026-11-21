@@ -1687,6 +1687,10 @@
           // Featured (⭐) ribbon injected onto list cards of entries picked as featured
           ".fdz-feat-star { position:absolute; top:8px; right:10px; z-index:4; display:inline-flex; align-items:center; gap:5px; font-family:'Barlow',sans-serif; font-size:0.56rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:#b5000b; background:rgba(181,0,11,0.10); border:1px solid rgba(181,0,11,0.28); padding:3px 8px 3px 6px; border-radius:999px; pointer-events:none; }",
           // Sidebar-bottom status card (content / panel / backup dates)
+          // Featured editors: the row label shows data-fdz-title (the real title)
+          // in place of the stored slug. No attribute = the slug shows as before.
+          "[class*='NestedObjectLabel'][data-fdz-title] { font-size:0 !important; }",
+          "[class*='NestedObjectLabel'][data-fdz-title]::after { content:attr(data-fdz-title); font-size:14px; line-height:1.45; display:block; }",
           "#fdz-status-card { margin:14px 10px 10px; padding:12px 13px; border:1px solid #e2e2e4; border-radius:10px; background:#fff; box-shadow:0 6px 18px -12px rgba(0,0,0,0.14); }",
           "#fdz-status-card .fdz-sc-h { font-family:'Barlow',sans-serif; font-weight:900; font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase; color:#b5000b; margin-bottom:9px; }",
           "#fdz-status-card .fdz-sc-row { display:flex; align-items:center; gap:7px; font-size:0.68rem; margin-bottom:6px; }",
@@ -2538,6 +2542,43 @@
         });
       }
 
+      // ── Featured editors: show each row's TITLE instead of its slug ──────────
+      // The featured lists store slugs (so renames can't break them), and Decap's
+      // collapsed row label shows the stored value — e.g. "construction-and-
+      // completion-of-the-remaining-works". We don't touch that React-owned text:
+      // we put the real title in a data-fdz-title ATTRIBUTE on the label and CSS
+      // shows it instead (see injectAppStyle). Attribute writes are not childList
+      // mutations, so this can't feed the enhancer observer loop, and each run
+      // re-checks every label, so a reordered/changed row never keeps a stale title.
+      // Titles come from the published bundles (same as the Featured previews).
+      var FDZ_TITLES = { map: null, loading: false };
+      function loadFeaturedTitles() {
+        if (FDZ_TITLES.map || FDZ_TITLES.loading) return;
+        FDZ_TITLES.loading = true;
+        function grab(url) {
+          return fetch(url, { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; });
+        }
+        Promise.all([grab('/projects-data.json'), grab('/certifications-data.json')]).then(function (res) {
+          var m = {};
+          (Array.isArray(res[0]) ? res[0] : []).forEach(function (p) { if (p && p.slug && p.description) m[p.slug] = p.description; });
+          (Array.isArray(res[1]) ? res[1] : []).forEach(function (c) { if (c && c.slug && c.title) m[c.slug] = c.title; });
+          FDZ_TITLES.map = m;
+          FDZ_TITLES.loading = false;
+          injectFeaturedTitles();
+        });
+      }
+      function injectFeaturedTitles() {
+        if (!/collections\/featured-(config|cert-config)\//.test(location.hash || '')) return;
+        if (!FDZ_TITLES.map) { loadFeaturedTitles(); return; }
+        var labels = document.querySelectorAll("[class*='NestedObjectLabel']");
+        Array.prototype.forEach.call(labels, function (el) {
+          var title = FDZ_TITLES.map[(el.textContent || '').trim()] || '';
+          var cur = el.getAttribute('data-fdz-title') || '';
+          if (title && cur !== title) el.setAttribute('data-fdz-title', title);
+          else if (!title && cur) el.removeAttribute('data-fdz-title');
+        });
+      }
+
       function injectFeaturedStars() {
         if (!document.querySelector("[class*='AppHeader']")) return; // CMS only, not login
         var m = (location.hash || '').match(/collections\/([^/?#]+)/);
@@ -2721,6 +2762,8 @@
       // language, what the owner can now DO, both languages. Newest first.
       var FDZ_UPDATES = [
         { date: '21 Nov 2026', items: [
+          ['<b>Featured Projects / Certificates</b> lists now show each item\'s real title instead of a short code.',
+           'Senarai <b>Projek / Sijil Pilihan</b> kini memaparkan tajuk sebenar setiap item, bukan kod pendek.'],
           ['<b>Guide rewritten as simple steps</b> with examples, for every section. All buttons now show in BM too (e.g. <b>Tambah Gambar Projek</b>, <b>Tukar Gambar</b>).',
            '<b>Panduan ditulis semula sebagai langkah mudah</b> dengan contoh, untuk setiap bahagian. Semua butang kini dalam BM juga (contoh <b>Tambah Gambar Projek</b>, <b>Tukar Gambar</b>).'],
           ['<b>Gallery:</b> each photo now has a <b>Photo Position</b> (a to g) chosen from a list, and the preview shows exactly where it sits on the website.',
@@ -2923,7 +2966,7 @@
       // via rAF with a runaway circuit-breaker — defence-in-depth against the class
       // of MutationObserver feedback loop that once froze the CMS after login.
       function runEnhancers() {
-        var fns = [brandLogin, brandHeader, injectHelpPanel, injectCollectionCounts, injectFeaturedStars, injectLangToggle, injectStatusCard, injectAnnounceBtn, translateTick];
+        var fns = [brandLogin, brandHeader, injectHelpPanel, injectCollectionCounts, injectFeaturedStars, injectFeaturedTitles, injectLangToggle, injectStatusCard, injectAnnounceBtn, translateTick];
         for (var i = 0; i < fns.length; i++) {
           try { fns[i](); }
           catch (e) { if (window.console && console.warn) console.warn('[FDZ CMS] enhancer failed:', e); }
