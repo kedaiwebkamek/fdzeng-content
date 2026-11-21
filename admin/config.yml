@@ -669,11 +669,27 @@ collections:
           - name: items
             label: Gallery Items
             widget: list
+            # The Projects-page mosaic has exactly 7 fixed spots, placed by CSS on the
+            # item id (.gm-cell--a … --g in projects.html). The id IS the position: a
+            # free-text id (the old hint suggested "gallery-001") matched no spot and
+            # broke the 2-row grid, and an 8th item had nowhere to go. Hence a select
+            # of the 7 positions and max: 7.
+            max: 7
+            summary: "{{fields.id}} · {{fields.src}}"
+            hint: "The gallery on the Projects page has 7 fixed spots (a to g). To change a photo, open its item and choose a different image — keep its Photo Position."
             fields:
               - name: id
-                label: ID
-                widget: string
-                hint: "A unique ID for each image. Use a short format without spaces. Example: gallery-001, site-kuching-01"
+                label: "Photo Position"
+                widget: select
+                options:
+                  - { label: "a — Large photo, top-left", value: "a" }
+                  - { label: "b — Top row, middle", value: "b" }
+                  - { label: "c — Top row, right", value: "c" }
+                  - { label: "d — Bottom row, 1st from left", value: "d" }
+                  - { label: "e — Bottom row, 2nd", value: "e" }
+                  - { label: "f — Bottom row, 3rd", value: "f" }
+                  - { label: "g — Bottom row, right", value: "g" }
+                hint: "Where this photo sits in the gallery. Use each position once."
               - name: src
                 label: Image
                 widget: image

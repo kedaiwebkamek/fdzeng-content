@@ -1016,17 +1016,22 @@
         var fbUrl = data.get('facebookUrl') || '';
         var items = toArray(data.get('items'));
 
-        // Mosaic spans mirror the live site: row1 = 5|4|3, row2 = 3|3|3|3 (12-col grid)
-        var spans = [5, 4, 3, 3, 3, 3, 3];
+        // Placed by POSITION (item id a–g), exactly like the live site's CSS
+        // (.gm-cell--a … --g in projects.html): row 1 = a(5) b(4) c(3), row 2 =
+        // d e f g (3 each) on a 12-col grid. List order does not matter.
+        var POS = { a: [5, 1], b: [4, 1], c: [3, 1], d: [3, 2], e: [3, 2], f: [3, 2], g: [3, 2] };
         var cells = items.length
-          ? items.map(function (it, i) {
+          ? items.map(function (it) {
               var src = it && it.src ? it.src : '';
-              var alt = it && it.alt ? it.alt : '';
-              var span = spans[i] || 3;
+              var p = POS[it && it.id];
               var inner = src
-                ? '<img src="' + src + '" alt="' + alt + '"><span class="gm-cell__ov"></span>'
-                : '<div class="gm-empty">' + fdzL('No src', 'Tiada src') + '</div>';
-              return '<div class="gm-cell" style="grid-column:span ' + span + ';">' + inner + '</div>';
+                ? '<img src="' + src + '" alt=""><span class="gm-cell__ov"></span><span class="gm-pos">' + (it.id || '?') + '</span>'
+                : '<div class="gm-empty">' + fdzL('No image yet', 'Tiada gambar lagi') + '</div>';
+              return p
+                ? '<div class="gm-cell" style="grid-column:span ' + p[0] + ';grid-row:' + p[1] + ';">' + inner + '</div>'
+                : '<div class="gm-cell gm-cell--bad" style="grid-column:span 12;"><div class="gm-empty">' +
+                    fdzL('This item has no Photo Position — choose a to g, or it will not show on the website.',
+                         'Item ini tiada Kedudukan Gambar — pilih a hingga g, jika tidak ia tidak akan dipapar di laman web.') + '</div></div>';
             }).join('')
           : '<div class="gm-cell" style="grid-column:span 12;"><div class="gm-empty">' + fdzL('No images yet — add gallery items on the left', 'Tiada gambar lagi — tambah item galeri di sebelah kiri') + '</div></div>';
 
@@ -1052,6 +1057,8 @@
           '.gm-cell{position:relative;overflow:hidden;background:rgba(255,255,255,0.04);}',
           '.gm-cell img{width:100%;height:100%;object-fit:cover;display:block;}',
           '.gm-cell__ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(14,15,17,0.45),transparent 55%);}',
+          '.gm-pos{position:absolute;top:6px;left:6px;z-index:2;background:rgba(0,0,0,0.6);color:#fff;font-family:"Barlow",sans-serif;font-weight:800;font-size:0.7rem;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-transform:uppercase;}',
+          '.gm-cell--bad{background:rgba(181,0,11,0.25) !important;}',
           '.gm-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;text-align:center;padding:8px;}',
           '.gcount{position:relative;z-index:2;font-size:0.6rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.12em;margin-top:14px;}',
           '.gstrip{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:20px;position:relative;z-index:2;}',
@@ -1846,7 +1853,7 @@
         "Certificate": "Sijil",
         "Featured Certificates (in display order)": "Sijil Pilihan (mengikut turutan paparan)",
         // ── Gallery field labels ──
-        "Header": "Pengepala",
+        "Header": "Tajuk Galeri",
         "Title": "Tajuk",
         "Description": "Penerangan",
         "Facebook URL": "URL Facebook",
@@ -1910,8 +1917,38 @@
         // Workflow board column headings (title-case, unlike the status menu)
         "Drafts": "Draf",
         "In Review": "Dalam Semakan",
-        // List "add row" button under Certificate Details (label_singular: Detail)
+        // List "add row" buttons — Decap's exact text nodes (sentence case),
+        // verified on screen 2026-11-21. They stayed English in BM mode before.
         "Add detail": "Tambah Butiran",
+        "Add project images": "Tambah Gambar Projek",
+        "Add news links": "Tambah Pautan Berita",
+        "Add video links": "Tambah Pautan Video",
+        "Add search tags": "Tambah Tag Carian",
+        "Add fact": "Tambah Fakta",
+        "Add section": "Tambah Bahagian",
+        "Add bullet point": "Tambah Poin",
+        "Add gallery items": "Tambah Item Galeri",
+        "Add featured project": "Tambah Projek Pilihan",
+        "Add featured certificate": "Tambah Sijil Pilihan",
+        // Image / date widget buttons
+        "Choose an image": "Pilih Gambar",
+        "Choose different image": "Tukar Gambar",
+        "Insert from URL": "Masukkan dari URL",
+        "Replace with URL": "Ganti dengan URL",
+        "Remove image": "Buang Gambar",
+        "Now": "Sekarang",
+        "Clear": "Kosongkan",
+        // Gallery positions (a–g)
+        "Photo Position": "Kedudukan Gambar",
+        "a — Large photo, top-left": "a — Gambar besar, kiri atas",
+        "b — Top row, middle": "b — Baris atas, tengah",
+        "c — Top row, right": "c — Baris atas, kanan",
+        "d — Bottom row, 1st from left": "d — Baris bawah, pertama dari kiri",
+        "e — Bottom row, 2nd": "e — Baris bawah, kedua",
+        "f — Bottom row, 3rd": "f — Baris bawah, ketiga",
+        "g — Bottom row, right": "g — Baris bawah, kanan",
+        "Where this photo sits in the gallery. Use each position once.": "Kedudukan gambar ini dalam galeri. Guna setiap kedudukan sekali sahaja.",
+        "The gallery on the Projects page has 7 fixed spots (a to g). To change a photo, open its item and choose a different image — keep its Photo Position.": "Galeri di halaman Projek ada 7 tempat tetap (a hingga g). Untuk tukar gambar, buka item itu dan pilih gambar lain — kekalkan Kedudukan Gambarnya.",
         // Decap's login button
         "Login with GitHub": "Log Masuk dengan GitHub",
         // Sidebar search dropdown
@@ -2147,39 +2184,33 @@
         return '' +
           '<h3>➕ Adding a New Project</h3>' +
           '<ol>' +
-            '<li>Click <b>Projects</b> on the left, then the red <b>New Project</b> button.</li>' +
-            '<li>Fill in <b>Project Status</b> (Ongoing / Completed) and <b>Project Title</b>. <b>Client</b> and <b>Project Value</b> are optional — the value is numbers only, e.g. <code>20000000</code>.</li>' +
-            '<li>Choose <b>Project Category</b> and <b>Division</b>, and fill in <b>Full Location</b>.</li>' +
-            '<li><b>Map location:</b> type a place name in the search box above the map and press <b>Search</b>, or simply click on the map. Drag the pin to adjust; switch to <b>Satellite</b> (top-right of the map) to see the actual buildings.</li>' +
-            '<li>Upload <b>Project Images</b> (see the rules below).</li>' +
-            '<li>Click <b>Save Draft</b>, then <b>Update Website</b> to put it live.</li>' +
+            '<li>Click <b>Projects</b> on the left → <b>New Project</b>.</li>' +
+            '<li><b>Project Status</b> — <b>Ongoing</b> if work is still going on, <b>Completed</b> if it has been handed over.<br>Completed? Pick the <b>Completion Date</b> from the calendar. Ongoing? Leave it — it shows "Ongoing".</li>' +
+            '<li><b>Project Title</b> — the full project name, e.g. <i>Proposed Dewan PKMS on Lot 123, Kuching</i>.</li>' +
+            '<li><b>Client / Employer</b> and <b>Project Value (RM)</b> — optional. Value in numbers only: <code>20000000</code> = RM 20,000,000.</li>' +
+            '<li>Choose <b>Project Category</b> and <b>Division</b>, then type the <b>Full Location</b>, e.g. <i>Kampung Stass, Kota Samarahan</i>.</li>' +
+            '<li><b>Map:</b> type the place in the box above the map → <b>🔍 Search</b>, or just click on the map. Drag the red pin to the exact spot (<b>Satellite</b>, top-right of the map, shows the buildings). Only roughly right? Say so in <b>Location Note</b>.</li>' +
+            '<li><b>Photos:</b> click <b>Add project images</b> → <b>Choose an image</b> → pick it from your computer. Repeat for each photo. The <b>first photo is the cover</b> — drag to change the order.</li>' +
+            '<li>News article or video about it? <b>Add news links</b> / <b>Add video links</b> → title + link. (Optional)</li>' +
+            '<li>Click <b>Save Draft</b> → <b>Update Website</b>.</li>' +
           '</ol>' +
-          '<div class="fh-tip">Tip — copying a similar project: open an existing project → click the green <b>Published</b> button at the top → <b>Duplicate</b>. A copy opens; change the details, then save.</div>' +
-          '<h3>🔍 Finding Projects</h3>' +
+          '<div class="fh-tip">Tip — a project similar to an existing one? Open the existing project → green <b>Published</b> button → <b>Duplicate</b>. Change the copy, then save.</div>' +
+          '<h3>🔍 Finding a Project</h3>' +
           '<ul>' +
-            '<li><b>Search:</b> type in the <b>Search all</b> box (top of the left sidebar), then choose where to look — <b>All Collections</b> or just <b>Projects</b> — or press Enter. A results page opens.</li>' +
-            '<li><b>Filter by:</b> Ongoing / Completed, or a category (Building, Infrastructure, …).</li>' +
-            '<li><b>Group by:</b> Category, Division or Status.</li>' +
-            '<li><b>Sort by:</b> Project Title, Project Status, Client or Division.</li>' +
+            '<li><b>Search:</b> type in <b>Search all</b> (top-left) → choose <b>Projects</b> (or <b>All Collections</b>). A results page opens.</li>' +
+            '<li>Above the list: <b>Filter by</b> (show only Ongoing / Completed, or one category), <b>Group by</b>, <b>Sort by</b>.</li>' +
           '</ul>' +
-          '<h3>🖼️ Image Rules</h3>' +
+          '<h3>🖼️ Photo Rules</h3>' +
           '<ul>' +
-            '<li><b>The first image is the thumbnail</b> on the project card and the homepage. Put the best photo first (drag to reorder).</li>' +
-            '<li>JPG or PNG, maximum <b>5MB</b> per image.</li>' +
-            '<li>&#9989; <b>No need to shrink photos.</b> They are optimised automatically when the site publishes (converted to the smaller, faster WebP format) with no visible quality loss.</li>' +
-            '<li><b>Do NOT use Facebook image links</b> — they expire and the image disappears. Upload from your computer.</li>' +
-            '<li>Image descriptions for Google are created automatically — nothing to fill in.</li>' +
-            '<li>📸 <b>Projects with photos are shown first</b> on the website. Adding photos to a project moves it up the list.</li>' +
+            '<li>JPG or PNG, up to <b>5MB</b> each. No need to make them smaller — the website does that by itself.</li>' +
+            '<li><b>Don\'t paste Facebook image links</b> — they stop working after a while. Save the photo to your computer and upload it.</li>' +
+            '<li>📸 <b>Projects with photos are shown first</b> on the website — adding photos moves a project up.</li>' +
           '</ul>' +
-          '<h3>📅 Status &amp; Date</h3>' +
+          '<h3>✏️ Changing or Removing</h3>' +
           '<ul>' +
-            '<li><b>Ongoing:</b> no completion date is needed — the date box simply shows "Ongoing".</li>' +
-            '<li><b>Completed:</b> pick the <b>Completion Date</b> from the calendar; it fills in as e.g. <code>29 Jan 2019</code>.</li>' +
-          '</ul>' +
-          '<h3>✏️ Editing or Removing</h3>' +
-          '<ul>' +
-            '<li><b>Edit:</b> open the entry, change it, then <b>Save Draft</b> → <b>Update Website</b>.</li>' +
-            '<li><b>Remove from the website:</b> open the entry → <b>Published</b> → <b>Unpublish</b> (keeps it as a draft), or <b>Delete published entry</b> (red button) to delete it for good.</li>' +
+            '<li><b>Change something:</b> open it → edit → <b>Save Draft</b> → <b>Update Website</b>.</li>' +
+            '<li><b>Hide it but keep it:</b> open it → green <b>Published</b> button → <b>Unpublish</b>. It becomes a draft.</li>' +
+            '<li><b>Delete for good:</b> open it → red <b>Delete published entry</b>.</li>' +
           '</ul>' +
           '<h3>📜 Certifications</h3>' +
           '<p style="margin:0 0 6px;"><b>Adding a certificate:</b></p>' +
@@ -2197,32 +2228,47 @@
             '<li><b>Show it in the big cards at the top</b> of the Certifications page: open the <b>Featured Certificates ⭐</b> tab and add it there (6 at most).</li>' +
           '</ul>' +
           '<h3>📸 Gallery</h3>' +
-          '<ul>' +
-            '<li>Open <b>Gallery</b> → <b>Work In The Field Gallery</b> → add or drag to reorder the <b>Gallery Items</b>.</li>' +
-          '</ul>' +
+          '<p style="margin:0 0 6px;">The gallery on the Projects page has <b>7 fixed spots</b>, <b>a</b> to <b>g</b>: <b>a</b> is the large photo top-left, <b>b</b> and <b>c</b> fill the top row, <b>d</b> to <b>g</b> are the bottom row.</p>' +
+          '<ol>' +
+            '<li>Click <b>Gallery</b> on the left → <b>Work In The Field Gallery</b>.</li>' +
+            '<li>Under <b>Gallery Items</b>, click the photo you want to change. The preview on the right shows which spot is which.</li>' +
+            '<li>Click <b>Choose different image</b> → pick the new photo. Leave its <b>Photo Position</b> as it is.</li>' +
+            '<li>Click <b>Save Draft</b> → <b>Update Website</b>.</li>' +
+          '</ol>' +
           '<h3>💼 Careers (Job Vacancies)</h3>' +
+          '<ol>' +
+            '<li>Click <b>Careers (Job Vacancies)</b> on the left → <b>New Vacancy</b>.</li>' +
+            '<li><b>Job Title</b>, a <b>Short Introduction</b> (1–2 sentences), and the <b>Apply-to Email Address</b> (where applications go).</li>' +
+            '<li><b>Closing Date</b> (optional) — pick it once. After that day the vacancy shows <b>CLOSED</b> by itself.</li>' +
+            '<li><b>Key Facts:</b> <b>Add fact</b> → choose an icon, then e.g. <code>Location</code> → <code>Kuching, Sarawak</code>.</li>' +
+            '<li><b>Details Sections:</b> <b>Add section</b> → a heading (e.g. <i>Requirements</i>) → <b>Add bullet point</b> for each line.</li>' +
+            '<li>Have the original advert? <b>Brochure / Poster Image</b> → <b>Choose an image</b>. (Optional)</li>' +
+            '<li>Click <b>Save Draft</b> → <b>Update Website</b>. The preview on the right shows the real card.</li>' +
+          '</ol>' +
           '<ul>' +
-            '<li><b>New vacancy:</b> open <b>Careers (Job Vacancies)</b> → <b>New Vacancy</b>. Fill in the Job Title, Short Introduction and Apply-to Email Address, then add <b>Key Facts</b> (location, experience…) and <b>Details Sections</b> (requirements, benefits…). The preview on the right shows the real card.</li>' +
-            '<li><b>Closing Date:</b> pick it once — the card shows it and switches to <b>CLOSED</b> by itself after that day.</li>' +
-            '<li><b>Take a vacancy down:</b> untick <b>Show on Website</b> (keeps it for reuse) or delete the entry. If none are showing, the page says there are no open vacancies.</li>' +
-            '<li>Upload the original advert under <b>Brochure / Poster Image</b> (optional), and paste the Facebook post link if there is one.</li>' +
+            '<li><b>Vacancy filled?</b> Untick <b>Show on Website</b> (keeps it for next time), or delete it. With none showing, the page says there are no openings.</li>' +
           '</ul>' +
           '<h3>⭐ Featured Projects &amp; Certificates</h3>' +
+          '<p style="margin:0 0 6px;">These choose what appears in the big highlighted section (homepage carousel / top of the Certifications page).</p>' +
+          '<ol>' +
+            '<li>Click <b>Featured Projects ⭐</b> (or <b>Featured Certificates ⭐</b>) on the left, then open it.</li>' +
+            '<li>To add one: <b>Add featured project</b> → type part of its name → click it in the list.</li>' +
+            '<li>To change the order: drag the rows. Top = shown first. To remove one: click the <b>×</b> on its row.</li>' +
+            '<li>Click <b>Save Draft</b> → <b>Update Website</b>. The preview on the right shows the real cards.</li>' +
+          '</ol>' +
           '<ul>' +
-            '<li>Open <b>Featured Projects ⭐</b> or <b>Featured Certificates ⭐</b>. Adding an item to the list features it; removing it un-features it.</li>' +
-            '<li><b>Search</b> the name in the dropdown, click to add, and <b>drag</b> to set the display order.</li>' +
-            '<li>The <b>preview on the right</b> shows the real cards in your order. Featured items are also marked <b>⭐ Featured</b> in the Projects / Certifications lists.</li>' +
-            '<li><b>Featured Certificates:</b> pick <b>6 only</b> — the Certifications page is designed for 6 cards.</li>' +
+            '<li>Certificates: <b>6 at most</b> — the page is designed for 6 cards.</li>' +
+            '<li>Featured items get a <b>⭐ Featured</b> mark in the Projects / Certifications lists.</li>' +
           '</ul>' +
-          '<h3>🔄 Drafts, Review &amp; Publishing</h3>' +
+          '<h3>🔄 Saving &amp; Publishing</h3>' +
           '<ul>' +
-            '<li><b>Save Draft</b> keeps your work private — it is not on the website yet.</li>' +
-            '<li>The <b>Workflow</b> tab (top of the screen) shows every unpublished change in three columns: <b>Drafts</b>, <b>In Review</b>, <b>Ready</b>.</li>' +
-            '<li><b>In Review</b> is the moment to double-check <b>client names, project values (RM) and dates</b> before they go public. Working alone and confident? You can go straight from Draft to <b>Update Website</b>.</li>' +
-            '<li><b>Update Website</b> puts it live. It takes about <b>1–2 minutes</b> — the <b>Status</b> box at the bottom-left shows ⏳ <b>Publishing…</b> and then ✅ <b>live</b>.</li>' +
+            '<li><b>Save Draft</b> = saved, but <b>not on the website yet</b>.</li>' +
+            '<li><b>Update Website</b> = put it live. It takes about <b>1–2 minutes</b>; the <b>Status</b> box (bottom-left) shows ⏳ <b>Publishing…</b> then ✅ <b>live</b>.</li>' +
+            '<li>Unfinished work is in the <b>Workflow</b> tab (top of the screen), in three columns: <b>Drafts</b>, <b>In Review</b>, <b>Ready</b>. Click a card to carry on.</li>' +
+            '<li>Want someone to check names, RM values and dates first? Move it to <b>In Review</b>. Working alone? Go straight to <b>Update Website</b>.</li>' +
           '</ul>' +
-          '<div class="fh-tip">&#8505;&#65039; The red numbers next to <b>Projects</b>, <b>Certifications</b> and <b>Careers</b>, the ⭐ marks, and the Featured previews show the <b>published</b> website. A new item appears there once the Status box says ✅ live — that is normal, not a bug.</div>' +
-          '<div class="fh-tip">🆘 Stuck? <a href="' + FDZ_WA + '" target="_blank" rel="noopener"><b>WhatsApp us</b></a> — we\'ll resolve it right away. The <b>📋 Updates</b> button shows what is new in this panel.</div>';
+          '<div class="fh-tip">&#8505;&#65039; The red numbers next to <b>Projects</b>, <b>Certifications</b> and <b>Careers</b>, the ⭐ marks and the Featured previews show the <b>live</b> website — a new item appears there once the Status box says ✅.</div>' +
+          '<div class="fh-tip">🆘 Stuck? <a href="' + FDZ_WA + '" target="_blank" rel="noopener"><b>WhatsApp us</b></a> — we\'ll sort it out right away.</div>';
       }
 
       // ── In-CMS help panel (Panduan) — bilingual quick guide for the site owner ─
@@ -2276,39 +2322,33 @@
             '<div class="fh-body">' + fdzL(fdzHelpEN(),
               '<h3>➕ Menambah Projek Baru</h3>' +
               '<ol>' +
-                '<li>Klik <b>Projek</b> di sebelah kiri, kemudian butang merah <b>Projek Baru</b>.</li>' +
-                '<li>Isi <b>Status Projek</b> (Sedang Berjalan / Siap) dan <b>Tajuk Projek</b>. <b>Klien / Majikan</b> dan <b>Nilai Projek (RM)</b> tidak wajib — nilai ditaip dalam angka sahaja, contoh <code>20000000</code>.</li>' +
-                '<li>Pilih <b>Kategori Projek</b> dan <b>Bahagian</b>, dan isi <b>Lokasi Penuh</b>.</li>' +
-                '<li><b>Lokasi peta:</b> taip nama tempat dalam kotak carian di atas peta dan tekan <b>Cari</b>, atau terus klik pada peta. Seret penanda untuk laraskan; tukar ke <b>Satelit</b> (penjuru kanan atas peta) untuk nampak bangunan sebenar.</li>' +
-                '<li>Muat naik <b>Gambar Projek</b> (lihat peraturan di bawah).</li>' +
-                '<li>Klik <b>Simpan Draf</b>, kemudian <b>Kemas Kini Laman Web</b> untuk terbitkan.</li>' +
+                '<li>Klik <b>Projek</b> di kiri → <b>Projek Baru</b>.</li>' +
+                '<li><b>Status Projek</b> — <b>Sedang Berjalan</b> jika kerja masih berjalan, <b>Siap</b> jika sudah diserahkan.<br>Siap? Pilih <b>Tarikh Siap</b> dari kalendar. Sedang Berjalan? Biarkan — ia tertulis "Ongoing".</li>' +
+                '<li><b>Tajuk Projek</b> — nama penuh projek, contoh: <i>Proposed Dewan PKMS on Lot 123, Kuching</i>.</li>' +
+                '<li><b>Klien / Majikan</b> dan <b>Nilai Projek (RM)</b> — tidak wajib. Nilai dalam angka sahaja: <code>20000000</code> = RM 20,000,000.</li>' +
+                '<li>Pilih <b>Kategori Projek</b> dan <b>Bahagian</b>, kemudian taip <b>Lokasi Penuh</b>, contoh: <i>Kampung Stass, Kota Samarahan</i>.</li>' +
+                '<li><b>Peta:</b> taip nama tempat dalam kotak di atas peta → <b>🔍 Cari</b>, atau terus klik pada peta. Seret penanda merah ke tempat yang tepat (<b>Satelit</b>, kanan atas peta, menunjukkan bangunan). Hanya anggaran? Tulis dalam <b>Nota Lokasi</b>.</li>' +
+                '<li><b>Gambar:</b> klik <b>Tambah Gambar Projek</b> → <b>Pilih Gambar</b> → pilih dari komputer. Ulang untuk setiap gambar. <b>Gambar pertama ialah gambar utama</b> — seret untuk tukar susunan.</li>' +
+                '<li>Ada berita atau video tentang projek ini? <b>Tambah Pautan Berita</b> / <b>Tambah Pautan Video</b> → tajuk + pautan. (Tidak wajib)</li>' +
+                '<li>Klik <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>.</li>' +
               '</ol>' +
-              '<div class="fh-tip">Tip — salin projek yang serupa: buka projek sedia ada → klik butang hijau <b>Diterbitkan</b> di bahagian atas → <b>Salin Entri</b>. Salinan akan dibuka; ubah butirannya, kemudian simpan.</div>' +
+              '<div class="fh-tip">Tip — projek baharu yang serupa dengan projek sedia ada? Buka projek itu → butang hijau <b>Diterbitkan</b> → <b>Salin Entri</b>. Ubah salinan itu, kemudian simpan.</div>' +
               '<h3>🔍 Mencari Projek</h3>' +
               '<ul>' +
-                '<li><b>Cari:</b> taip dalam kotak <b>Search all</b> (atas bar sisi kiri), kemudian pilih di mana hendak dicari — <b>Semua Koleksi</b> atau <b>Projek</b> sahaja — atau tekan Enter. Halaman hasil carian akan dibuka.</li>' +
-                '<li><b>Tapis ikut:</b> Sedang Berjalan / Siap, atau kategori (Building, Infrastructure, …).</li>' +
-                '<li><b>Kumpul ikut:</b> Kategori, Bahagian atau Status.</li>' +
-                '<li><b>Susun ikut:</b> Tajuk Projek, Status Projek, Klien / Majikan atau Bahagian.</li>' +
+                '<li><b>Cari:</b> taip dalam <b>Search all</b> (kiri atas) → pilih <b>Projek</b> (atau <b>Semua Koleksi</b>). Halaman hasil carian akan dibuka.</li>' +
+                '<li>Di atas senarai: <b>Tapis ikut</b> (tunjuk Sedang Berjalan / Siap sahaja, atau satu kategori), <b>Kumpul ikut</b>, <b>Susun ikut</b>.</li>' +
               '</ul>' +
               '<h3>🖼️ Peraturan Gambar</h3>' +
               '<ul>' +
-                '<li><b>Gambar pertama ialah thumbnail</b> pada kad projek dan homepage. Letak gambar terbaik di atas (seret untuk susun).</li>' +
-                '<li>JPG atau PNG, maksimum <b>5MB</b> setiap gambar.</li>' +
-                '<li>&#9989; <b>Tak perlu kecilkan gambar.</b> Gambar dioptimum secara automatik semasa laman diterbitkan (ditukar ke format WebP yang lebih kecil &amp; laju) tanpa kualiti nampak berkurang.</li>' +
-                '<li><b>JANGAN guna pautan gambar Facebook</b> — ia tamat tempoh dan gambar hilang. Muat naik dari komputer.</li>' +
-                '<li>Penerangan gambar untuk Google dijana automatik — tiada apa perlu diisi.</li>' +
-                '<li>📸 <b>Projek yang ada gambar dipaparkan dahulu</b> di laman web. Menambah gambar akan menaikkan projek itu dalam senarai.</li>' +
+                '<li>JPG atau PNG, maksimum <b>5MB</b> setiap satu. Tak perlu kecilkan — laman web buat sendiri.</li>' +
+                '<li><b>Jangan tampal pautan gambar Facebook</b> — ia akan rosak selepas beberapa ketika. Simpan gambar ke komputer, kemudian muat naik.</li>' +
+                '<li>📸 <b>Projek yang ada gambar dipaparkan dahulu</b> di laman web — tambah gambar untuk naikkan projek itu.</li>' +
               '</ul>' +
-              '<h3>📅 Status &amp; Tarikh</h3>' +
+              '<h3>✏️ Mengubah atau Membuang</h3>' +
               '<ul>' +
-                '<li><b>Sedang Berjalan:</b> tarikh siap tidak diperlukan — kotak tarikh hanya memaparkan "Ongoing".</li>' +
-                '<li><b>Siap:</b> pilih <b>Tarikh Siap</b> dari kalendar; ia diisi seperti <code>29 Jan 2019</code>.</li>' +
-              '</ul>' +
-              '<h3>✏️ Menyunting atau Membuang</h3>' +
-              '<ul>' +
-                '<li><b>Sunting:</b> buka entri, ubah, kemudian <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>.</li>' +
-                '<li><b>Buang dari laman web:</b> buka entri → <b>Diterbitkan</b> → <b>Nyahterbit</b> (disimpan sebagai draf), atau <b>Padam entri terbit</b> (butang merah) untuk padam terus.</li>' +
+                '<li><b>Ubah sesuatu:</b> buka → ubah → <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>.</li>' +
+                '<li><b>Sembunyikan tapi simpan:</b> buka → butang hijau <b>Diterbitkan</b> → <b>Nyahterbit</b>. Ia menjadi draf.</li>' +
+                '<li><b>Padam terus:</b> buka → butang merah <b>Padam entri terbit</b>.</li>' +
               '</ul>' +
               '<h3>📜 Sijil (Certifications)</h3>' +
               '<p style="margin:0 0 6px;"><b>Cara tambah sijil:</b></p>' +
@@ -2326,32 +2366,47 @@
                 '<li><b>Mahu sijil keluar dalam kad besar di atas</b> halaman Sijil? Buka tab <b>Sijil Pilihan ⭐</b> dan tambah di sana (maksimum 6).</li>' +
               '</ul>' +
               '<h3>📸 Galeri</h3>' +
-              '<ul>' +
-                '<li>Buka <b>Galeri</b> → <b>Galeri Kerja Di Lapangan</b> → tambah atau seret untuk susun <b>Item Galeri</b>.</li>' +
-              '</ul>' +
+              '<p style="margin:0 0 6px;">Galeri di halaman Projek ada <b>7 tempat tetap</b>, <b>a</b> hingga <b>g</b>: <b>a</b> ialah gambar besar di kiri atas, <b>b</b> dan <b>c</b> di baris atas, <b>d</b> hingga <b>g</b> di baris bawah.</p>' +
+              '<ol>' +
+                '<li>Klik <b>Galeri</b> di kiri → <b>Galeri Kerja Di Lapangan</b>.</li>' +
+                '<li>Di bawah <b>Item Galeri</b>, klik gambar yang hendak ditukar. Pratonton di kanan menunjukkan kedudukan setiap gambar.</li>' +
+                '<li>Klik <b>Tukar Gambar</b> → pilih gambar baharu. Biarkan <b>Kedudukan Gambar</b> seperti asal.</li>' +
+                '<li>Klik <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>.</li>' +
+              '</ol>' +
               '<h3>💼 Kerjaya (Jawatan Kosong)</h3>' +
+              '<ol>' +
+                '<li>Klik <b>Kerjaya (Jawatan Kosong)</b> di kiri → <b>Jawatan Baru</b>.</li>' +
+                '<li><b>Nama Jawatan</b>, <b>Pengenalan Ringkas</b> (1–2 ayat), dan <b>Alamat Emel Permohonan</b> (ke mana permohonan dihantar).</li>' +
+                '<li><b>Tarikh Tutup</b> (tidak wajib) — pilih sekali. Selepas hari itu jawatan bertukar kepada <b>CLOSED</b> sendiri.</li>' +
+                '<li><b>Fakta Utama:</b> <b>Tambah Fakta</b> → pilih ikon, kemudian contoh <code>Location</code> → <code>Kuching, Sarawak</code>.</li>' +
+                '<li><b>Bahagian Butiran:</b> <b>Tambah Bahagian</b> → tajuk (contoh <i>Requirements</i>) → <b>Tambah Poin</b> untuk setiap baris.</li>' +
+                '<li>Ada iklan asal? <b>Gambar Brosur / Poster</b> → <b>Pilih Gambar</b>. (Tidak wajib)</li>' +
+                '<li>Klik <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>. Pratonton di kanan menunjukkan kad sebenar.</li>' +
+              '</ol>' +
               '<ul>' +
-                '<li><b>Jawatan baharu:</b> buka <b>Kerjaya (Jawatan Kosong)</b> → <b>Jawatan Baru</b>. Isi Nama Jawatan, Pengenalan Ringkas dan Alamat Emel Permohonan, kemudian tambah <b>Fakta Utama</b> (lokasi, pengalaman…) dan <b>Bahagian Butiran</b> (syarat, faedah…). Pratonton di sebelah kanan menunjukkan kad sebenar.</li>' +
-                '<li><b>Tarikh Tutup:</b> pilih sekali sahaja — kad memaparkannya dan bertukar kepada <b>CLOSED</b> dengan sendiri selepas hari itu.</li>' +
-                '<li><b>Turunkan jawatan:</b> nyahtanda <b>Papar di Laman Web</b> (simpan untuk guna semula) atau padam entri. Jika tiada yang dipapar, halaman akan menyatakan tiada jawatan kosong.</li>' +
-                '<li>Muat naik iklan asal di <b>Gambar Brosur / Poster</b> (jika perlu), dan tampal pautan hantaran Facebook jika ada.</li>' +
+                '<li><b>Jawatan sudah diisi?</b> Nyahtanda <b>Papar di Laman Web</b> (simpan untuk lain kali), atau padam. Jika tiada yang dipapar, halaman akan menyatakan tiada jawatan kosong.</li>' +
               '</ul>' +
               '<h3>⭐ Projek &amp; Sijil Pilihan</h3>' +
+              '<p style="margin:0 0 6px;">Di sini anda pilih apa yang keluar di bahagian utama yang besar (karusel homepage / bahagian atas halaman Sijil).</p>' +
+              '<ol>' +
+                '<li>Klik <b>Projek Pilihan ⭐</b> (atau <b>Sijil Pilihan ⭐</b>) di kiri, kemudian bukanya.</li>' +
+                '<li>Untuk tambah: <b>Tambah Projek Pilihan</b> → taip sebahagian nama → klik dalam senarai.</li>' +
+                '<li>Untuk tukar susunan: seret baris. Paling atas = dipapar dahulu. Untuk buang: klik <b>×</b> pada baris itu.</li>' +
+                '<li>Klik <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>. Pratonton di kanan menunjukkan kad sebenar.</li>' +
+              '</ol>' +
               '<ul>' +
-                '<li>Buka <b>Projek Pilihan ⭐</b> atau <b>Sijil Pilihan ⭐</b>. Menambah item ke senarai menjadikannya pilihan; mengeluarkannya membatalkan pilihan.</li>' +
-                '<li><b>Cari</b> nama dalam dropdown, klik untuk tambah, dan <b>seret</b> untuk menetapkan susunan.</li>' +
-                '<li><b>Pratonton di sebelah kanan</b> menunjukkan kad sebenar mengikut susunan anda. Item pilihan juga ditanda <b>⭐ Pilihan</b> dalam senarai Projek / Pensijilan.</li>' +
-                '<li><b>Sijil Pilihan:</b> pilih <b>6 sahaja</b> — halaman Certifications direka untuk 6 kad.</li>' +
+                '<li>Sijil: <b>maksimum 6</b> — halaman itu direka untuk 6 kad.</li>' +
+                '<li>Item pilihan ditanda <b>⭐ Pilihan</b> dalam senarai Projek / Pensijilan.</li>' +
               '</ul>' +
-              '<h3>🔄 Draf, Semakan &amp; Penerbitan</h3>' +
+              '<h3>🔄 Simpan &amp; Terbit</h3>' +
               '<ul>' +
-                '<li><b>Simpan Draf</b> menyimpan kerja anda secara peribadi — belum masuk laman web.</li>' +
-                '<li>Tab <b>Aliran Kerja</b> (atas skrin) memaparkan semua perubahan yang belum diterbitkan dalam tiga lajur: <b>Draf</b>, <b>Dalam Semakan</b>, <b>Sedia</b>.</li>' +
-                '<li><b>Dalam Semakan</b> ialah masa untuk semak semula <b>nama klien, nilai projek (RM) dan tarikh</b> sebelum tersiar. Bekerja seorang &amp; yakin? Boleh terus dari Draf ke <b>Kemas Kini Laman Web</b>.</li>' +
-                '<li><b>Kemas Kini Laman Web</b> menerbitkannya. Ia mengambil masa kira-kira <b>1–2 minit</b> — kotak <b>Status</b> di kiri bawah memaparkan ⏳ <b>Sedang menerbitkan…</b> dan kemudian ✅ <b>sudah dipapar</b>.</li>' +
+                '<li><b>Simpan Draf</b> = disimpan, tetapi <b>belum masuk laman web</b>.</li>' +
+                '<li><b>Kemas Kini Laman Web</b> = terbitkan. Ambil masa kira-kira <b>1–2 minit</b>; kotak <b>Status</b> (kiri bawah) tunjuk ⏳ <b>Sedang menerbitkan…</b> kemudian ✅ <b>sudah dipapar</b>.</li>' +
+                '<li>Kerja yang belum siap ada dalam tab <b>Aliran Kerja</b> (atas skrin), dalam tiga lajur: <b>Draf</b>, <b>Dalam Semakan</b>, <b>Sedia</b>. Klik kad untuk sambung.</li>' +
+                '<li>Mahu orang lain semak nama, nilai RM dan tarikh dahulu? Pindah ke <b>Dalam Semakan</b>. Bekerja seorang? Terus <b>Kemas Kini Laman Web</b>.</li>' +
               '</ul>' +
-              '<div class="fh-tip">&#8505;&#65039; Nombor merah di sebelah <b>Projek</b>, <b>Pensijilan</b> dan <b>Kerjaya</b>, tanda ⭐, dan pratonton Pilihan menunjukkan laman web yang <b>telah diterbitkan</b>. Item baharu akan muncul di situ selepas kotak Status menunjukkan ✅ — ini normal, bukan pepijat.</div>' +
-              '<div class="fh-tip">🆘 Ada masalah? <a href="' + FDZ_WA + '" target="_blank" rel="noopener"><b>WhatsApp kami</b></a> — kami akan selesaikan dengan segera. Butang <b>📋 Kemas Kini</b> menunjukkan perkara baharu dalam panel ini.</div>' +
+              '<div class="fh-tip">&#8505;&#65039; Nombor merah di sebelah <b>Projek</b>, <b>Pensijilan</b> dan <b>Kerjaya</b>, tanda ⭐ dan pratonton Pilihan menunjukkan laman web yang <b>sudah dipapar</b> — item baharu muncul di situ selepas kotak Status tunjuk ✅.</div>' +
+              '<div class="fh-tip">🆘 Ada masalah? <a href="' + FDZ_WA + '" target="_blank" rel="noopener"><b>WhatsApp kami</b></a> — kami akan selesaikan dengan segera.</div>' +
               '') +
             '</div>' +
           '</div>';
@@ -2666,6 +2721,10 @@
       // language, what the owner can now DO, both languages. Newest first.
       var FDZ_UPDATES = [
         { date: '21 Nov 2026', items: [
+          ['<b>Guide rewritten as simple steps</b> with examples, for every section. All buttons now show in BM too (e.g. <b>Tambah Gambar Projek</b>, <b>Tukar Gambar</b>).',
+           '<b>Panduan ditulis semula sebagai langkah mudah</b> dengan contoh, untuk setiap bahagian. Semua butang kini dalam BM juga (contoh <b>Tambah Gambar Projek</b>, <b>Tukar Gambar</b>).'],
+          ['<b>Gallery:</b> each photo now has a <b>Photo Position</b> (a to g) chosen from a list, and the preview shows exactly where it sits on the website.',
+           '<b>Galeri:</b> setiap gambar kini ada <b>Kedudukan Gambar</b> (a hingga g) yang dipilih dari senarai, dan pratonton menunjukkan kedudukan sebenar di laman web.'],
           ['<b>The Guide now stays open beside your work</b> — follow the steps while you do them. It remembers where you were, and the chips at the top jump to each section.',
            '<b>Panduan kini kekal terbuka di sisi kerja anda</b> — ikut langkah sambil melakukannya. Ia ingat kedudukan anda, dan butang di atas melompat ke setiap bahagian.'],
           ['<b>New login page</b> — cleaner, one language at a time (EN | BM switch, top-right).',
