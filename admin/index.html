@@ -298,7 +298,11 @@
           var satellite = L.tileLayer('https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}&hl=en&gl=MY', gOpts);
           roadmap.addTo(map);
           var lyr = {}; lyr[fdzL('Map', 'Peta')] = roadmap; lyr[fdzL('Satellite', 'Satelit')] = satellite;
-          L.control.layers(lyr, null, { position: 'topright' }).addTo(map);
+          // collapsed:false — always show the two labelled options (Peta / Satelit).
+          // Collapsed, Leaflet draws an icon from images/layers.png, which the
+          // self-hosted admin/vendor never shipped: the owner saw a blank white
+          // square and couldn't find the satellite view the guide tells them to use.
+          L.control.layers(lyr, null, { position: 'topright', collapsed: false }).addTo(map);
           el._fdzMap = map;
           el._fdzMarker = null;
           // Draw/move the pin only — no value change.
@@ -1564,7 +1568,7 @@
           t.className = 'fdz-toast' + (tone === 'ok' ? ' fdz-toast--ok' : '');
           var ic = document.createElement('span'); ic.className = 'fdz-toast__i'; ic.textContent = tone === 'ok' ? '✓' : 'ℹ';
           var m = document.createElement('span'); m.className = 'fdz-toast__m'; m.textContent = msg;
-          var x = document.createElement('button'); x.className = 'fdz-toast__x'; x.setAttribute('aria-label', 'Tutup'); x.textContent = '×';
+          var x = document.createElement('button'); x.className = 'fdz-toast__x'; x.setAttribute('aria-label', fdzL('Close', 'Tutup')); x.textContent = '×';
           t.appendChild(ic); t.appendChild(m); t.appendChild(x);
           document.body.appendChild(t);
           requestAnimationFrame(function () { t.classList.add('fdz-show'); });
@@ -1576,13 +1580,17 @@
       CMS.registerEventListener({
         name: 'postSave',
         handler: function () {
-          fdzToast('Draf disimpan. Untuk menyiarkannya ke laman web, tekan butang “Publish” di penjuru atas kanan.', 'info');
+          // Name the button as it is ACTUALLY labelled (it was "Publish" until the
+          // relabel to "Update Website" / "Kemas Kini Laman Web").
+          fdzToast(fdzL('Draft saved — not on the website yet. To put it live, click “Update Website” at the top right.',
+                        'Draf disimpan — belum masuk laman web. Untuk paparkannya, tekan butang “Kemas Kini Laman Web” di penjuru atas kanan.'), 'info');
         }
       });
       CMS.registerEventListener({
         name: 'postPublish',
         handler: function () {
-          fdzToast('Berjaya disiarkan! Laman web akan dikemas kini dalam lebih kurang 2 minit — muat semula (refresh) laman web selepas itu untuk melihat perubahan.', 'ok');
+          fdzToast(fdzL('Done! The website updates in about 1–2 minutes — the Status box on the left shows ✅ when it is live.',
+                        'Berjaya! Laman web dikemas kini dalam kira-kira 1–2 minit — kotak Status di kiri tunjuk ✅ apabila sudah dipapar.'), 'ok');
         }
       });
     });
@@ -2139,12 +2147,32 @@
         // Workflow board summary (Decap: "0 entries waiting for review, 1 ready to go live.")
         { re: /^(\d+) entr(?:y|ies) waiting for review, (\d+) ready to go live\.$/, to: '$1 menunggu semakan, $2 sedia untuk dipapar.' },
         // Workflow column counts ("0 ENTRIES" / "1 ENTRY" — upper-cased by CSS)
-        { re: /^(\d+) entr(?:y|ies)$/i, to: '$1 entri' }
+        { re: /^(\d+) entr(?:y|ies)$/i, to: '$1 entri' },
+        // Collapsed list summaries: "<count> <field label, lower-cased>", e.g.
+        // "21 project images", "3 key facts". Reuse that field's own BM label.
+        // Returns null (no change) when the label isn't in the dictionary, and a
+        // translated result never matches a key again, so it can't loop.
+        { re: /^(\d+) (.+)$/, to: function (all, n, label) {
+            var bm = fdzLabelBM(label);
+            return bm ? n + ' ' + bm.toLowerCase() : null;
+          } }
       ];
+      var FDZ_LABEL_LC = null;
+      function fdzLabelBM(label) {
+        if (!FDZ_LABEL_LC) {
+          FDZ_LABEL_LC = {};
+          for (var k in FDZ_I18N) if (FDZ_I18N.hasOwnProperty(k)) FDZ_LABEL_LC[k.toLowerCase()] = FDZ_I18N[k];
+        }
+        return FDZ_LABEL_LC[String(label).toLowerCase()] || null;
+      }
+      // Returns the translated string, or null when no pattern produces a change.
       function fdzPatternFor(text) {
         if (fdzLang !== 'bm') return null;
         for (var i = 0; i < FDZ_I18N_PATTERNS.length; i++) {
-          if (FDZ_I18N_PATTERNS[i].re.test(text)) return FDZ_I18N_PATTERNS[i];
+          var p = FDZ_I18N_PATTERNS[i], m = text.match(p.re);
+          if (!m) continue;
+          var out = typeof p.to === 'function' ? p.to.apply(null, m) : text.replace(p.re, p.to);
+          if (out && out !== text) return out;
         }
         return null;
       }
@@ -2172,7 +2200,7 @@
         for (var i = 0; i < hits.length; i++) {
           var t = hits[i].nodeValue.trim();
           var rep = map[t];
-          if (!rep) { var pat = fdzPatternFor(t); if (pat) rep = t.replace(pat.re, pat.to); }
+          if (!rep) rep = fdzPatternFor(t);
           if (rep && rep !== t) hits[i].nodeValue = hits[i].nodeValue.replace(t, rep);
         }
       }
@@ -2210,44 +2238,56 @@
 
       // English body for the Panduan help panel (BM version is inline in
       // injectHelpPanel; fdzL() picks between them). Keep the two in sync.
+      // Guide screenshots live in admin/guide/<name>-<en|bm>.webp (captured from the
+      // real panel, annotated with numbered red boxes that match the guide text).
+      function fdzShot(name, cap) {
+        var src = '/admin/guide/' + name + '-' + (fdzLang === 'bm' ? 'bm' : 'en') + '.webp';
+        return '<a class="fh-shot" href="' + src + '" target="_blank" rel="noopener" title="' + fdzL('Open full size', 'Buka saiz penuh') + '">' +
+          '<img src="' + src + '" alt="' + (cap || '') + '" loading="lazy"></a>' + (cap ? '<p class="fh-cap">' + cap + '</p>' : '');
+      }
+
       function fdzHelpEN() {
         return '' +
           '<h3>💾 Save Draft vs Update Website (read this first)</h3>' +
-          '<p style="margin:0 0 6px;">There are <b>two buttons</b> at the top, and they do different things:</p>' +
+          '<p style="margin:0 0 6px;">Whenever you open something to edit — a project, a certificate, a vacancy — the <b>bar at the very top of the screen</b> has two buttons that do different things:</p>' +
+          fdzShot('save-vs-update', 'The top bar when you are editing.') +
           '<ul>' +
-            '<li><b>Save Draft</b> — saves your work <b>privately</b>. Nothing changes on the website. If you are editing something that is already on the website, visitors <b>keep seeing the old version</b> until you click Update Website.</li>' +
-            '<li><b>Update Website</b> — puts your changes <b>on the public website</b>. Takes about <b>1–2 minutes</b>; the <b>Status</b> box (bottom-left) shows ⏳ <b>Publishing…</b> then ✅.</li>' +
+            '<li><b class="fh-n">1</b><b>Save Draft</b> — saves your work <b>privately</b>. Nothing changes on the website. If the item is already on the website, visitors <b>keep seeing the old version</b> until you click Update Website.</li>' +
+            '<li><b class="fh-n">2</b><b>Update Website</b> — puts your changes <b>on the public website</b>, in about <b>1–2 minutes</b>.</li>' +
           '</ul>' +
-          '<p style="margin:8px 0 6px;"><b>Why two steps?</b> The website is seen by clients and government agencies. Saving a draft first lets you finish, check, or come back tomorrow, without a half-done or wrong entry (a wrong RM value, a typo in a client name) going public.</p>' +
+          '<p style="margin:8px 0 6px;"><b>Why two steps?</b> The website is seen by clients and government agencies. A draft lets you finish, check, or continue tomorrow — without a half-done or wrong entry (a wrong RM value, a typo in a client name) going public.</p>' +
           '<p style="margin:0 0 6px;"><b>Usual way:</b> edit → <b>Save Draft</b> (as often as you like) → <b>Update Website</b> when it is right.</p>' +
-          '<p style="margin:10px 0 6px;"><b>The Workflow tab</b> (top of the screen) is the list of everything saved as a draft but <b>not on the website yet</b> — so nothing gets forgotten. It has three columns:</p>' +
+          '<p style="margin:10px 0 6px;"><b>Is it live yet?</b> Look at the <b>Status</b> box at the bottom of the left sidebar: it shows ⏳ <b>Publishing…</b> while the website updates, then ✅.</p>' +
+          fdzShot('status-box', 'The Status box (left sidebar) — ✅ means the website shows your latest changes.') +
+          '<p style="margin:12px 0 6px;"><b>The Workflow tab</b> is the list of everything saved as a draft but <b>not on the website yet</b>, so nothing gets forgotten.</p>' +
+          fdzShot('workflow-board', '1 = the Workflow tab at the top of the screen. 2 = your drafts appear here as cards.') +
           '<ul>' +
             '<li><b>Drafts</b> — still being worked on.</li>' +
             '<li><b>In Review</b> — finished; waiting for someone (e.g. a manager) to check names, RM values and dates.</li>' +
             '<li><b>Ready</b> — checked, waiting to go live.</li>' +
           '</ul>' +
+          '<p style="margin:8px 0 6px;"><b>Move a draft to another column:</b> open it → click <b>Status: Draft</b> in the top bar → choose <b>In review</b> or <b>Ready</b>.</p>' +
+          fdzShot('status-menu', 'The Status button appears in the top bar once something is saved as a draft.') +
           '<ul>' +
-            '<li><b>Move a draft between columns:</b> open it → click <b>Status: Draft</b> at the top → choose <b>In review</b> or <b>Ready</b>.</li>' +
-            '<li><b>On the Workflow board</b>, point at a card to see <b>Update Website</b> (put it live) and <b>Delete changes</b> (throw the draft away — the website stays as it was). Click the card to open it.</li>' +
+            '<li>On the Workflow board, <b>point at a card</b> to see <b>Update Website</b> (put it live) and <b>Delete changes</b> (throw the draft away — the website stays as it was).</li>' +
             '<li><b>Working alone?</b> The columns are optional — you can click <b>Update Website</b> straight from Draft.</li>' +
           '</ul>' +
           '<h3>➕ Adding a New Project</h3>' +
           '<ol>' +
-            '<li>Click <b>Projects</b> on the left → <b>New Project</b>.</li>' +
+            '<li>Click <b class="fh-n">1</b><b>Projects</b> on the left, then <b class="fh-n">2</b><b>New Project</b>.' + fdzShot('new-project', '') + '</li>' +
             '<li><b>Project Status</b> — <b>Ongoing</b> if work is still going on, <b>Completed</b> if it has been handed over.<br>Completed? Pick the <b>Completion Date</b> from the calendar. Ongoing? Leave it — it shows "Ongoing".</li>' +
             '<li><b>Project Title</b> — the full project name, e.g. <i>Proposed Dewan PKMS on Lot 123, Kuching</i>.</li>' +
             '<li><b>Client / Employer</b> and <b>Project Value (RM)</b> — optional. Value in numbers only: <code>20000000</code> = RM 20,000,000.</li>' +
             '<li>Choose <b>Project Category</b> and <b>Division</b>, then type the <b>Full Location</b>, e.g. <i>Kampung Stass, Kota Samarahan</i>.</li>' +
-            '<li><b>Map:</b> type the place in the box above the map → <b>🔍 Search</b>, or just click on the map. Drag the red pin to the exact spot (<b>Satellite</b>, top-right of the map, shows the buildings). Only roughly right? Say so in <b>Location Note</b>.</li>' +
-            '<li><b>Photos:</b> click <b>Add project images</b> → <b>Choose an image</b> → pick it from your computer. Repeat for each photo. The <b>first photo is the cover</b> — drag to change the order.</li>' +
+            '<li><b>Map:</b> <b class="fh-n">1</b> type the place name and press <b>🔍 Search</b>, or just click on the map <b class="fh-n">2</b>. Drag the red pin to the exact spot. Choose <b class="fh-n">3</b> <b>Satellite</b> to see the actual buildings. Only roughly right? Say so in <b>Location Note</b>.' + fdzShot('map', '') + '</li>' +
+            '<li><b>Photos:</b> click <b>Add project images</b> → <b>Choose an image</b> → pick it from your computer. Repeat for each photo. The <b>first photo is the cover</b> — drag to change the order.' + fdzShot('add-images', '') + '</li>' +
             '<li>News article or video about it? <b>Add news links</b> / <b>Add video links</b> → title + link. (Optional)</li>' +
             '<li>Click <b>Save Draft</b> → <b>Update Website</b>.</li>' +
           '</ol>' +
-          '<div class="fh-tip">Tip — a project similar to an existing one? Open the existing project → green <b>Published</b> button → <b>Duplicate</b>. Change the copy, then save.</div>' +
           '<h3>🔍 Finding a Project</h3>' +
           '<ul>' +
-            '<li><b>Search:</b> type in <b>Search all</b> (top-left) → choose <b>Projects</b> (or <b>All Collections</b>). A results page opens.</li>' +
-            '<li>Above the list: <b>Filter by</b> (show only Ongoing / Completed, or one category), <b>Group by</b>, <b>Sort by</b>.</li>' +
+            '<li><b>Search:</b> type in <b>Search all</b> (top-left), then choose where to look — <b>Projects</b>, or <b>All Collections</b>. A results page opens.' + fdzShot('search', '') + '</li>' +
+            '<li>Above the list: <b class="fh-n">1</b><b>Sort by</b>, <b class="fh-n">2</b><b>Filter by</b> (show only Ongoing / Completed, or one category), <b class="fh-n">3</b><b>Group by</b>.' + fdzShot('list-tools', '') + '</li>' +
           '</ul>' +
           '<h3>🖼️ Photo Rules</h3>' +
           '<ul>' +
@@ -2255,11 +2295,14 @@
             '<li><b>Don\'t paste Facebook image links</b> — they stop working after a while. Save the photo to your computer and upload it.</li>' +
             '<li>📸 <b>Projects with photos are shown first</b> on the website — adding photos moves a project up.</li>' +
           '</ul>' +
-          '<h3>✏️ Changing or Removing</h3>' +
+          '<h3>✏️ Changing, Copying or Removing</h3>' +
+          '<p style="margin:0 0 6px;"><b>Change something:</b> open it → edit → <b>Save Draft</b> → <b>Update Website</b>.</p>' +
+          '<p style="margin:0 0 6px;">For anything already on the website, click the green <b>Published</b> button in the top bar:</p>' +
+          fdzShot('published-menu', '') +
           '<ul>' +
-            '<li><b>Change something:</b> open it → edit → <b>Save Draft</b> → <b>Update Website</b>.</li>' +
-            '<li><b>Hide it but keep it:</b> open it → green <b>Published</b> button → <b>Unpublish</b>. It becomes a draft.</li>' +
-            '<li><b>Delete for good:</b> open it → red <b>Delete published entry</b>.</li>' +
+            '<li><b class="fh-n">1</b><b>Unpublish</b> — takes it off the website but keeps it as a draft.</li>' +
+            '<li><b class="fh-n">2</b><b>Duplicate</b> — makes a copy to edit. Handy for a new project similar to an existing one.</li>' +
+            '<li><b class="fh-n">3</b><b>Delete published entry</b> — deletes it for good.</li>' +
           '</ul>' +
           '<h3>📜 Certifications</h3>' +
           '<p style="margin:0 0 6px;"><b>Adding a certificate:</b></p>' +
@@ -2267,8 +2310,8 @@
             '<li>Click <b>Certifications</b> on the left → <b>New Certification</b>.</li>' +
             '<li><b>Certificate Name</b> — e.g. <i>CIDB G7</i>. <b>Issuing Body</b> — who issued it, e.g. <i>CIDB Malaysia</i>.</li>' +
             '<li><b>Short Description</b> — one sentence on what this certificate lets the company do. Visitors see it when they point at the ⓘ icon.</li>' +
-            '<li><b>Certificate Details</b> — extra information, <b>one row per item</b>. Click <b>Add Detail</b>, then fill in <b>Label</b> (what it is) and <b>Value</b> (the answer).<br>e.g. <code>Registration No.</code> → <code>0120110824-SR135974</code></li>' +
-            '<li><b>Expiry Date</b> — pick it from the calendar. The website writes "Valid until …" for you: <b style="color:#15803d">green</b> while valid, <b style="color:#c2410c">orange</b> in the last 6 months, <b style="color:#b5000b">red</b> once expired. <b>So don\'t type the expiry date again</b> in Certificate Details.</li>' +
+            '<li><b>Certificate Details</b> — extra information, <b>one row per item</b>. Click <b>Add Detail</b>, then fill in <b>Label</b> (what it is) and <b>Value</b> (the answer).<br>e.g. <code>Registration No.</code> → <code>0120110824-SR135974</code>' + fdzShot('cert-details', '') + '</li>' +
+            '<li><b>Expiry Date</b> — pick it from the calendar. The website writes "Valid until …" for you: <b style="color:#15803d">green</b> while valid, <b style="color:#c2410c">orange</b> in the last 6 months, <b style="color:#b5000b">red</b> once expired. <b>So don\'t type the expiry date again</b> in Certificate Details.' + fdzShot('cert-expiry', '') + '</li>' +
             '<li><b>Certificate PDF File</b> (optional) — upload a copy if visitors may download it. They must type their name and company first.</li>' +
             '<li>Click <b>Save Draft</b> → <b>Update Website</b>.</li>' +
           '</ol>' +
@@ -2278,10 +2321,11 @@
           '</ul>' +
           '<h3>📸 Gallery</h3>' +
           '<p style="margin:0 0 6px;">The gallery on the Projects page has <b>7 fixed spots</b>, <b>a</b> to <b>g</b>: <b>a</b> is the large photo top-left, <b>b</b> and <b>c</b> fill the top row, <b>d</b> to <b>g</b> are the bottom row.</p>' +
+          fdzShot('gallery-preview', 'The preview on the right shows each photo with its letter.') +
           '<ol>' +
             '<li>Click <b>Gallery</b> on the left → <b>Work In The Field Gallery</b>.</li>' +
-            '<li>Under <b>Gallery Items</b>, click the photo you want to change. The preview on the right shows which spot is which.</li>' +
-            '<li>Click <b>Choose different image</b> → pick the new photo. Leave its <b>Photo Position</b> as it is.</li>' +
+            '<li>Under <b>Gallery Items</b>, click the photo you want to change.</li>' +
+            '<li><b class="fh-n">1</b> leave its <b>Photo Position</b> as it is, and click <b class="fh-n">2</b><b>Choose different image</b> to pick the new photo.' + fdzShot('gallery-item', '') + '</li>' +
             '<li>Click <b>Save Draft</b> → <b>Update Website</b>.</li>' +
           '</ol>' +
           '<h3>💼 Careers (Job Vacancies)</h3>' +
@@ -2289,8 +2333,7 @@
             '<li>Click <b>Careers (Job Vacancies)</b> on the left → <b>New Vacancy</b>.</li>' +
             '<li><b>Job Title</b>, a <b>Short Introduction</b> (1–2 sentences), and the <b>Apply-to Email Address</b> (where applications go).</li>' +
             '<li><b>Closing Date</b> (optional) — pick it once. After that day the vacancy shows <b>CLOSED</b> by itself.</li>' +
-            '<li><b>Key Facts:</b> <b>Add fact</b> → choose an icon, then e.g. <code>Location</code> → <code>Kuching, Sarawak</code>.</li>' +
-            '<li><b>Details Sections:</b> <b>Add section</b> → a heading (e.g. <i>Requirements</i>) → <b>Add bullet point</b> for each line.</li>' +
+            '<li><b class="fh-n">1</b><b>Add fact</b> for each short fact, e.g. <code>Location</code> → <code>Kuching, Sarawak</code>. <b class="fh-n">2</b><b>Add section</b> for each block (e.g. <i>Requirements</i>), then <b>Add bullet point</b> for each line.' + fdzShot('careers-lists', '') + '</li>' +
             '<li>Have the original advert? <b>Brochure / Poster Image</b> → <b>Choose an image</b>. (Optional)</li>' +
             '<li>Click <b>Save Draft</b> → <b>Update Website</b>. The preview on the right shows the real card.</li>' +
           '</ol>' +
@@ -2298,19 +2341,16 @@
             '<li><b>Vacancy filled?</b> Untick <b>Show on Website</b> (keeps it for next time), or delete it. With none showing, the page says there are no openings.</li>' +
           '</ul>' +
           '<h3>⭐ Featured Projects &amp; Certificates</h3>' +
-          '<p style="margin:0 0 6px;">These choose what appears in the big highlighted section (homepage carousel / top of the Certifications page).</p>' +
-          '<ol>' +
-            '<li>Click <b>Featured Projects ⭐</b> (or <b>Featured Certificates ⭐</b>) on the left, then open it.</li>' +
-            '<li>To add one: <b>Add featured project</b> → type part of its name → click it in the list.</li>' +
-            '<li>To change the order: drag the rows. Top = shown first. To remove one: click the <b>×</b> on its row.</li>' +
-            '<li>Click <b>Save Draft</b> → <b>Update Website</b>. The preview on the right shows the real cards.</li>' +
-          '</ol>' +
+          '<p style="margin:0 0 6px;">These choose what appears in the big highlighted section (homepage carousel / top of the Certifications page). Click <b>Featured Projects ⭐</b> (or <b>Featured Certificates ⭐</b>) on the left, then open it.</p>' +
+          fdzShot('featured-list', '') +
           '<ul>' +
-            '<li>Certificates: <b>6 at most</b> — the page is designed for 6 cards.</li>' +
-            '<li>Featured items get a <b>⭐ Featured</b> mark in the Projects / Certifications lists.</li>' +
+            '<li><b class="fh-n">1</b><b>Add featured project</b> → type part of its name → click it in the list.</li>' +
+            '<li><b class="fh-n">2</b> <b>Drag</b> a row by this handle to change the order. Top = shown first.</li>' +
+            '<li><b class="fh-n">3</b> <b>×</b> removes it from the list.</li>' +
+            '<li>Then <b>Save Draft</b> → <b>Update Website</b>. Certificates: <b>6 at most</b>. Featured items also get a <b>⭐ Featured</b> mark in the lists.</li>' +
           '</ul>' +
           '<div class="fh-tip">&#8505;&#65039; The red numbers next to <b>Projects</b>, <b>Certifications</b> and <b>Careers</b>, the ⭐ marks and the Featured previews show the <b>live</b> website — a new item appears there once the Status box says ✅.</div>' +
-          '<div class="fh-tip">🆘 Stuck? <a href="' + FDZ_WA + '" target="_blank" rel="noopener"><b>WhatsApp us</b></a> — we\'ll sort it out right away.</div>';
+          '<div class="fh-tip">🆘 Stuck? <a href="' + FDZ_WA + '" target="_blank" rel="noopener"><b>WhatsApp us</b></a> — we\'ll sort it out right away. Tap any picture to see it full size.</div>';
       }
 
       // ── In-CMS help panel (Panduan) — bilingual quick guide for the site owner ─
@@ -2346,6 +2386,10 @@
             "#fdz-help-modal ol,#fdz-help-modal ul{margin:0 0 4px;padding-left:20px;}",
             "#fdz-help-modal li{margin-bottom:5px;}",
             "#fdz-help-modal .fh-tip{background:#fff8e1;border-left:4px solid #f59e0b;padding:9px 13px;border-radius:4px;color:#92400e;font-size:0.82rem;margin:8px 0;}",
+            "#fdz-help-modal .fh-shot{display:block;margin:8px 0 4px;border:1px solid #e4e4e7;border-radius:8px;overflow:hidden;background:#f4f4f5;cursor:zoom-in;}",
+            "#fdz-help-modal .fh-shot img{display:block;width:100%;height:auto;}",
+            "#fdz-help-modal .fh-cap{font-size:0.74rem;color:#71717a;margin:2px 0 10px;line-height:1.45;}",
+            "#fdz-help-modal .fh-n{display:inline-block;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#e30613;color:#fff;font-size:0.66rem;font-weight:800;line-height:17px;text-align:center;margin:0 4px 0 1px;vertical-align:1px;}",
             "#fdz-help-modal code{background:#f0f0f2;padding:1px 6px;border-radius:3px;font-size:0.82rem;}"
           ].join('\n');
           document.head.appendChild(st);
@@ -2363,41 +2407,45 @@
             '<div class="fh-head"><img src="/fdzeng-logo.png" alt="FDZ"><h2>' + fdzL('Quick CMS Guide', 'Panduan Ringkas CMS') + '</h2><button id="fdz-help-close" aria-label="' + fdzL('Close', 'Tutup') + '">&times;</button></div>' +
             '<div class="fh-body">' + fdzL(fdzHelpEN(),
               '<h3>💾 Simpan Draf vs Kemas Kini Laman Web (baca dahulu)</h3>' +
-              '<p style="margin:0 0 6px;">Ada <b>dua butang</b> di bahagian atas, dan fungsinya berbeza:</p>' +
+              '<p style="margin:0 0 6px;">Setiap kali anda buka sesuatu untuk diubah — projek, sijil, jawatan kosong — <b>bar di bahagian paling atas skrin</b> ada dua butang yang fungsinya berbeza:</p>' +
+              fdzShot('save-vs-update', 'Bar atas semasa anda mengubah sesuatu.') +
               '<ul>' +
-                '<li><b>Simpan Draf</b> — menyimpan kerja anda <b>secara peribadi</b>. Laman web tidak berubah. Jika anda sedang mengubah sesuatu yang sudah ada di laman web, pelawat <b>masih nampak versi lama</b> sehingga anda klik Kemas Kini Laman Web.</li>' +
-                '<li><b>Kemas Kini Laman Web</b> — memaparkan perubahan anda <b>di laman web awam</b>. Ambil masa kira-kira <b>1–2 minit</b>; kotak <b>Status</b> (kiri bawah) tunjuk ⏳ <b>Sedang menerbitkan…</b> kemudian ✅.</li>' +
+                '<li><b class="fh-n">1</b><b>Simpan Draf</b> — menyimpan kerja anda <b>secara peribadi</b>. Laman web tidak berubah. Jika item itu sudah ada di laman web, pelawat <b>masih nampak versi lama</b> sehingga anda klik Kemas Kini Laman Web.</li>' +
+                '<li><b class="fh-n">2</b><b>Kemas Kini Laman Web</b> — memaparkan perubahan anda <b>di laman web awam</b>, dalam kira-kira <b>1–2 minit</b>.</li>' +
               '</ul>' +
-              '<p style="margin:8px 0 6px;"><b>Kenapa dua langkah?</b> Laman web ini dilihat oleh pelanggan dan agensi kerajaan. Simpan draf dahulu supaya anda boleh siapkan, semak, atau sambung esok — tanpa entri yang separuh siap atau salah (nilai RM salah, nama klien tersilap) tersiar kepada umum.</p>' +
+              '<p style="margin:8px 0 6px;"><b>Kenapa dua langkah?</b> Laman web ini dilihat oleh pelanggan dan agensi kerajaan. Draf membolehkan anda siapkan, semak, atau sambung esok — tanpa entri separuh siap atau salah (nilai RM salah, nama klien tersilap) tersiar kepada umum.</p>' +
               '<p style="margin:0 0 6px;"><b>Cara biasa:</b> ubah → <b>Simpan Draf</b> (berapa kali pun) → <b>Kemas Kini Laman Web</b> bila sudah betul.</p>' +
-              '<p style="margin:10px 0 6px;"><b>Tab Aliran Kerja</b> (atas skrin) ialah senarai semua yang sudah disimpan sebagai draf tetapi <b>belum masuk laman web</b> — supaya tiada yang terlupa. Ada tiga lajur:</p>' +
+              '<p style="margin:10px 0 6px;"><b>Sudah dipapar belum?</b> Lihat kotak <b>Status</b> di bawah bar sisi kiri: ia tunjuk ⏳ <b>Sedang menerbitkan…</b> semasa laman web dikemas kini, kemudian ✅.</p>' +
+              fdzShot('status-box', 'Kotak Status (bar sisi kiri) — ✅ bermaksud laman web sudah menunjukkan perubahan terkini anda.') +
+              '<p style="margin:12px 0 6px;"><b>Tab Aliran Kerja</b> ialah senarai semua yang disimpan sebagai draf tetapi <b>belum masuk laman web</b>, supaya tiada yang terlupa.</p>' +
+              fdzShot('workflow-board', '1 = tab Aliran Kerja di atas skrin. 2 = draf anda muncul di sini sebagai kad.') +
               '<ul>' +
                 '<li><b>Draf</b> — masih sedang dibuat.</li>' +
                 '<li><b>Dalam Semakan</b> — sudah siap; menunggu seseorang (contoh pengurus) semak nama, nilai RM dan tarikh.</li>' +
                 '<li><b>Sedia</b> — sudah disemak, menunggu untuk dipapar.</li>' +
               '</ul>' +
+              '<p style="margin:8px 0 6px;"><b>Pindah draf ke lajur lain:</b> buka draf itu → klik <b>Status: Draf</b> di bar atas → pilih <b>Dalam Semakan</b> atau <b>Sedia</b>.</p>' +
+              fdzShot('status-menu', 'Butang Status muncul di bar atas selepas sesuatu disimpan sebagai draf.') +
               '<ul>' +
-                '<li><b>Pindah draf ke lajur lain:</b> buka draf itu → klik <b>Status: Draf</b> di atas → pilih <b>Dalam Semakan</b> atau <b>Sedia</b>.</li>' +
-                '<li><b>Di papan Aliran Kerja</b>, letak tetikus pada kad untuk nampak <b>Kemas Kini Laman Web</b> (paparkan di laman web) dan <b>Padam perubahan</b> (buang draf — laman web kekal seperti asal). Klik kad untuk membukanya.</li>' +
+                '<li>Di papan Aliran Kerja, <b>letak tetikus pada kad</b> untuk nampak <b>Kemas Kini Laman Web</b> (paparkan) dan <b>Padam perubahan</b> (buang draf — laman web kekal seperti asal).</li>' +
                 '<li><b>Bekerja seorang?</b> Lajur-lajur ini tidak wajib — anda boleh terus klik <b>Kemas Kini Laman Web</b> dari Draf.</li>' +
               '</ul>' +
               '<h3>➕ Menambah Projek Baru</h3>' +
               '<ol>' +
-                '<li>Klik <b>Projek</b> di kiri → <b>Projek Baru</b>.</li>' +
+                '<li>Klik <b class="fh-n">1</b><b>Projek</b> di kiri, kemudian <b class="fh-n">2</b><b>Projek Baru</b>.' + fdzShot('new-project', '') + '</li>' +
                 '<li><b>Status Projek</b> — <b>Sedang Berjalan</b> jika kerja masih berjalan, <b>Siap</b> jika sudah diserahkan.<br>Siap? Pilih <b>Tarikh Siap</b> dari kalendar. Sedang Berjalan? Biarkan — ia tertulis "Ongoing".</li>' +
                 '<li><b>Tajuk Projek</b> — nama penuh projek, contoh: <i>Proposed Dewan PKMS on Lot 123, Kuching</i>.</li>' +
                 '<li><b>Klien / Majikan</b> dan <b>Nilai Projek (RM)</b> — tidak wajib. Nilai dalam angka sahaja: <code>20000000</code> = RM 20,000,000.</li>' +
                 '<li>Pilih <b>Kategori Projek</b> dan <b>Bahagian</b>, kemudian taip <b>Lokasi Penuh</b>, contoh: <i>Kampung Stass, Kota Samarahan</i>.</li>' +
-                '<li><b>Peta:</b> taip nama tempat dalam kotak di atas peta → <b>🔍 Cari</b>, atau terus klik pada peta. Seret penanda merah ke tempat yang tepat (<b>Satelit</b>, kanan atas peta, menunjukkan bangunan). Hanya anggaran? Tulis dalam <b>Nota Lokasi</b>.</li>' +
-                '<li><b>Gambar:</b> klik <b>Tambah Gambar Projek</b> → <b>Pilih Gambar</b> → pilih dari komputer. Ulang untuk setiap gambar. <b>Gambar pertama ialah gambar utama</b> — seret untuk tukar susunan.</li>' +
+                '<li><b>Peta:</b> <b class="fh-n">1</b> taip nama tempat dan tekan <b>🔍 Cari</b>, atau terus klik pada peta <b class="fh-n">2</b>. Seret penanda merah ke tempat yang tepat. Pilih <b class="fh-n">3</b> <b>Satelit</b> untuk nampak bangunan sebenar. Hanya anggaran? Tulis dalam <b>Nota Lokasi</b>.' + fdzShot('map', '') + '</li>' +
+                '<li><b>Gambar:</b> klik <b>Tambah Gambar Projek</b> → <b>Pilih Gambar</b> → pilih dari komputer. Ulang untuk setiap gambar. <b>Gambar pertama ialah gambar utama</b> — seret untuk tukar susunan.' + fdzShot('add-images', '') + '</li>' +
                 '<li>Ada berita atau video tentang projek ini? <b>Tambah Pautan Berita</b> / <b>Tambah Pautan Video</b> → tajuk + pautan. (Tidak wajib)</li>' +
                 '<li>Klik <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>.</li>' +
               '</ol>' +
-              '<div class="fh-tip">Tip — projek baharu yang serupa dengan projek sedia ada? Buka projek itu → butang hijau <b>Diterbitkan</b> → <b>Salin Entri</b>. Ubah salinan itu, kemudian simpan.</div>' +
               '<h3>🔍 Mencari Projek</h3>' +
               '<ul>' +
-                '<li><b>Cari:</b> taip dalam <b>Search all</b> (kiri atas) → pilih <b>Projek</b> (atau <b>Semua Koleksi</b>). Halaman hasil carian akan dibuka.</li>' +
-                '<li>Di atas senarai: <b>Tapis ikut</b> (tunjuk Sedang Berjalan / Siap sahaja, atau satu kategori), <b>Kumpul ikut</b>, <b>Susun ikut</b>.</li>' +
+                '<li><b>Cari:</b> taip dalam <b>Search all</b> (kiri atas), kemudian pilih di mana hendak dicari — <b>Projek</b>, atau <b>Semua Koleksi</b>. Halaman hasil carian akan dibuka.' + fdzShot('search', '') + '</li>' +
+                '<li>Di atas senarai: <b class="fh-n">1</b><b>Susun ikut</b>, <b class="fh-n">2</b><b>Tapis ikut</b> (tunjuk Sedang Berjalan / Siap sahaja, atau satu kategori), <b class="fh-n">3</b><b>Kumpul ikut</b>.' + fdzShot('list-tools', '') + '</li>' +
               '</ul>' +
               '<h3>🖼️ Peraturan Gambar</h3>' +
               '<ul>' +
@@ -2405,11 +2453,14 @@
                 '<li><b>Jangan tampal pautan gambar Facebook</b> — ia akan rosak selepas beberapa ketika. Simpan gambar ke komputer, kemudian muat naik.</li>' +
                 '<li>📸 <b>Projek yang ada gambar dipaparkan dahulu</b> di laman web — tambah gambar untuk naikkan projek itu.</li>' +
               '</ul>' +
-              '<h3>✏️ Mengubah atau Membuang</h3>' +
+              '<h3>✏️ Mengubah, Menyalin atau Membuang</h3>' +
+              '<p style="margin:0 0 6px;"><b>Ubah sesuatu:</b> buka → ubah → <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>.</p>' +
+              '<p style="margin:0 0 6px;">Untuk item yang sudah ada di laman web, klik butang hijau <b>Diterbitkan</b> di bar atas:</p>' +
+              fdzShot('published-menu', '') +
               '<ul>' +
-                '<li><b>Ubah sesuatu:</b> buka → ubah → <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>.</li>' +
-                '<li><b>Sembunyikan tapi simpan:</b> buka → butang hijau <b>Diterbitkan</b> → <b>Nyahterbit</b>. Ia menjadi draf.</li>' +
-                '<li><b>Padam terus:</b> buka → butang merah <b>Padam entri terbit</b>.</li>' +
+                '<li><b class="fh-n">1</b><b>Nyahterbit</b> — keluarkan dari laman web tetapi simpan sebagai draf.</li>' +
+                '<li><b class="fh-n">2</b><b>Salin Entri</b> — buat salinan untuk diubah. Sesuai untuk projek baharu yang serupa dengan projek sedia ada.</li>' +
+                '<li><b class="fh-n">3</b><b>Padam entri terbit</b> — padam terus.</li>' +
               '</ul>' +
               '<h3>📜 Sijil (Certifications)</h3>' +
               '<p style="margin:0 0 6px;"><b>Cara tambah sijil:</b></p>' +
@@ -2417,8 +2468,8 @@
                 '<li>Klik <b>Pensijilan</b> di kiri → <b>Sijil Baru</b>.</li>' +
                 '<li><b>Nama Sijil</b> — contoh: <i>CIDB G7</i>. <b>Badan Pengeluar</b> — siapa yang keluarkan sijil, contoh: <i>CIDB Malaysia</i>.</li>' +
                 '<li><b>Penerangan Ringkas</b> — satu ayat tentang apa sijil ini benarkan syarikat buat. Pelawat nampak ayat ini bila letak tetikus pada ikon ⓘ.</li>' +
-                '<li><b>Butiran Sijil</b> — maklumat tambahan, <b>satu baris untuk satu maklumat</b>. Klik <b>Tambah Butiran</b>, kemudian isi <b>Label</b> (nama maklumat) dan <b>Nilai</b> (jawapannya).<br>Contoh: <code>No. Pendaftaran</code> → <code>0120110824-SR135974</code></li>' +
-                '<li><b>Tarikh Luput</b> — pilih dari kalendar. Laman web akan tulis "Valid until …" sendiri: <b style="color:#15803d">hijau</b> bila masih sah, <b style="color:#c2410c">oren</b> bila tinggal 6 bulan, <b style="color:#b5000b">merah</b> bila sudah tamat. <b>Jadi jangan taip tarikh luput sekali lagi</b> dalam Butiran Sijil.</li>' +
+                '<li><b>Butiran Sijil</b> — maklumat tambahan, <b>satu baris untuk satu maklumat</b>. Klik <b>Tambah Butiran</b>, kemudian isi <b>Label</b> (nama maklumat) dan <b>Nilai</b> (jawapannya).<br>Contoh: <code>No. Pendaftaran</code> → <code>0120110824-SR135974</code>' + fdzShot('cert-details', '') + '</li>' +
+                '<li><b>Tarikh Luput</b> — pilih dari kalendar. Laman web akan tulis "Valid until …" sendiri: <b style="color:#15803d">hijau</b> bila masih sah, <b style="color:#c2410c">oren</b> bila tinggal 6 bulan, <b style="color:#b5000b">merah</b> bila sudah tamat. <b>Jadi jangan taip tarikh luput sekali lagi</b> dalam Butiran Sijil.' + fdzShot('cert-expiry', '') + '</li>' +
                 '<li><b>Fail PDF Sijil</b> (tidak wajib) — muat naik salinan sijil jika pelawat boleh muat turun. Pelawat perlu isi nama dan syarikat dahulu.</li>' +
                 '<li>Klik <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>.</li>' +
               '</ol>' +
@@ -2428,10 +2479,11 @@
               '</ul>' +
               '<h3>📸 Galeri</h3>' +
               '<p style="margin:0 0 6px;">Galeri di halaman Projek ada <b>7 tempat tetap</b>, <b>a</b> hingga <b>g</b>: <b>a</b> ialah gambar besar di kiri atas, <b>b</b> dan <b>c</b> di baris atas, <b>d</b> hingga <b>g</b> di baris bawah.</p>' +
+              fdzShot('gallery-preview', 'Pratonton di kanan menunjukkan setiap gambar dengan hurufnya.') +
               '<ol>' +
                 '<li>Klik <b>Galeri</b> di kiri → <b>Galeri Kerja Di Lapangan</b>.</li>' +
-                '<li>Di bawah <b>Item Galeri</b>, klik gambar yang hendak ditukar. Pratonton di kanan menunjukkan kedudukan setiap gambar.</li>' +
-                '<li>Klik <b>Tukar Gambar</b> → pilih gambar baharu. Biarkan <b>Kedudukan Gambar</b> seperti asal.</li>' +
+                '<li>Di bawah <b>Item Galeri</b>, klik gambar yang hendak ditukar.</li>' +
+                '<li><b class="fh-n">1</b> biarkan <b>Kedudukan Gambar</b> seperti asal, dan klik <b class="fh-n">2</b><b>Tukar Gambar</b> untuk pilih gambar baharu.' + fdzShot('gallery-item', '') + '</li>' +
                 '<li>Klik <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>.</li>' +
               '</ol>' +
               '<h3>💼 Kerjaya (Jawatan Kosong)</h3>' +
@@ -2439,8 +2491,7 @@
                 '<li>Klik <b>Kerjaya (Jawatan Kosong)</b> di kiri → <b>Jawatan Baru</b>.</li>' +
                 '<li><b>Nama Jawatan</b>, <b>Pengenalan Ringkas</b> (1–2 ayat), dan <b>Alamat Emel Permohonan</b> (ke mana permohonan dihantar).</li>' +
                 '<li><b>Tarikh Tutup</b> (tidak wajib) — pilih sekali. Selepas hari itu jawatan bertukar kepada <b>CLOSED</b> sendiri.</li>' +
-                '<li><b>Fakta Utama:</b> <b>Tambah Fakta</b> → pilih ikon, kemudian contoh <code>Location</code> → <code>Kuching, Sarawak</code>.</li>' +
-                '<li><b>Bahagian Butiran:</b> <b>Tambah Bahagian</b> → tajuk (contoh <i>Requirements</i>) → <b>Tambah Poin</b> untuk setiap baris.</li>' +
+                '<li><b class="fh-n">1</b><b>Tambah Fakta</b> untuk setiap fakta ringkas, contoh <code>Location</code> → <code>Kuching, Sarawak</code>. <b class="fh-n">2</b><b>Tambah Bahagian</b> untuk setiap blok (contoh <i>Requirements</i>), kemudian <b>Tambah Poin</b> untuk setiap baris.' + fdzShot('careers-lists', '') + '</li>' +
                 '<li>Ada iklan asal? <b>Gambar Brosur / Poster</b> → <b>Pilih Gambar</b>. (Tidak wajib)</li>' +
                 '<li>Klik <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>. Pratonton di kanan menunjukkan kad sebenar.</li>' +
               '</ol>' +
@@ -2448,19 +2499,16 @@
                 '<li><b>Jawatan sudah diisi?</b> Nyahtanda <b>Papar di Laman Web</b> (simpan untuk lain kali), atau padam. Jika tiada yang dipapar, halaman akan menyatakan tiada jawatan kosong.</li>' +
               '</ul>' +
               '<h3>⭐ Projek &amp; Sijil Pilihan</h3>' +
-              '<p style="margin:0 0 6px;">Di sini anda pilih apa yang keluar di bahagian utama yang besar (karusel homepage / bahagian atas halaman Sijil).</p>' +
-              '<ol>' +
-                '<li>Klik <b>Projek Pilihan ⭐</b> (atau <b>Sijil Pilihan ⭐</b>) di kiri, kemudian bukanya.</li>' +
-                '<li>Untuk tambah: <b>Tambah Projek Pilihan</b> → taip sebahagian nama → klik dalam senarai.</li>' +
-                '<li>Untuk tukar susunan: seret baris. Paling atas = dipapar dahulu. Untuk buang: klik <b>×</b> pada baris itu.</li>' +
-                '<li>Klik <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>. Pratonton di kanan menunjukkan kad sebenar.</li>' +
-              '</ol>' +
+              '<p style="margin:0 0 6px;">Di sini anda pilih apa yang keluar di bahagian utama yang besar (karusel homepage / bahagian atas halaman Sijil). Klik <b>Projek Pilihan ⭐</b> (atau <b>Sijil Pilihan ⭐</b>) di kiri, kemudian bukanya.</p>' +
+              fdzShot('featured-list', '') +
               '<ul>' +
-                '<li>Sijil: <b>maksimum 6</b> — halaman itu direka untuk 6 kad.</li>' +
-                '<li>Item pilihan ditanda <b>⭐ Pilihan</b> dalam senarai Projek / Pensijilan.</li>' +
+                '<li><b class="fh-n">1</b><b>Tambah Projek Pilihan</b> → taip sebahagian nama → klik dalam senarai.</li>' +
+                '<li><b class="fh-n">2</b> <b>Seret</b> baris pada pemegang ini untuk tukar susunan. Paling atas = dipapar dahulu.</li>' +
+                '<li><b class="fh-n">3</b> <b>×</b> membuangnya dari senarai.</li>' +
+                '<li>Kemudian <b>Simpan Draf</b> → <b>Kemas Kini Laman Web</b>. Sijil: <b>maksimum 6</b>. Item pilihan juga ditanda <b>⭐ Pilihan</b> dalam senarai.</li>' +
               '</ul>' +
               '<div class="fh-tip">&#8505;&#65039; Nombor merah di sebelah <b>Projek</b>, <b>Pensijilan</b> dan <b>Kerjaya</b>, tanda ⭐ dan pratonton Pilihan menunjukkan laman web yang <b>sudah dipapar</b> — item baharu muncul di situ selepas kotak Status tunjuk ✅.</div>' +
-              '<div class="fh-tip">🆘 Ada masalah? <a href="' + FDZ_WA + '" target="_blank" rel="noopener"><b>WhatsApp kami</b></a> — kami akan selesaikan dengan segera.</div>' +
+              '<div class="fh-tip">🆘 Ada masalah? <a href="' + FDZ_WA + '" target="_blank" rel="noopener"><b>WhatsApp kami</b></a> — kami akan selesaikan dengan segera. Tekan mana-mana gambar untuk lihat saiz penuh.</div>' +
               '') +
             '</div>' +
           '</div>';
@@ -2812,6 +2860,10 @@
       // language, what the owner can now DO, both languages. Newest first.
       var FDZ_UPDATES = [
         { date: '21 Nov 2026', items: [
+          ['<b>The Guide now has pictures</b> — real screenshots with the buttons circled and numbered to match each step. Tap a picture to see it full size.',
+           '<b>Panduan kini ada gambar</b> — tangkapan skrin sebenar dengan butang dibulatkan dan bernombor mengikut setiap langkah. Tekan gambar untuk lihat saiz penuh.'],
+          ['Map: the <b>Map / Satellite</b> switch now shows its two options clearly (it was a blank white box). The "saved" pop-up messages now name the right button and follow the BM/EN setting.',
+           'Peta: suis <b>Peta / Satelit</b> kini menunjukkan dua pilihannya dengan jelas (dahulu kotak putih kosong). Mesej "disimpan" kini menyebut butang yang betul dan ikut tetapan BM/EN.'],
           ['The Guide now starts with <b>Save Draft vs Update Website</b> — why there are two steps, and what the <b>Workflow</b> tab is for. The Workflow board and draft buttons are now in BM too.',
            'Panduan kini bermula dengan <b>Simpan Draf vs Kemas Kini Laman Web</b> — kenapa ada dua langkah, dan apa fungsi tab <b>Aliran Kerja</b>. Papan Aliran Kerja dan butang draf kini dalam BM juga.'],
           ['<b>Featured Projects / Certificates</b> lists now show each item\'s real title instead of a short code.',
