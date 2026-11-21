@@ -2650,8 +2650,8 @@
         { date: '21 Nov 2026', items: [
           ['<b>The Guide now stays open beside your work</b> — follow the steps while you do them. It remembers where you were, and the chips at the top jump to each section.',
            '<b>Panduan kini kekal terbuka di sisi kerja anda</b> — ikut langkah sambil melakukannya. Ia ingat kedudukan anda, dan butang di atas melompat ke setiap bahagian.'],
-          ['<b>New login page</b> — one language at a time (EN | BM switch, top-right), and a WhatsApp link to request access for a new user.',
-           '<b>Halaman log masuk baharu</b> — satu bahasa pada satu masa (suis EN | BM, kanan atas), dan pautan WhatsApp untuk memohon akses pengguna baharu.'],
+          ['<b>New login page</b> — cleaner, one language at a time (EN | BM switch, top-right).',
+           '<b>Halaman log masuk baharu</b> — lebih kemas, satu bahasa pada satu masa (suis EN | BM, kanan atas).'],
           ['<b>Guide (Panduan) rewritten</b> — every step now matches the real screen. To copy a project: open it → green <b>Published</b> button → <b>Duplicate</b>.',
            '<b>Panduan ditulis semula</b> — setiap langkah kini sepadan dengan skrin sebenar. Untuk salin projek: buka → butang hijau <b>Diterbitkan</b> → <b>Salin Entri</b>.'],
           ['Fixed: the <b>⭐ Featured</b> marks in the Projects / Certifications lists are back, and just <b>opening</b> a project no longer asks "leave this page?".',
@@ -2774,7 +2774,6 @@
 
         // Under Decap's "Login with GitHub" button.
         if (!document.getElementById('fdz-login-note')) {
-          var waAccess = 'https://wa.me/601115255798?text=' + encodeURIComponent('Hi KedaiWebKamek, please add FDZ CMS access for: ');
           var note = document.createElement('div');
           note.id = 'fdz-login-note';
           note.innerHTML =
@@ -2786,8 +2785,8 @@
               '<span>' + fdzL('Daily backups', 'Sandaran harian') + '</span>' +
               '<span>' + fdzL('Live in about a minute', 'Dipapar dalam seminit') + '</span>' +
             '</p>' +
-            '<p class="fdz-ln-access">' + fdzL('No access yet?', 'Belum ada akses?') +
-              ' <a href="' + waAccess + '" target="_blank" rel="noopener">' + fdzL('Request it on WhatsApp', 'Mohon melalui WhatsApp') + '</a></p>' +
+            // Deliberately no link: the owner knows who to contact (owner, 2026-11-21).
+            '<p class="fdz-ln-access">' + fdzL('No access yet? Ask your site administrator.', 'Belum ada akses? Hubungi pentadbir laman web anda.') + '</p>' +
             '<p class="fdz-ln-updated" id="fdz-login-updated"></p>';
           authPage.appendChild(note);
           // Real data only: when the website was last rebuilt (same file the CMS
@@ -2836,7 +2835,7 @@
         if (!document.getElementById('fdz-login-foot')) {
           var foot = document.createElement('div');
           foot.id = 'fdz-login-foot';
-          foot.innerHTML = fdzL('Supported by', 'Disokong oleh') + ' <a href="https://wa.me/601115255798" target="_blank" rel="noopener">KedaiWebKamek</a>';
+          foot.innerHTML = fdzL('Supported by', 'Disokong oleh') + ' KedaiWebKamek';
           authPage.appendChild(foot);
         }
       }
