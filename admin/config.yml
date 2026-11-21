@@ -60,7 +60,7 @@ collections:
         label: "Completion Date"
         widget: date-conditional
         required: false
-        hint: "Required for Completed projects only. PICK a date from the calendar — it fills in automatically in the format 29 Jan 2019. (This field is hidden automatically for Ongoing projects.)"
+        hint: "Required for Completed projects only. PICK a date from the calendar — it fills in automatically in the format 29 Jan 2019. Not needed for Ongoing projects."
 
       # ── Project Details ──────────────────────────────────────────────────────
       - name: description

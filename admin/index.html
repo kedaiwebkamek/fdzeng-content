@@ -1605,13 +1605,24 @@
           '[class*="AuthenticationPage"] p{color:rgba(255,255,255,0.55) !important;font-family:"Inter",sans-serif !important;font-size:0.78rem !important;position:relative;z-index:2;}',
           '#fdz-login-tag{font-family:"Barlow",sans-serif;font-size:0.56rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:26px;position:relative;z-index:2;}',
           '#fdz-login-foot{position:fixed;bottom:18px;left:0;right:0;text-align:center;font-family:"Inter",sans-serif;font-size:0.62rem;letter-spacing:0.08em;color:rgba(255,255,255,0.25);z-index:2;line-height:1.7;}',
-          '#fdz-login-foot a{color:rgba(255,255,255,0.5);text-decoration:none;}',
+          '#fdz-login-foot a{color:rgba(255,255,255,0.4) !important;text-decoration:none;font-weight:500 !important;font-size:inherit !important;letter-spacing:inherit;}',
           '#fdz-login-foot a:hover{color:#e30613;}',
-          '#fdz-login-note{max-width:360px;margin-top:22px;font-family:"Inter",sans-serif;font-size:0.72rem;line-height:1.6;color:rgba(255,255,255,0.55);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px 16px;position:relative;z-index:2;text-align:center;}',
-          '#fdz-login-note .add{display:block;margin-top:9px;color:rgba(255,255,255,0.6);}',
-          '#fdz-login-note .en{display:block;margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.35);font-size:0.66rem;}',
+          '#fdz-login-note{max-width:380px;margin-top:20px;font-family:"Inter",sans-serif;font-size:0.72rem;line-height:1.6;color:rgba(255,255,255,0.55);padding:0 16px;position:relative;z-index:2;text-align:center;}',
+          // Login note: one quiet column of text, no box-in-a-box.
+          '#fdz-login-note p{margin:0;}',
+          '#fdz-login-note .fdz-ln-main{color:rgba(255,255,255,0.62);font-size:0.76rem;}',
+          '#fdz-login-note .fdz-ln-facts{display:flex;flex-wrap:nowrap;white-space:nowrap;justify-content:center;gap:4px 0;margin-top:12px;font-size:0.66rem;color:rgba(255,255,255,0.4);letter-spacing:0.01em;}',
+          '#fdz-login-note .fdz-ln-facts span+span::before{content:"";display:inline-block;width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.28);margin:0 9px;vertical-align:middle;}',
+          '@media (max-width:480px){#fdz-login-note .fdz-ln-facts{flex-direction:column;align-items:center;gap:3px;white-space:normal;}#fdz-login-note .fdz-ln-facts span+span::before{display:none;}}',
+          '#fdz-login-note .fdz-ln-access{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08);font-size:0.74rem;color:rgba(255,255,255,0.5);}',
+          '#fdz-login-note .fdz-ln-updated{margin-top:6px;font-size:0.64rem;color:rgba(255,255,255,0.3);min-height:1em;}',
           '#fdz-login-note a{color:#ff7a72;text-decoration:none;font-weight:600;}',
-          '#fdz-login-note a:hover{color:#fff;}'
+          '#fdz-login-note a:hover{color:#fff;text-decoration:underline;}',
+          // EN | BM switch, top-right of the login screen.
+          '#fdz-login-lang{position:fixed;top:18px;right:18px;z-index:10001;display:flex;padding:3px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);}',
+          '#fdz-login-lang button{font-family:"Barlow",sans-serif !important;font-weight:800 !important;font-size:0.66rem !important;letter-spacing:0.1em !important;padding:6px 12px !important;border-radius:999px !important;background:transparent !important;color:rgba(255,255,255,0.55) !important;border:none !important;box-shadow:none !important;cursor:pointer;min-width:0 !important;height:auto !important;margin:0 !important;transform:none !important;}',
+          '#fdz-login-lang button.on{background:#b5000b !important;color:#fff !important;}',
+          '#fdz-login-lang button:not(.on):hover{color:#fff !important;}'
         ].join('\n');
         document.head.appendChild(s);
       })();
@@ -1899,6 +1910,8 @@
         // Workflow board column headings (title-case, unlike the status menu)
         "Drafts": "Draf",
         "In Review": "Dalam Semakan",
+        // Decap's login button
+        "Login with GitHub": "Log Masuk dengan GitHub",
         // Sidebar search dropdown
         "Search in": "Cari dalam",
         "All Collections": "Semua Koleksi",
@@ -1939,7 +1952,7 @@
         "Pick & order the certificates shown as the main cards at the top of the Certifications page (recommended max 6). Adding a certificate here is what makes it featured — remove it here to un-feature it. Drag to reorder the cards left to right.":
           "Pilih & susun sijil yang dipaparkan sebagai kad utama di bahagian atas halaman Persijilan (disyorkan maksimum 6). Menambah sijil di sini itulah yang menjadikannya pilihan — keluarkan dari sini untuk membatalkannya. Seret untuk menyusun kad dari kiri ke kanan.",
         // ── Field hints (added so BM mode has no English left over) ──
-        "Required for Completed projects only. PICK a date from the calendar — it fills in automatically in the format 29 Jan 2019. (This field is hidden automatically for Ongoing projects.)": "Diperlukan untuk projek Siap sahaja. PILIH tarikh dari kalendar — ia diisi automatik dalam format 29 Jan 2019. (Medan ini disembunyikan automatik untuk projek Sedang Berjalan.)",
+        "Required for Completed projects only. PICK a date from the calendar — it fills in automatically in the format 29 Jan 2019. Not needed for Ongoing projects.": "Diperlukan untuk projek Siap sahaja. PILIH tarikh dari kalendar — ia diisi automatik dalam format 29 Jan 2019. Tidak diperlukan untuk projek Sedang Berjalan.",
         "Choose the category that best describes the project's scope of work. This also determines the pin color on the project map.": "Pilih kategori yang paling menepati skop kerja projek. Ia juga menentukan warna penanda pada peta projek.",
         "⭐ IMPORTANT: The FIRST image in the list = the main image (thumbnail) shown on the project card and homepage carousel. The remaining images are shown in the modal gallery. Upload directly or enter a URL. Format: JPG/PNG, maximum size 5MB per image. (Image descriptions for Google/SEO are generated automatically — nothing to fill in.)": "⭐ PENTING: Gambar PERTAMA dalam senarai = gambar utama (thumbnail) yang dipaparkan pada kad projek dan karusel laman utama. Gambar selebihnya dipaparkan dalam galeri tetingkap. Muat naik terus atau masukkan URL. Format: JPG/PNG, saiz maksimum 5MB setiap gambar. (Penerangan gambar untuk Google/SEO dijana automatik — tiada apa perlu diisi.)",
         "Upload an image from your computer OR enter a full URL starting with https://. Maximum size 5MB. ⚠ Avoid URLs from Facebook — Facebook URLs will expire and the image will not display.": "Muat naik gambar dari komputer anda ATAU masukkan URL penuh bermula dengan https://. Saiz maksimum 5MB. ⚠ Elakkan URL dari Facebook — URL Facebook akan luput dan gambar tidak akan dipaparkan.",
@@ -2213,14 +2226,23 @@
           st.textContent = [
             "#fdz-help-btn{position:fixed;right:22px;bottom:22px;z-index:9998;display:inline-flex;align-items:center;gap:7px;background:#b5000b;color:#fff;font-family:'Barlow',sans-serif;font-weight:800;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;border:none;border-radius:999px;padding:12px 20px;box-shadow:0 10px 26px rgba(181,0,11,0.4);cursor:pointer;transition:transform .2s,background .2s;}",
             "#fdz-help-btn:hover{background:#e30613;transform:translateY(-2px);}",
-            "#fdz-help-overlay{position:fixed;inset:0;z-index:9999;background:rgba(14,15,17,0.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:24px;}",
-            "#fdz-help-modal{background:#fff;width:100%;max-width:640px;max-height:86vh;overflow-y:auto;border-radius:14px;border-top:4px solid #b5000b;box-shadow:0 30px 80px -20px rgba(0,0,0,0.6);position:relative;}",
-            "#fdz-help-modal .fh-head{position:sticky;top:0;background:#141518;color:#fff;padding:20px 26px;display:flex;align-items:center;gap:12px;}",
+            // Docked side panel, NOT a modal: no backdrop, the CMS stays usable
+            // underneath, so the owner can follow the steps while doing them.
+            "#fdz-help-overlay{position:fixed;top:72px;right:16px;bottom:16px;width:min(410px,calc(100vw - 32px));z-index:9999;display:none;}",
+            "#fdz-help-modal{background:#fff;width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;border-radius:12px;border-top:4px solid #b5000b;box-shadow:0 18px 48px -12px rgba(0,0,0,0.45),0 0 0 1px rgba(0,0,0,0.06);}",
+            "#fdz-help-modal .fh-head{flex:0 0 auto;background:#141518;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:10px;}",
+            "#fdz-help-modal .fh-toc{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;border-bottom:1px solid #eee;background:#fafafa;}",
+            "#fdz-help-modal .fh-toc button{font-family:'Inter',sans-serif;font-size:0.7rem;font-weight:600;color:#3f3f46;background:#fff;border:1px solid #e4e4e7;border-radius:999px;padding:4px 10px;cursor:pointer;}",
+            "#fdz-help-modal .fh-toc button:hover{border-color:#b5000b;color:#b5000b;}",
+            // While the panel is open, slide the floating buttons left so they
+            // stay reachable instead of hiding behind it.
+            "body.fdz-help-open #fdz-help-btn,body.fdz-help-open #fdz-lang-btn,body.fdz-help-open #fdz-announce-btn{right:calc(min(410px,100vw - 32px) + 30px);}",
+            "@media (max-width:720px){body.fdz-help-open #fdz-help-btn,body.fdz-help-open #fdz-lang-btn,body.fdz-help-open #fdz-announce-btn{display:none;}}",
             "#fdz-help-modal .fh-head img{height:22px;filter:brightness(0) invert(1);}",
             "#fdz-help-modal .fh-head h2{font-family:'Barlow',sans-serif;font-weight:900;font-size:1.05rem;text-transform:uppercase;letter-spacing:0.02em;margin:0;}",
             "#fdz-help-close{margin-left:auto;background:none;border:none;color:#fff;font-size:1.6rem;line-height:1;cursor:pointer;opacity:0.7;}",
             "#fdz-help-close:hover{opacity:1;}",
-            "#fdz-help-modal .fh-body{padding:22px 26px 30px;font-family:'Inter',sans-serif;color:#1a1c1d;font-size:0.9rem;line-height:1.65;}",
+            "#fdz-help-modal .fh-body{flex:1 1 auto;overflow-y:auto;padding:16px 20px 26px;font-family:'Inter',sans-serif;color:#1a1c1d;font-size:0.86rem;line-height:1.62;}",
             "#fdz-help-modal h3{font-family:'Barlow',sans-serif;font-weight:800;font-size:0.9rem;text-transform:uppercase;letter-spacing:0.04em;color:#b5000b;margin:22px 0 8px;padding-top:16px;border-top:1px solid #eee;}",
             "#fdz-help-modal h3:first-child{border-top:none;padding-top:0;margin-top:0;}",
             "#fdz-help-modal ol,#fdz-help-modal ul{margin:0 0 4px;padding-left:20px;}",
@@ -2316,12 +2338,46 @@
             '</div>' +
           '</div>';
 
-        btn.addEventListener('click', function () { overlay.style.display = 'flex'; });
-        overlay.addEventListener('click', function (e) { if (e.target === overlay) overlay.style.display = 'none'; });
+        // Docked panel behaviour (2026-11-21). It used to be a modal: opening it
+        // covered the CMS, so the owner had to close it to do a step, then reopen
+        // it to read the next one. Now it stays open beside the work, and it
+        // remembers open/closed + scroll position across navigation and reloads.
+        // Only the Guide button and the × close it — no click-outside or Escape,
+        // so it never vanishes mid-task.
+        var body = overlay.querySelector('.fh-body');
+        function setOpen(open) {
+          overlay.style.display = open ? 'block' : 'none';
+          document.body.classList.toggle('fdz-help-open', open);
+          btn.innerHTML = open ? '✕ ' + fdzL('Close guide', 'Tutup panduan') : '📖 ' + fdzL('Guide', 'Panduan');
+          try { localStorage.setItem('fdz-help-open', open ? '1' : '0'); } catch (e) {}
+        }
+        // Section shortcuts: one chip per heading, jumps inside the panel.
+        var heads = body.querySelectorAll('h3');
+        if (heads.length) {
+          var toc = document.createElement('div');
+          toc.className = 'fh-toc';
+          Array.prototype.forEach.call(heads, function (h3) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.textContent = h3.textContent.replace(/^[^A-Za-z]+/, '');   // drop the leading emoji
+            b.addEventListener('click', function () { body.scrollTop = h3.offsetTop - body.offsetTop - 8; });
+            toc.appendChild(b);
+          });
+          body.parentNode.insertBefore(toc, body);
+        }
+        var saveTimer = null;
+        body.addEventListener('scroll', function () {
+          clearTimeout(saveTimer);
+          saveTimer = setTimeout(function () { try { localStorage.setItem('fdz-help-scroll', String(body.scrollTop)); } catch (e) {} }, 200);
+        });
+        btn.addEventListener('click', function () { setOpen(overlay.style.display === 'none' || !overlay.style.display); });
         document.body.appendChild(btn);
         document.body.appendChild(overlay);
-        overlay.querySelector('#fdz-help-close').addEventListener('click', function () { overlay.style.display = 'none'; });
-        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') overlay.style.display = 'none'; });
+        overlay.querySelector('#fdz-help-close').addEventListener('click', function () { setOpen(false); });
+        var wasOpen = false, savedScroll = 0;
+        try { wasOpen = localStorage.getItem('fdz-help-open') === '1'; savedScroll = +localStorage.getItem('fdz-help-scroll') || 0; } catch (e) {}
+        setOpen(wasOpen);
+        if (wasOpen && savedScroll) body.scrollTop = savedScroll;
       }
 
       // ── Total-count badges (Projects / Certifications) in the sidebar ─────────
@@ -2592,6 +2648,10 @@
       // language, what the owner can now DO, both languages. Newest first.
       var FDZ_UPDATES = [
         { date: '21 Nov 2026', items: [
+          ['<b>The Guide now stays open beside your work</b> — follow the steps while you do them. It remembers where you were, and the chips at the top jump to each section.',
+           '<b>Panduan kini kekal terbuka di sisi kerja anda</b> — ikut langkah sambil melakukannya. Ia ingat kedudukan anda, dan butang di atas melompat ke setiap bahagian.'],
+          ['<b>New login page</b> — one language at a time (EN | BM switch, top-right), and a WhatsApp link to request access for a new user.',
+           '<b>Halaman log masuk baharu</b> — satu bahasa pada satu masa (suis EN | BM, kanan atas), dan pautan WhatsApp untuk memohon akses pengguna baharu.'],
           ['<b>Guide (Panduan) rewritten</b> — every step now matches the real screen. To copy a project: open it → green <b>Published</b> button → <b>Duplicate</b>.',
            '<b>Panduan ditulis semula</b> — setiap langkah kini sepadan dengan skrin sebenar. Untuk salin projek: buka → butang hijau <b>Diterbitkan</b> → <b>Salin Entri</b>.'],
           ['Fixed: the <b>⭐ Featured</b> marks in the Projects / Certifications lists are back, and just <b>opening</b> a project no longer asks "leave this page?".',
@@ -2689,30 +2749,62 @@
 
       function brandLogin() {
         var authPage = document.querySelector('[class*="AuthenticationPage"]');
-        if (!authPage) return;
+        if (!authPage) {
+          // Logged in: the EN|BM login switch lives on <body>, so take it away.
+          // Guarded (only when present) so this can't feed the observer loop.
+          var oldSw = document.getElementById('fdz-login-lang');
+          if (oldSw && oldSw.parentNode) oldSw.parentNode.removeChild(oldSw);
+          return;
+        }
         // Re-check by element (not a flag) so it self-heals if React re-renders
         if (document.getElementById('fdz-login-hero')) return;
         // Wait until Decap has rendered the login button
         if (!authPage.querySelector('button')) return;
 
+        // ONE language at a time (EN | BM switch, top-right) — it used to print
+        // every sentence twice, BM then EN, around a single button.
         var hero = document.createElement('div');
         hero.id = 'fdz-login-hero';
         hero.innerHTML =
           '<div class="fdz-logo-chip"><img class="fdz-logo" src="/fdzeng-logo.png" alt="FDZ Engineering Sdn Bhd"></div>' +
           '<div class="fdz-rule"></div>' +
           '<div class="fdz-cms">Content Management System</div>' +
-          '<div class="fdz-cms-sub">Panel Kandungan Laman Web Rasmi</div>';
+          '<div class="fdz-cms-sub">' + fdzL('Official website content panel', 'Panel Kandungan Laman Web Rasmi') + '</div>';
         authPage.insertBefore(hero, authPage.firstChild);
 
-        // Reassure first-time users about the GitHub redirect (the button below is
-        // Decap's "Login with GitHub") — placed under the button, above the tag.
+        // Under Decap's "Login with GitHub" button.
         if (!document.getElementById('fdz-login-note')) {
+          var waAccess = 'https://wa.me/601115255798?text=' + encodeURIComponent('Hi KedaiWebKamek, please add FDZ CMS access for: ');
           var note = document.createElement('div');
           note.id = 'fdz-login-note';
-          note.innerHTML = '&#128274; Anda akan dibawa ke GitHub untuk log masuk dengan selamat &mdash; ini normal. Gunakan email yang telah diberi akses.' +
-            '<span class="add">Ingin menambah pengguna? Nyatakan kepada <a href="mailto:apel@kedaiwebkamek.my">apel@kedaiwebkamek.my</a>, kami akan menambah akses untuk anda.</span>' +
-            '<span class="en">You&rsquo;ll be redirected to GitHub to sign in securely &mdash; this is normal. Use the email that has been granted access. To add a user, email apel@kedaiwebkamek.my and we&rsquo;ll set it up.</span>';
+          note.innerHTML =
+            '<p class="fdz-ln-main">' + fdzL('You&rsquo;ll sign in through GitHub. Use the account that has been given access.',
+                                             'Anda akan log masuk melalui GitHub. Guna akaun yang telah diberi akses.') + '</p>' +
+            // Plain facts, each one true of this setup — no badges, no adjectives.
+            '<p class="fdz-ln-facts">' +
+              '<span>' + fdzL('GitHub sign-in', 'Log masuk GitHub') + '</span>' +
+              '<span>' + fdzL('Daily backups', 'Sandaran harian') + '</span>' +
+              '<span>' + fdzL('Live in about a minute', 'Dipapar dalam seminit') + '</span>' +
+            '</p>' +
+            '<p class="fdz-ln-access">' + fdzL('No access yet?', 'Belum ada akses?') +
+              ' <a href="' + waAccess + '" target="_blank" rel="noopener">' + fdzL('Request it on WhatsApp', 'Mohon melalui WhatsApp') + '</a></p>' +
+            '<p class="fdz-ln-updated" id="fdz-login-updated"></p>';
           authPage.appendChild(note);
+          // Real data only: when the website was last rebuilt (same file the CMS
+          // Status box reads). Stays empty if it can't be fetched.
+          fetch('/cms-status.json', { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (s) {
+              var el = document.getElementById('fdz-login-updated');
+              if (!el || !s || !s.builtAt) return;
+              var d = new Date(s.builtAt); if (isNaN(d.getTime())) return;
+              var t = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+              var when = new Date().toDateString() === d.toDateString()
+                ? fdzL('today, ', 'hari ini, ') + t
+                : d.getDate() + ' ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()] + ' ' + d.getFullYear() + ', ' + t;
+              el.textContent = fdzL('Website last updated ', 'Laman web dikemas kini ') + when;
+            })
+            .catch(function () {});
         }
 
         var tag = document.createElement('div');
@@ -2720,10 +2812,31 @@
         tag.innerHTML = 'G7 Bumiputera Contractor &bull; Sarawak';
         authPage.appendChild(tag);
 
+        if (!document.getElementById('fdz-login-lang')) {
+          var sw = document.createElement('div');
+          sw.id = 'fdz-login-lang';
+          sw.setAttribute('role', 'group');
+          sw.setAttribute('aria-label', 'Language / Bahasa');
+          ['en', 'bm'].forEach(function (code) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.textContent = code.toUpperCase();
+            if (fdzLang === code) b.className = 'on';
+            b.setAttribute('aria-pressed', fdzLang === code ? 'true' : 'false');
+            b.addEventListener('click', function () {
+              if (fdzLang === code) return;
+              try { localStorage.setItem('fdz-cms-lang', code); } catch (e) {}
+              location.reload();
+            });
+            sw.appendChild(b);
+          });
+          document.body.appendChild(sw);
+        }
+
         if (!document.getElementById('fdz-login-foot')) {
           var foot = document.createElement('div');
           foot.id = 'fdz-login-foot';
-          foot.innerHTML = 'Secure admin access &bull; www.fdzeng.com/admin';
+          foot.innerHTML = fdzL('Supported by', 'Disokong oleh') + ' <a href="https://wa.me/601115255798" target="_blank" rel="noopener">KedaiWebKamek</a>';
           authPage.appendChild(foot);
         }
       }
