@@ -15,6 +15,7 @@ collections:
   # ── 1. PROJECTS ─────────────────────────────────────────────────────────────
   - name: projects
     label: Projects
+    label_singular: "Project"
     folder: content/projects
     identifier_field: description
     slug: "{{slug}}"
@@ -244,6 +245,7 @@ collections:
   # ── 2. CERTIFICATIONS ───────────────────────────────────────────────────────
   - name: certifications
     label: Certifications
+    label_singular: "Certification"
     folder: content/certifications
     extension: json
     format: json
