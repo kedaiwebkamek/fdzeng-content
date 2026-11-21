@@ -1076,6 +1076,142 @@
 
       CMS.registerPreviewTemplate('gallery', GalleryPreview);
 
+      // ── Careers (job vacancy) preview ──────────────────────────────────────
+      // Mirrors renderJob() in fdzeng.com/scripts/build-data.js, which writes the
+      // REAL card into careers.html at build time — same markup, and the CSS below
+      // is copied from careers.html (variables kept, values from its :root). If you
+      // change the card on the site, change renderJob() and this together.
+      function CareersPreview(props) {
+        var d = props.entry.getIn(['data']);
+        d = d && d.toJS ? d.toJS() : {};
+        function esc(s) {
+          return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+        var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+          'August', 'September', 'October', 'November', 'December'];
+        var cm = String(d.closingDate || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+        var close = cm ? { iso: cm[1] + '-' + cm[2] + '-' + cm[3], label: (+cm[3]) + ' ' + MONTHS[+cm[2] - 1] + ' ' + cm[1] } : null;
+        // Same rule as the live page: an Open vacancy past its closing date shows Closed.
+        var pastClose = close && Date.now() > new Date(close.iso + 'T23:59:59+08:00').getTime();
+        var closed = d.status === 'Closed' || pastClose;
+        var title = d.title || fdzL('(Job title)', '(Nama jawatan)');
+        var ico = function (n) { return '<span class="material-symbols-outlined">' + esc(n || 'info') + '</span>'; };
+
+        var facts = toArray(d.facts).filter(function (f) { return f && (f.label || f.value); });
+        if (close) facts.push({ icon: 'event', label: 'Closing date', value: close.label });
+
+        var cols = [];
+        toArray(d.sections).forEach(function (s) {
+          if (!s || !(s.heading || toArray(s.items).length)) return;
+          if (s.stack && cols.length) cols[cols.length - 1].push(s); else cols.push([s]);
+        });
+        var colsHtml = cols.map(function (col) {
+          return '<div>' + col.map(function (s, i) {
+            return '<p class="job__heading"' + (i ? ' style="margin-top:20px;"' : '') + '>' + esc(s.heading) + '</p>' +
+              '<ul class="job__list">' + toArray(s.items).filter(function (x) { return x && x.text; }).map(function (x) {
+                return '<li>' + esc(x.text) + (x.note ? ' <span class="qty">' + esc(x.note) + '</span>' : '') + '</li>';
+              }).join('') + '</ul>';
+          }).join('') + '</div>';
+        }).join('');
+
+        var posterSrc = '';
+        if (d.poster) {
+          var asset = props.getAsset ? props.getAsset(d.poster) : null;   // shows a just-uploaded image too
+          posterSrc = asset ? String(asset) : d.poster;
+        }
+
+        var notes = [];
+        if (d.show === false) notes.push(fdzL('HIDDEN — "Show on Website" is unticked, so this vacancy is NOT on the Careers page.',
+                                              'TERSEMBUNYI — "Papar di Laman Web" tidak ditanda, jadi jawatan ini TIDAK dipapar di halaman Kerjaya.'));
+        if (pastClose && d.status !== 'Closed') notes.push(fdzL('The closing date has passed — the website already shows this vacancy as CLOSED.',
+                                                                 'Tarikh tutup telah lepas — laman web sudah memaparkan jawatan ini sebagai DITUTUP.'));
+        if (!d.email) notes.push(fdzL('Add an Apply-to Email Address — a vacancy without one is not shown on the website.',
+                                      'Tambah Alamat Emel Permohonan — jawatan tanpa emel tidak dipapar di laman web.'));
+
+        var css = [
+          '<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">',
+          '<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@24,400,0..1&display=swap" rel="stylesheet">',
+          '<style>',
+          ':root{--surface:#ffffff;--surface-low:#f3f3f5;--surface-container:#eeeef0;--surface-high:#e8e8ea;--on-surface:#1a1c1d;--outline:#936e69;--outline-variant:#e9bcb6;--primary:#b5000b;--primary-container:#ffdad5;--secondary:#5f5e5e;--secondary-container:#e2dfde;--font-display:"Barlow",sans-serif;--font-body:"Inter",sans-serif;--font-mono:"JetBrains Mono",monospace;--radius:0.25rem;--radius-lg:0.5rem;}',
+          '*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}',
+          'body{font-family:var(--font-body);background:var(--surface-low);padding:24px;color:var(--on-surface);}',
+          '.material-symbols-outlined{font-family:"Material Symbols Outlined";font-weight:normal;font-style:normal;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;-webkit-font-feature-settings:"liga";font-feature-settings:"liga";}',
+          '.pv-note{background:#fff7e0;border:1px solid #f0d58a;color:#6b4e00;border-radius:var(--radius-lg);padding:10px 14px;font-size:0.8rem;line-height:1.5;margin-bottom:14px;}',
+          '.pv-cap{font-family:var(--font-mono);font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--outline);margin-bottom:10px;}',
+          '.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 28px;height:48px;font-family:var(--font-display);font-size:0.8rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;border:1.5px solid transparent;border-radius:var(--radius);cursor:default;text-decoration:none;}',
+          '.btn--primary{background:var(--primary);color:#fff;border-color:var(--primary);}',
+          '.btn--outline{background:transparent;color:var(--on-surface);border-color:var(--on-surface);}',
+          '.job{background:var(--surface);border:1px solid var(--surface-high);border-radius:var(--radius-lg);overflow:hidden;position:relative;display:grid;grid-template-columns:280px 1fr;}',
+          '.job::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--primary);z-index:2;}',
+          '.job.job--no-poster{grid-template-columns:1fr;}',
+          '.job__poster{display:flex;flex-direction:column;gap:14px;padding:20px;background:var(--surface-container);border-right:1px solid var(--surface-high);}',
+          '.job__poster-img{display:block;width:100%;border:1px solid var(--surface-high);border-radius:var(--radius);background:#fff;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,0.12);}',
+          '.job__poster-img img{display:block;width:100%;height:auto;}',
+          '.job__poster-cta{display:flex;align-items:center;justify-content:center;gap:8px;height:40px;border:1.5px solid var(--on-surface);color:var(--on-surface);font-family:var(--font-display);font-size:0.7rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;border-radius:var(--radius);}',
+          '.job__body{padding:28px 28px 24px;display:flex;flex-direction:column;min-width:0;}',
+          '.job__top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;}',
+          '.chip{display:inline-flex;align-items:center;gap:6px;font-size:0.64rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--primary);background:var(--primary-container);padding:4px 12px;border-radius:99px;}',
+          '.chip--status{color:#14632b;background:#d9f2e0;}',
+          '.chip--status::before{content:"";width:6px;height:6px;border-radius:50%;background:#1c9a45;}',
+          '.chip--status.is-closed{color:#5f5e5e;background:var(--secondary-container);}',
+          '.chip--status.is-closed::before{background:#8a8888;}',
+          '.job__title{font-family:var(--font-display);font-size:1.8rem;font-weight:900;text-transform:uppercase;letter-spacing:-0.01em;line-height:1.05;margin-bottom:10px;}',
+          '.job__lead{font-size:0.92rem;color:var(--secondary);line-height:1.7;margin-bottom:20px;max-width:62ch;}',
+          '.job__facts{display:flex;flex-wrap:wrap;gap:8px 26px;padding:14px 0;margin-bottom:22px;border-top:1px solid var(--surface-high);border-bottom:1px solid var(--surface-high);}',
+          '.fact{display:flex;align-items:center;gap:8px;font-size:0.82rem;}',
+          '.fact .material-symbols-outlined{font-size:1.1rem;color:var(--primary);}',
+          '.fact strong{font-weight:600;}',
+          '.fact__label{font-family:var(--font-mono);font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--outline);}',
+          '.job__cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px 36px;margin-bottom:26px;}',
+          '.job__heading{font-family:var(--font-mono);font-size:0.62rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--primary);margin-bottom:10px;}',
+          '.job__list{list-style:none;display:flex;flex-direction:column;gap:8px;}',
+          '.job__list li{position:relative;padding-left:18px;font-size:0.86rem;line-height:1.55;}',
+          '.job__list li::before{content:"";position:absolute;left:0;top:0.6em;width:6px;height:6px;background:var(--primary);border-radius:1px;}',
+          '.job__list li .qty{font-family:var(--font-mono);font-size:0.68rem;font-weight:700;color:var(--primary);background:var(--primary-container);padding:1px 8px;border-radius:99px;margin-left:6px;white-space:nowrap;}',
+          '.job__actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:auto;padding-top:4px;}',
+          '.email-copy{display:inline-flex;align-items:center;gap:4px;height:48px;padding:0 5px 0 16px;background:var(--surface-low);border:1.5px solid var(--surface-high);border-radius:var(--radius);}',
+          '.email-copy__addr{font-family:var(--font-mono);font-size:0.82rem;font-weight:700;word-break:break-all;}',
+          '.email-copy__btn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;background:var(--surface);border:1px solid var(--surface-high);border-radius:var(--radius);font-family:var(--font-mono);font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;}',
+          '.email-copy__btn .material-symbols-outlined{font-size:1rem;}',
+          '.job__verify{display:flex;align-items:center;gap:10px;margin-top:20px;padding:12px 16px;background:var(--surface-low);border:1px solid var(--surface-high);border-radius:var(--radius-lg);font-size:0.78rem;line-height:1.5;color:var(--secondary);}',
+          '.job__verify .material-symbols-outlined{color:#1c9a45;font-size:1.25rem;flex-shrink:0;font-variation-settings:"FILL" 1;}',
+          '.job__verify a{color:var(--primary);font-weight:600;}',
+          '@media (max-width:760px){.job{grid-template-columns:1fr;}.job__poster{border-right:none;border-bottom:1px solid var(--surface-high);}}',
+          '</style>'
+        ].join('');
+
+        var html = css +
+          notes.map(function (n) { return '<div class="pv-note">⚠ ' + esc(n) + '</div>'; }).join('') +
+          '<p class="pv-cap">' + fdzL('Preview — Careers page vacancy card', 'Pratonton — kad jawatan di halaman Kerjaya') + '</p>' +
+          '<article class="job' + (posterSrc ? '' : ' job--no-poster') + '">' +
+            (posterSrc ? '<div class="job__poster"><a class="job__poster-img"><img src="' + esc(posterSrc) + '" alt=""></a>' +
+              '<a class="job__poster-cta"><span class="material-symbols-outlined" style="font-size:1.1rem;">zoom_in</span>View Original Brochure</a></div>' : '') +
+            '<div class="job__body">' +
+              '<div class="job__top">' +
+                (d.tag ? '<span class="chip"><span class="material-symbols-outlined" style="font-size:0.85rem;">' + esc(d.tagIcon || 'work') + '</span>' + esc(d.tag) + '</span>' : '') +
+                '<span class="chip chip--status' + (closed ? ' is-closed">Closed' : '">Open') + '</span>' +
+              '</div>' +
+              '<h3 class="job__title">' + esc(title) + '</h3>' +
+              (d.lead ? '<p class="job__lead">' + esc(d.lead) + '</p>' : '') +
+              (facts.length ? '<div class="job__facts">' + facts.map(function (f) {
+                return '<div class="fact">' + ico(f.icon) + '<span><span class="fact__label">' + esc(f.label) + '</span><br><strong>' + esc(f.value) + '</strong></span></div>';
+              }).join('') + '</div>' : '') +
+              (colsHtml ? '<div class="job__cols">' + colsHtml + '</div>' : '') +
+              '<div class="job__actions">' +
+                '<a class="btn btn--primary"><span class="material-symbols-outlined" style="font-size:1.1rem;">mail</span>Apply by Email</a>' +
+                (d.email ? '<span class="email-copy"><span class="email-copy__addr">' + esc(d.email) + '</span><span class="email-copy__btn"><span class="material-symbols-outlined">content_copy</span>Copy</span></span>' : '') +
+                '<a class="btn btn--outline"><span class="material-symbols-outlined" style="font-size:1.1rem;">share</span>Share</a>' +
+              '</div>' +
+              (d.facebookUrl ? '<p class="job__verify"><span class="material-symbols-outlined">verified</span><span>Announced on the official FDZ Engineering Facebook page. <a>View original post&nbsp;↗</a></span></p>' : '') +
+            '</div>' +
+          '</article>';
+
+        return h('div', { dangerouslySetInnerHTML: { __html: html } });
+      }
+
+      CMS.registerPreviewTemplate('careers', CareersPreview);
+
       // ─────────────────────────────────────────────────────────────────────────
       // Featured Projects / Featured Certificates previews.
       // These two collections store only REFERENCES (a project's description / a
@@ -1574,6 +1710,9 @@
           "#fdz-announce .fdz-an-btn--ghost:hover { border-color:#b5000b; background:rgba(181,0,11,0.05); }",
           "#fdz-announce .fdz-an-btn--go { background:#b5000b; color:#fff; }",
           "#fdz-announce .fdz-an-btn--go:hover { background:#8e0009; }",
+          "#fdz-announce .fdz-up-entry { margin:0 0 4px; }",
+          "#fdz-announce .fdz-up-date { display:block; font-family:'Barlow',sans-serif; font-weight:800; font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color:#b5000b; margin:4px 0 7px; }",
+          "#fdz-announce .fdz-up-entry .fdz-an-list li { padding:9px 12px; font-size:0.85rem; }",
           // Third pill in the bottom-right rail. The rail is already Guide (22px)
           // and the language toggle (74px) — keep this above both, and quieter
           // than the red Guide so that stays the primary call to action.
@@ -1721,6 +1860,7 @@
         "Workflow": "Aliran Kerja",
         "New Project": "Projek Baru",
         "New Certification": "Sijil Baru",
+        "New Vacancy": "Jawatan Baru",
         "Save": "Simpan Draf",
         "Publish": "Kemas Kini Laman Web",
         "Publishing...": "Mengemas kini Laman Web...",
@@ -1749,8 +1889,8 @@
         "Choose Ongoing if the project is still under construction. Choose Completed if the project has been handed over to the client.": "Pilih Sedang Berjalan jika projek masih dalam pembinaan. Pilih Siap jika projek telah diserahkan kepada klien.",
         "A short, clear title describing the project. Example: Cadangan Pembinaan Jalan Penghubung Kg. Stass, Kota Samarahan": "Tajuk ringkas dan jelas yang menerangkan projek. Contoh: Cadangan Pembinaan Jalan Penghubung Kg. Stass, Kota Samarahan",
         "Full name of the client or agency managing the project. Example: Jabatan Kerja Raya Sarawak, PETRONAS Carigali, Suruhanjaya Perkhidmatan Air Negeri (SPAN). Leave blank if it is not confirmed yet — you can add it later.": "Nama penuh klien atau agensi yang menguruskan projek. Contoh: Jabatan Kerja Raya Sarawak, PETRONAS Carigali, Suruhanjaya Perkhidmatan Air Negeri (SPAN). Biarkan kosong jika belum disahkan — anda boleh tambah kemudian.",
-        "Enter the contract value in NUMBERS ONLY — without RM, commas, or decimal points. Example: type 10000000 for RM 10,000,000": "Masukkan nilai kontrak dalam ANGKA SAHAJA — tanpa RM, koma, atau titik perpuluhan. Contoh: taip 10000000 untuk RM 10,000,000",
-        "Choose the Sarawak administrative division where this project is carried out.": "Pilih bahagian pentadbiran Sarawak di mana projek ini dijalankan.",
+        "Enter the contract value in NUMBERS ONLY — without RM, commas, or decimal points. Example: type 10000000 for RM 10,000,000. Leave blank if the project has no fixed contract value.": "Masukkan nilai kontrak dalam ANGKA SAHAJA — tanpa RM, koma, atau titik perpuluhan. Contoh: taip 10000000 untuk RM 10,000,000. Biarkan kosong jika projek tiada nilai kontrak tetap.",
+        "Choose the Sarawak administrative division where this project is carried out. Lawas, Ba'kelalan and Trusan are in Limbang Division.": "Pilih bahagian pentadbiran Sarawak di mana projek ini dijalankan. Lawas, Ba'kelalan dan Trusan terletak dalam Bahagian Limbang.",
         "A more specific location name than the division. Example: Kampung Stass, Kota Samarahan or Jalan Oya, Sibu, Sarawak": "Nama lokasi yang lebih khusus daripada bahagian. Contoh: Kampung Stass, Kota Samarahan atau Jalan Oya, Sibu, Sarawak",
         "Leave blank if the coordinates are the exact project site location. Fill in if the coordinates are only approximate. Example: Around Kampung Asajaya, coordinates are not the exact project site": "Biarkan kosong jika koordinat adalah lokasi tapak projek yang tepat. Isi jika koordinat hanya anggaran. Contoh: Sekitar Kampung Asajaya, koordinat bukan tapak projek sebenar",
         "Write a short description of this image. Helps Google recognize your image (SEO). Example: Road widening work at Jalan Oya, Sibu": "Tulis penerangan ringkas gambar ini. Membantu Google mengenali gambar anda (SEO). Contoh: Kerja menaik taraf jalan di Jalan Oya, Sibu",
@@ -1794,6 +1934,76 @@
         "Full URL of the FDZ Engineering Facebook page for the 'See More' button. Example: https://www.facebook.com/fdzengineering": "URL penuh halaman Facebook FDZ Engineering untuk butang 'Lihat Lagi'. Contoh: https://www.facebook.com/fdzengineering",
         "A unique ID for each image. Use a short format without spaces. Example: gallery-001, site-kuching-01": "ID unik untuk setiap gambar. Gunakan format pendek tanpa ruang. Contoh: gallery-001, site-kuching-01",
         "Upload a work-in-the-field image. Format: JPG/PNG. Maximum size 5MB. (Image description for Google/SEO is generated automatically.)": "Muat naik gambar kerja di lapangan. Format: JPG/PNG. Saiz maksimum 5MB. (Penerangan gambar untuk Google/SEO dijana automatik.)",
+
+        // ── Careers (Job Vacancies) collection ──
+        "Careers (Job Vacancies)": "Kerjaya (Jawatan Kosong)",
+        "Vacancy": "Jawatan Kosong",
+        "Open": "Dibuka",
+        "Closed": "Ditutup",
+        "Job Title": "Nama Jawatan",
+        "Show on Website": "Papar di Laman Web",
+        "Vacancy Status": "Status Jawatan",
+        "Open — Accepting applications": "Dibuka — Menerima permohonan",
+        "Closed — Still shown, marked Closed": "Ditutup — Masih dipapar, ditanda Ditutup",
+        "Closing Date": "Tarikh Tutup",
+        "Display Order": "Susunan Paparan",
+        "Category Tag": "Label Kategori",
+        "Category Tag Icon": "Ikon Label Kategori",
+        "💼 Briefcase (general job)": "💼 Beg Kerja (kerja umum)",
+        "👷 Engineer": "👷 Jurutera",
+        "🏗 Construction": "🏗 Pembinaan",
+        "🎓 Training / Education": "🎓 Latihan / Pendidikan",
+        "📐 Survey / Measurement": "📐 Ukur / Ukuran",
+        "🧾 Accounts / Finance": "🧾 Akaun / Kewangan",
+        "🗂 Office / Admin": "🗂 Pejabat / Pentadbiran",
+        "👥 Team / People": "👥 Pasukan / Orang",
+        "📍 Location": "📍 Lokasi",
+        "🕒 Time / Duration": "🕒 Masa / Tempoh",
+        "📅 Calendar / Working days": "📅 Kalendar / Hari bekerja",
+        "🧭 Experience": "🧭 Pengalaman",
+        "🛡 Safety": "🛡 Keselamatan",
+        "ℹ Information": "ℹ Maklumat",
+        "Short Introduction": "Pengenalan Ringkas",
+        "Key Facts": "Fakta Utama",
+        "Fact": "Fakta",
+        "Icon": "Ikon",
+        "Details Sections": "Bahagian Butiran",
+        "Section": "Bahagian",
+        "Section Heading": "Tajuk Bahagian",
+        "Place Under the Previous Section": "Letak di Bawah Bahagian Sebelumnya",
+        "Bullet Points": "Poin",
+        "Bullet Point": "Poin",
+        "Text": "Teks",
+        "Badge": "Lencana",
+        "Apply-to Email Address": "Alamat Emel Permohonan",
+        "Email Subject": "Subjek Emel",
+        "Email Message Template": "Templat Mesej Emel",
+        "Application Instructions": "Arahan Permohonan",
+        "Brochure / Poster Image": "Gambar Brosur / Poster",
+        "Facebook Post Link": "Pautan Hantaran Facebook",
+        "Share Message": "Mesej Kongsi",
+        "The position name shown as the big heading on the vacancy card. Example: Project Engineer": "Nama jawatan yang dipaparkan sebagai tajuk besar pada kad jawatan kosong. Contoh: Jurutera Projek",
+        "Untick to hide this vacancy from the Careers page without deleting it (useful to reuse it later). To remove it for good, delete the entry instead.": "Nyahtanda untuk menyembunyikan jawatan ini dari halaman Kerjaya tanpa memadamnya (berguna untuk digunakan semula kelak). Untuk membuangnya terus, padam entri ini.",
+        "Open vacancies show a green OPEN badge. If you set a Closing Date below, the badge switches to CLOSED automatically the day after — you don't need to come back and change this.": "Jawatan yang dibuka memaparkan lencana hijau OPEN. Jika anda tetapkan Tarikh Tutup di bawah, lencana bertukar kepada CLOSED secara automatik pada hari berikutnya — anda tidak perlu kembali untuk mengubahnya.",
+        "Optional. PICK the last day to apply. It is shown on the card as 'Closing date' and the vacancy is marked CLOSED automatically after that day. Do NOT also add it under Key Facts. Leave blank if there is no closing date.": "Jika perlu. PILIH hari terakhir untuk memohon. Ia dipaparkan pada kad sebagai 'Closing date' dan jawatan ditanda CLOSED secara automatik selepas hari itu. JANGAN tambah juga di bawah Fakta Utama. Biarkan kosong jika tiada tarikh tutup.",
+        "Optional. 1 = shown first, 2 = second, and so on. Closed vacancies are always shown after open ones. Leave blank to sort by job title.": "Jika perlu. 1 = dipapar pertama, 2 = kedua, dan seterusnya. Jawatan yang ditutup sentiasa dipapar selepas yang dibuka. Biarkan kosong untuk susun ikut nama jawatan.",
+        "Small red label above the job title. Example: Engineering, Trainee Programme, Site Operations": "Label merah kecil di atas nama jawatan. Contoh: Engineering, Trainee Programme, Site Operations",
+        "One or two sentences under the job title that sum up the role. Example: Join our Kuching team to monitor project progress and coordinate with clients and contractors.": "Satu atau dua ayat di bawah nama jawatan yang meringkaskan peranan. Contoh: Sertai pasukan kami di Kuching untuk memantau kemajuan projek dan menyelaras dengan klien serta kontraktor.",
+        "The short facts row under the introduction (location, experience, working hours…). Add one row per fact. The Closing Date is added automatically — don't add it here.": "Baris fakta ringkas di bawah pengenalan (lokasi, pengalaman, waktu bekerja…). Tambah satu baris untuk setiap fakta. Tarikh Tutup ditambah secara automatik — jangan tambah di sini.",
+        "Small grey label. Example: Location, Experience, Working days": "Label kelabu kecil. Contoh: Location, Experience, Working days",
+        "The fact itself, in bold. Example: Kuching, Sarawak or 1–2 years minimum": "Fakta itu sendiri, dalam huruf tebal. Contoh: Kuching, Sarawak atau 1–2 years minimum",
+        "The bullet-point blocks on the card (Requirements, Responsibilities, Benefits, What to Send…). Each section becomes a column. Drag to reorder.": "Blok poin pada kad (Syarat, Tanggungjawab, Faedah, Dokumen untuk Dihantar…). Setiap bahagian menjadi satu lajur. Seret untuk susun semula.",
+        "Example: Job Requirements, Key Responsibilities, Benefits": "Contoh: Job Requirements, Key Responsibilities, Benefits",
+        "Tick to put this section underneath the one above it (same column) instead of starting a new column. Good for short sections like Qualification.": "Tanda untuk meletakkan bahagian ini di bawah bahagian di atasnya (lajur yang sama) dan bukan memulakan lajur baharu. Sesuai untuk bahagian pendek seperti Kelayakan.",
+        "One bullet point. Example: Bachelor's Degree in Civil Engineering": "Satu poin. Contoh: Bachelor's Degree in Civil Engineering",
+        "Optional small red badge after the text. Example: 6 vacancies": "Lencana merah kecil selepas teks (jika perlu). Contoh: 6 vacancies",
+        "Where applications are sent. Shown on the card with a Copy button, and used by the Apply by Email button. Example: hr@fdzeng.com.my": "Ke mana permohonan dihantar. Dipaparkan pada kad bersama butang Copy, dan digunakan oleh butang Apply by Email. Contoh: hr@fdzeng.com.my",
+        "Pre-filled subject line when an applicant clicks Apply by Email. Example: Application - Project Engineer - [Your Name]. Leave blank to use 'Application - <Job Title>'.": "Baris subjek yang diisi awal apabila pemohon klik Apply by Email. Contoh: Application - Project Engineer - [Your Name]. Biarkan kosong untuk guna 'Application - <Nama Jawatan>'.",
+        "Pre-filled message the applicant starts from. Leave blank for a simple default message.": "Mesej yang diisi awal untuk pemohon. Biarkan kosong untuk mesej lalai yang ringkas.",
+        "Shown in the email pop-up as the reminder of what to attach. Example: Attach your detailed resume, copies of relevant certificates, and your expected salary.": "Dipaparkan dalam pop-up emel sebagai peringatan dokumen yang perlu dilampirkan. Contoh: Attach your detailed resume, copies of relevant certificates, and your expected salary.",
+        "Optional. The original job advertisement image. Shown beside the vacancy and opens full size when clicked. Format: JPG/PNG, maximum 5MB. Leave blank and the card uses the full width.": "Jika perlu. Gambar iklan jawatan yang asal. Dipaparkan di sebelah jawatan dan dibuka dalam saiz penuh apabila diklik. Format: JPG/PNG, maksimum 5MB. Biarkan kosong dan kad akan guna lebar penuh.",
+        "Optional. Link to the official Facebook announcement for this vacancy — shown as 'View original post'. Leave blank if none.": "Jika perlu. Pautan ke pengumuman rasmi Facebook untuk jawatan ini — dipaparkan sebagai 'View original post'. Biarkan kosong jika tiada.",
+        "Optional. The message used when someone shares this vacancy on WhatsApp/Facebook/Telegram. Leave blank to use 'FDZ Engineering is hiring: <Job Title>.' plus the closing date.": "Jika perlu. Mesej yang digunakan apabila seseorang berkongsi jawatan ini di WhatsApp/Facebook/Telegram. Biarkan kosong untuk guna 'FDZ Engineering is hiring: <Nama Jawatan>.' beserta tarikh tutup.",
       };
 
       // Friendlier ENGLISH relabels applied even in EN mode — Decap's "Publish"
@@ -1931,6 +2141,13 @@
           '<ul>' +
             '<li>Open <b>Photo Gallery</b> → add/arrange items in the <b>Gallery Items</b> list (drag to reorder).</li>' +
           '</ul>' +
+          '<h3>💼 Careers (Job Vacancies)</h3>' +
+          '<ul>' +
+            '<li><b>New vacancy:</b> open <b>Careers (Job Vacancies)</b> → <b>New Vacancy</b>. Fill in the Job Title, Short Introduction and Apply-to Email Address, then add <b>Key Facts</b> (location, experience…) and <b>Details Sections</b> (requirements, benefits…). The preview on the right shows the real card.</li>' +
+            '<li><b>Closing Date:</b> pick it once — the card shows it and switches to <b>CLOSED</b> by itself after that day. No need to come back.</li>' +
+            '<li><b>Take a vacancy down:</b> untick <b>Show on Website</b> (keeps it for reuse) or delete the entry. If none are showing, the page says there are no open vacancies.</li>' +
+            '<li>Upload the original advert under <b>Brochure / Poster Image</b> (optional), and paste the Facebook post link if there is one.</li>' +
+          '</ul>' +
           '<h3>⭐ Featured Projects &amp; Certificates</h3>' +
           '<ul>' +
             '<li>Open the <b>Featured Projects ⭐</b> or <b>Featured Certificates ⭐</b> tab to choose &amp; arrange the items shown in the main section of the site. Adding an item to the list is what features it; removing it un-features it.</li>' +
@@ -2035,6 +2252,13 @@
               '<h3>📸 Galeri Foto</h3>' +
               '<ul>' +
                 '<li>Buka <b>Galeri Foto</b> → tambah/susun item dalam senarai <b>Gallery Items</b> (seret untuk susun semula).</li>' +
+              '</ul>' +
+              '<h3>💼 Kerjaya (Jawatan Kosong)</h3>' +
+              '<ul>' +
+                '<li><b>Jawatan baharu:</b> buka <b>Kerjaya (Jawatan Kosong)</b> → <b>Jawatan Baru</b>. Isi Nama Jawatan, Pengenalan Ringkas dan Alamat Emel Permohonan, kemudian tambah <b>Fakta Utama</b> (lokasi, pengalaman…) dan <b>Bahagian Butiran</b> (syarat, faedah…). Pratonton di sebelah kanan menunjukkan kad sebenar.</li>' +
+                '<li><b>Tarikh Tutup:</b> pilih sekali sahaja — kad memaparkannya dan bertukar kepada <b>CLOSED</b> dengan sendiri selepas hari itu. Tidak perlu kembali.</li>' +
+                '<li><b>Turunkan jawatan:</b> nyahtanda <b>Papar di Laman Web</b> (simpan untuk guna semula) atau padam entri. Jika tiada yang dipapar, halaman akan menyatakan tiada jawatan kosong.</li>' +
+                '<li>Muat naik iklan asal di <b>Gambar Brosur / Poster</b> (jika perlu), dan tampal pautan hantaran Facebook jika ada.</li>' +
               '</ul>' +
               '<h3>⭐ Projek & Sijil Pilihan (Featured)</h3>' +
               '<ul>' +
@@ -2237,27 +2461,48 @@
         container.appendChild(card);
       }
 
-      // ── One-time announcement to the site owner ───────────────────────────
-      // Dismissal is stored per version: bump FDZ_ANNOUNCE_VER to publish a new
-      // announcement and it will show once more, even to someone who dismissed
-      // the previous one.
-      var FDZ_ANNOUNCE_VER = 'v1';
+      // ── CMS update log ("Updates" button) ───────────────────────────────────
+      // Reference only: nothing pops up by itself any more (the old one-time
+      // "final polish" announcement was retired 2026-11-21 — owners found an
+      // auto-popup annoying). The floating "Updates" button opens this log.
+      //
+      // To publish a change: add an entry at the TOP of FDZ_UPDATES — plain
+      // language, what the owner can now DO, both languages. Newest first.
+      var FDZ_UPDATES = [
+        { date: '21 Nov 2026', items: [
+          ['<b>New: Careers (Job Vacancies)</b> — post, edit and remove job vacancies on the Careers page yourself. The preview shows the real card as you type.',
+           '<b>Baharu: Kerjaya (Jawatan Kosong)</b> — siarkan, sunting dan buang jawatan kosong di halaman Kerjaya sendiri. Pratonton memaparkan kad sebenar semasa anda menaip.'],
+          ['Set a <b>Closing Date</b> once and the vacancy switches to <b>Closed</b> by itself after that day. Untick <b>Show on Website</b> to hide one without deleting it.',
+           'Tetapkan <b>Tarikh Tutup</b> sekali dan jawatan bertukar kepada <b>Ditutup</b> dengan sendiri selepas hari itu. Nyahtanda <b>Papar di Laman Web</b> untuk menyembunyikannya tanpa memadam.'],
+          ['The last few English-only hints in BM mode are now translated.',
+           'Beberapa petunjuk terakhir yang masih dalam Bahasa Inggeris dalam mod BM kini telah diterjemah.'] ] },
+        { date: '20 Oct 2026', items: [
+          ['Certificates can now carry a <b>downloadable PDF</b> (Certificate PDF File). Visitors enter their name and organisation before downloading.',
+           'Sijil kini boleh disertakan <b>PDF untuk dimuat turun</b> (Fail PDF Sijil). Pelawat memasukkan nama dan organisasi sebelum memuat turun.'] ] },
+        { date: '17 Jul 2026', items: [
+          ['Renaming a project or certificate no longer removes it from the <b>Featured</b> lists — titles are safe to edit.',
+           'Menukar nama projek atau sijil tidak lagi membuangnya dari senarai <b>Pilihan</b> — tajuk selamat untuk disunting.'] ] },
+        { date: '13–16 Jul 2026', items: [
+          ['<b>BM / EN</b> button for the panel, the <b>Panduan</b> help guide, a map to set project locations, and a calendar for certificate expiry dates.',
+           'Butang <b>BM / EN</b> untuk panel, panduan <b>Panduan</b>, peta untuk menetapkan lokasi projek, dan kalendar untuk tarikh luput sijil.'],
+          ['Each project keeps its own photo folder; Client and Project Value are optional, so they never block saving photos.',
+           'Setiap projek mempunyai folder gambar sendiri; Klien dan Nilai Projek tidak wajib, jadi ia tidak lagi menghalang gambar disimpan.'] ] }
+      ];
 
-      function fdzAnnounceSeen() {
-        try { return localStorage.getItem('fdz-announce') === FDZ_ANNOUNCE_VER; }
-        catch (e) { return false; }
-      }
-
-      function fdzDismissAnnounce() {
-        try { localStorage.setItem('fdz-announce', FDZ_ANNOUNCE_VER); } catch (e) {}
+      function fdzCloseUpdates() {
         var el = document.getElementById('fdz-announce');
         if (el && el.parentNode) el.parentNode.removeChild(el);
       }
 
-      // Builds and shows the modal. Used both for the once-only auto-show and for
-      // the persistent "Notice" button, which re-opens it any time.
+      // Builds and shows the update log. Opened ONLY by the "Updates" button.
       function fdzOpenAnnounce() {
         if (document.getElementById('fdz-announce')) return;         // already on screen
+
+        var log = FDZ_UPDATES.map(function (u) {
+          return '<div class="fdz-up-entry"><span class="fdz-up-date">' + u.date + '</span><ul class="fdz-an-list">' +
+            u.items.map(function (it) { return '<li><span class="fdz-an-ic">•</span><span>' + fdzL(it[0], it[1]) + '</span></li>'; }).join('') +
+            '</ul></div>';
+        }).join('');
 
         var wrap = document.createElement('div');
         wrap.id = 'fdz-announce';
@@ -2265,62 +2510,46 @@
         wrap.setAttribute('aria-modal', 'true');
         wrap.innerHTML =
           '<div class="fdz-an-card">' +
-            '<span class="fdz-an-badge">KedaiWebKamek · ' + fdzL('Notice', 'Notis') + '</span>' +
-            '<h2>' + fdzL('Your CMS is in final polish', 'Panel CMS anda di peringkat akhir') + '</h2>' +
+            '<span class="fdz-an-badge">KedaiWebKamek · ' + fdzL('Updates', 'Kemas Kini') + '</span>' +
+            '<h2>' + fdzL('What\'s new in your CMS', 'Apa yang baharu dalam CMS anda') + '</h2>' +
             '<p>' + fdzL(
-              'This admin panel is in the final stage of development. We are actively debugging and stabilising it behind the scenes, so you may notice small changes from time to time. Your content stays safe and is backed up every day.',
-              'Panel admin ini berada di peringkat akhir pembangunan. Kami sedang aktif menyahpepijat dan menstabilkannya di belakang tabir, jadi anda mungkin nampak perubahan kecil dari semasa ke semasa. Kandungan anda kekal selamat dan disandarkan setiap hari.'
+              'A record of the improvements made to this panel, newest first. Your content is backed up every day.',
+              'Rekod penambahbaikan yang dibuat pada panel ini, yang terbaharu dahulu. Kandungan anda disandarkan setiap hari.'
             ) + '</p>' +
-            '<ul class="fdz-an-list">' +
-              '<li><span class="fdz-an-ic">📋</span><span>' + fdzL(
-                'Have <b>projects or certificates</b> to add? Do not hesitate to reach out — we will help you get them in.',
-                'Ada <b>projek atau sijil</b> untuk ditambah? Jangan segan hubungi kami — kami akan bantu masukkannya.'
-              ) + '</span></li>' +
-              '<li><span class="fdz-an-ic">🛟</span><span>' + fdzL(
-                'This finalisation comes with a further <b>30 days of site support</b>.',
-                'Penyiapan ini disertakan dengan <b>30 hari sokongan laman web</b> tambahan.'
-              ) + '</span></li>' +
-            '</ul>' +
+            log +
             '<p class="fdz-an-thanks">' + fdzL(
-              'It is part of our mandate to give the best possible service for the portfolio we build. Thank you for trusting us.',
-              'Ia sebahagian daripada mandat kami untuk memberi perkhidmatan terbaik bagi portfolio yang kami bina. Terima kasih kerana mempercayai kami.'
+              'Need something added or changed? Email us and we will help.',
+              'Perlukan sesuatu ditambah atau diubah? Emel kami dan kami akan bantu.'
             ) + '</p>' +
             '<div class="fdz-an-foot">' +
               '<a class="fdz-an-btn fdz-an-btn--ghost" href="mailto:apel@kedaiwebkamek.my">' + fdzL('Email us', 'Emel kami') + '</a>' +
-              '<button type="button" class="fdz-an-btn fdz-an-btn--go" id="fdz-an-ok">' + fdzL('Got it', 'Faham') + '</button>' +
+              '<button type="button" class="fdz-an-btn fdz-an-btn--go" id="fdz-an-ok">' + fdzL('Close', 'Tutup') + '</button>' +
             '</div>' +
           '</div>';
 
         wrap.addEventListener('click', function (e) {
-          if (e.target === wrap) fdzDismissAnnounce(); // backdrop click
+          if (e.target === wrap) fdzCloseUpdates(); // backdrop click
         });
         var ok = wrap.querySelector('#fdz-an-ok');
-        if (ok) ok.addEventListener('click', fdzDismissAnnounce);
+        if (ok) ok.addEventListener('click', fdzCloseUpdates);
         document.body.appendChild(wrap);
         if (ok) ok.focus();
       }
 
-      // Auto-show, once per announcement version.
-      function injectAnnouncement() {
-        if (!document.querySelector("[class*='AppHeader']")) return; // CMS only, not login
-        if (fdzAnnounceSeen()) return;                               // already dismissed
-        fdzOpenAnnounce();
-      }
-
-      // Persistent button so the notice can always be re-read after dismissal.
+      // Persistent button that opens the update log.
       function injectAnnounceBtn() {
         if (!document.querySelector("[class*='AppHeader']")) return; // CMS only, not login
         if (document.getElementById('fdz-announce-btn')) return;     // once
         var b = document.createElement('button');
         b.id = 'fdz-announce-btn';
         b.type = 'button';
-        b.innerHTML = '📣 ' + fdzL('Notice', 'Notis');
+        b.innerHTML = '📋 ' + fdzL('Updates', 'Kemas Kini');
         b.addEventListener('click', fdzOpenAnnounce);
         document.body.appendChild(b);
       }
 
       document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && document.getElementById('fdz-announce')) fdzDismissAnnounce();
+        if (e.key === 'Escape' && document.getElementById('fdz-announce')) fdzCloseUpdates();
       });
 
       function brandLogin() {
@@ -2370,7 +2599,7 @@
       // via rAF with a runaway circuit-breaker — defence-in-depth against the class
       // of MutationObserver feedback loop that once froze the CMS after login.
       function runEnhancers() {
-        var fns = [brandLogin, brandHeader, injectHelpPanel, injectCollectionCounts, injectFeaturedStars, injectLangToggle, injectStatusCard, injectAnnouncement, injectAnnounceBtn, translateTick];
+        var fns = [brandLogin, brandHeader, injectHelpPanel, injectCollectionCounts, injectFeaturedStars, injectLangToggle, injectStatusCard, injectAnnounceBtn, translateTick];
         for (var i = 0; i < fns.length; i++) {
           try { fns[i](); }
           catch (e) { if (window.console && console.warn) console.warn('[FDZ CMS] enhancer failed:', e); }

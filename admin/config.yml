@@ -433,6 +433,209 @@ collections:
                 options_length: 100
                 hint: "Search for a certificate name and pick it. Drag items to reorder — this sets the left-to-right order of the featured certificate cards."
 
+  # ── 2c. CAREERS (job vacancies on careers.html) ─────────────────────────────
+  # One file per vacancy. The fdzeng.com build (scripts/build-data.js, step 4)
+  # renders these into careers.html at build time — so every field below maps to
+  # one visible part of a vacancy card. The filename (slug) becomes the card's
+  # #anchor used by the Share button links, so it never changes after creation.
+  - name: careers
+    label: "Careers (Job Vacancies)"
+    label_singular: "Vacancy"
+    folder: content/careers
+    identifier_field: title
+    slug: "{{slug}}"
+    extension: json
+    format: json
+    create: true
+    media_folder: "/uploads/careers"
+    public_folder: "/uploads/careers"
+    summary: "{{status}} · {{title}}"
+    sortable_fields: ['title', 'status', 'order']
+    search_fields: ['title', 'tag', 'lead', 'email']
+    view_filters:
+      - { label: "Open", field: status, pattern: Open }
+      - { label: "Closed", field: status, pattern: Closed }
+    fields:
+
+      - name: title
+        label: "Job Title"
+        widget: string
+        required: true
+        hint: "The position name shown as the big heading on the vacancy card. Example: Project Engineer"
+
+      - name: show
+        label: "Show on Website"
+        widget: boolean
+        default: true
+        required: false
+        hint: "Untick to hide this vacancy from the Careers page without deleting it (useful to reuse it later). To remove it for good, delete the entry instead."
+
+      - name: status
+        label: "Vacancy Status"
+        widget: select
+        required: true
+        default: "Open"
+        options:
+          - { label: "Open — Accepting applications", value: "Open" }
+          - { label: "Closed — Still shown, marked Closed", value: "Closed" }
+        hint: "Open vacancies show a green OPEN badge. If you set a Closing Date below, the badge switches to CLOSED automatically the day after — you don't need to come back and change this."
+
+      - name: closingDate
+        label: "Closing Date"
+        widget: datetime
+        required: false
+        default: ""
+        format: "YYYY-MM-DD"
+        date_format: "DD MMM YYYY"
+        time_format: false
+        picker_utc: true
+        hint: "Optional. PICK the last day to apply. It is shown on the card as 'Closing date' and the vacancy is marked CLOSED automatically after that day. Do NOT also add it under Key Facts. Leave blank if there is no closing date."
+
+      - name: order
+        label: "Display Order"
+        widget: number
+        value_type: int
+        min: 1
+        required: false
+        hint: "Optional. 1 = shown first, 2 = second, and so on. Closed vacancies are always shown after open ones. Leave blank to sort by job title."
+
+      - name: tag
+        label: "Category Tag"
+        widget: string
+        required: false
+        hint: "Small red label above the job title. Example: Engineering, Trainee Programme, Site Operations"
+
+      - name: tagIcon
+        label: "Category Tag Icon"
+        widget: select
+        required: false
+        default: "work"
+        options: &career_icons
+          - { label: "💼 Briefcase (general job)", value: "work" }
+          - { label: "👷 Engineer", value: "engineering" }
+          - { label: "🏗 Construction", value: "construction" }
+          - { label: "🎓 Training / Education", value: "school" }
+          - { label: "📐 Survey / Measurement", value: "straighten" }
+          - { label: "🧾 Accounts / Finance", value: "payments" }
+          - { label: "🗂 Office / Admin", value: "badge" }
+          - { label: "👥 Team / People", value: "groups" }
+          - { label: "📍 Location", value: "location_on" }
+          - { label: "🕒 Time / Duration", value: "schedule" }
+          - { label: "📅 Calendar / Working days", value: "calendar_month" }
+          - { label: "🧭 Experience", value: "work_history" }
+          - { label: "🛡 Safety", value: "health_and_safety" }
+          - { label: "ℹ Information", value: "info" }
+
+      - name: lead
+        label: "Short Introduction"
+        widget: text
+        required: true
+        hint: "One or two sentences under the job title that sum up the role. Example: Join our Kuching team to monitor project progress and coordinate with clients and contractors."
+
+      - name: facts
+        label: "Key Facts"
+        label_singular: "Fact"
+        widget: list
+        required: false
+        summary: "{{fields.label}}: {{fields.value}}"
+        hint: "The short facts row under the introduction (location, experience, working hours…). Add one row per fact. The Closing Date is added automatically — don't add it here."
+        fields:
+          - name: icon
+            label: "Icon"
+            widget: select
+            required: false
+            default: "location_on"
+            options: *career_icons
+          - name: label
+            label: "Label"
+            widget: string
+            hint: "Small grey label. Example: Location, Experience, Working days"
+          - name: value
+            label: "Value"
+            widget: string
+            hint: "The fact itself, in bold. Example: Kuching, Sarawak or 1–2 years minimum"
+
+      - name: sections
+        label: "Details Sections"
+        label_singular: "Section"
+        widget: list
+        required: false
+        summary: "{{fields.heading}}"
+        hint: "The bullet-point blocks on the card (Requirements, Responsibilities, Benefits, What to Send…). Each section becomes a column. Drag to reorder."
+        fields:
+          - name: heading
+            label: "Section Heading"
+            widget: string
+            hint: "Example: Job Requirements, Key Responsibilities, Benefits"
+          - name: stack
+            label: "Place Under the Previous Section"
+            widget: boolean
+            default: false
+            required: false
+            hint: "Tick to put this section underneath the one above it (same column) instead of starting a new column. Good for short sections like Qualification."
+          - name: items
+            label: "Bullet Points"
+            label_singular: "Bullet Point"
+            widget: list
+            summary: "{{fields.text}}"
+            fields:
+              - name: text
+                label: "Text"
+                widget: string
+                hint: "One bullet point. Example: Bachelor's Degree in Civil Engineering"
+              - name: note
+                label: "Badge"
+                widget: string
+                required: false
+                hint: "Optional small red badge after the text. Example: 6 vacancies"
+
+      - name: email
+        label: "Apply-to Email Address"
+        widget: string
+        required: true
+        pattern: ['^[^@\s]+@[^@\s]+\.[^@\s]+$', 'Enter a valid email address. Example: hr@fdzeng.com.my']
+        hint: "Where applications are sent. Shown on the card with a Copy button, and used by the Apply by Email button. Example: hr@fdzeng.com.my"
+
+      - name: emailSubject
+        label: "Email Subject"
+        widget: string
+        required: false
+        hint: "Pre-filled subject line when an applicant clicks Apply by Email. Example: Application - Project Engineer - [Your Name]. Leave blank to use 'Application - <Job Title>'."
+
+      - name: emailBody
+        label: "Email Message Template"
+        widget: text
+        required: false
+        hint: "Pre-filled message the applicant starts from. Leave blank for a simple default message."
+
+      - name: applyInstruction
+        label: "Application Instructions"
+        widget: text
+        required: false
+        hint: "Shown in the email pop-up as the reminder of what to attach. Example: Attach your detailed resume, copies of relevant certificates, and your expected salary."
+
+      - name: poster
+        label: "Brochure / Poster Image"
+        widget: image
+        required: false
+        media_library:
+          config:
+            max_file_size: 5242880
+        hint: "Optional. The original job advertisement image. Shown beside the vacancy and opens full size when clicked. Format: JPG/PNG, maximum 5MB. Leave blank and the card uses the full width."
+
+      - name: facebookUrl
+        label: "Facebook Post Link"
+        widget: string
+        required: false
+        pattern: ['^$|^https?://.+', 'Must start with https:// or http://']
+        hint: "Optional. Link to the official Facebook announcement for this vacancy — shown as 'View original post'. Leave blank if none."
+
+      - name: shareText
+        label: "Share Message"
+        widget: text
+        required: false
+        hint: "Optional. The message used when someone shares this vacancy on WhatsApp/Facebook/Telegram. Leave blank to use 'FDZ Engineering is hiring: <Job Title>.' plus the closing date."
+
   # ── 3. GALLERY ───────────────────────────────────────────────────────────────
   - name: gallery
     label: Gallery

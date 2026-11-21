@@ -1,0 +1,91 @@
+{
+  "title": "PROTÉGÉ-RTW Trainee",
+  "show": true,
+  "order": 1,
+  "status": "Open",
+  "closingDate": "2027-01-02",
+  "tag": "Trainee Programme",
+  "tagIcon": "school",
+  "lead": "A 12-month traineeship, with a monthly allowance, under the PROTÉGÉ Ready to Work programme, with hands-on training at our Bajau, Saratok project site and at our Kuching headquarters. 20 places across three positions.",
+  "facts": [
+    {
+      "icon": "location_on",
+      "label": "Working location",
+      "value": "HQ Kuching / Site Bajau"
+    },
+    {
+      "icon": "schedule",
+      "label": "Training period",
+      "value": "12 months"
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Positions",
+      "stack": false,
+      "items": [
+        {
+          "text": "Quantity Surveyor",
+          "note": "8 vacancies"
+        },
+        {
+          "text": "Project Engineer",
+          "note": "6 vacancies"
+        },
+        {
+          "text": "Surveyor",
+          "note": "6 vacancies"
+        }
+      ]
+    },
+    {
+      "heading": "Qualification",
+      "stack": true,
+      "items": [
+        {
+          "text": "Bachelor's Degree in a related field"
+        }
+      ]
+    },
+    {
+      "heading": "Benefits & Compensation",
+      "stack": false,
+      "items": [
+        {
+          "text": "Monthly allowance of RM 2,000.00"
+        },
+        {
+          "text": "SOCSO & EIS contribution"
+        },
+        {
+          "text": "Annual leave and medical leave"
+        },
+        {
+          "text": "Medical entitlement"
+        },
+        {
+          "text": "Shared accommodation at site if required"
+        }
+      ]
+    },
+    {
+      "heading": "Training Location",
+      "stack": true,
+      "items": [
+        {
+          "text": "Project Site, Bajau, Saratok"
+        },
+        {
+          "text": "HQ, Kuching, Sarawak"
+        }
+      ]
+    }
+  ],
+  "email": "protegebajau@outlook.com",
+  "emailSubject": "Application - PROTÉGÉ-RTW Trainee - [Position]",
+  "emailBody": "Hi FDZ Engineering,\n\nI would like to apply for the PROTÉGÉ-RTW Trainee programme.\n\nFull name:\nPosition applied:\n\nMy resume is attached.\n\nThank you.",
+  "applyInstruction": "Attach your resume and tell us which position you are applying for: Quantity Surveyor, Project Engineer or Surveyor.",
+  "poster": "/uploads/careers/rtw-protege.jpg",
+  "facebookUrl": "https://www.facebook.com/permalink.php?story_fbid=pfbid03166fiCoJi84PSEZYMYRmHtx9DqgtnHn2VdmiiWZdEegvYDDPDdnVgVCiS4EZERNql&id=61570057791049",
+  "shareText": "FDZ Engineering is hiring PROTÉGÉ-RTW Trainees (Quantity Surveyor, Project Engineer, Surveyor) in Kuching and Site Bajau, Sarawak. Closing 2 January 2027."
+}

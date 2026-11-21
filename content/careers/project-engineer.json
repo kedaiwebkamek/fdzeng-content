@@ -1,0 +1,102 @@
+{
+  "title": "Project Engineer",
+  "show": true,
+  "order": 2,
+  "status": "Open",
+  "closingDate": "",
+  "tag": "Engineering",
+  "tagIcon": "engineering",
+  "lead": "Join our Kuching team to monitor project progress, keep timelines on track and coordinate with clients, contractors and consultants to deliver our projects smoothly.",
+  "facts": [
+    {
+      "icon": "location_on",
+      "label": "Location",
+      "value": "Kuching, Sarawak"
+    },
+    {
+      "icon": "work_history",
+      "label": "Experience",
+      "value": "1–2 years minimum"
+    },
+    {
+      "icon": "calendar_month",
+      "label": "Working days",
+      "value": "Mon–Fri, 8.00 AM – 5.00 PM"
+    }
+  ],
+  "sections": [
+    {
+      "heading": "Job Requirements",
+      "stack": false,
+      "items": [
+        {
+          "text": "Bachelor's Degree in Civil Engineering"
+        },
+        {
+          "text": "Minimum 1–2 years' experience in construction projects"
+        },
+        {
+          "text": "Self-motivated, able to work independently and handle multiple tasks"
+        },
+        {
+          "text": "Positive attitude with strong communication and interpersonal skills"
+        }
+      ]
+    },
+    {
+      "heading": "Key Responsibilities",
+      "stack": false,
+      "items": [
+        {
+          "text": "Monitor project progress and ensure all documentation complies with relevant standards and regulations"
+        },
+        {
+          "text": "Ensure project timelines and schedules are met"
+        },
+        {
+          "text": "Coordinate and liaise with clients, contractors and consultants to ensure smooth project execution"
+        }
+      ]
+    },
+    {
+      "heading": "Benefits",
+      "stack": false,
+      "items": [
+        {
+          "text": "5 working days (Monday – Friday, 8.00 AM to 5.00 PM)"
+        },
+        {
+          "text": "Comprehensive health coverage, including annual health check-ups, medical and dental claims"
+        },
+        {
+          "text": "Training and career development opportunities"
+        }
+      ]
+    },
+    {
+      "heading": "What to Send",
+      "stack": false,
+      "items": [
+        {
+          "text": "Detailed resume"
+        },
+        {
+          "text": "Copies of valid, relevant certificates"
+        },
+        {
+          "text": "Current and expected salary"
+        },
+        {
+          "text": "Recent passport-sized photograph"
+        }
+      ]
+    }
+  ],
+  "email": "hr@fdzeng.com.my",
+  "emailSubject": "Application - Project Engineer (Kuching) - [Your Name]",
+  "emailBody": "Hi FDZ Engineering HR,\n\nI would like to apply for the Project Engineer position.\n\nPlease find attached:\n- Detailed resume\n- Copies of relevant certificates\n- Recent passport-sized photograph\n\nCurrent salary:\nExpected salary:\n\nThank you.",
+  "applyInstruction": "Attach your detailed resume, copies of valid relevant certificates, your current and expected salary, and a recent passport-sized photograph.",
+  "poster": "/uploads/careers/civil-engineer.jpg",
+  "facebookUrl": "https://www.facebook.com/permalink.php?story_fbid=pfbid0264dfz7M8jc3MPa8fyRmnuoekje6ddDyprZFoGjg3SiUtcoqNXinPiEpEd1Ua5Md5l&id=61570057791049",
+  "shareText": "FDZ Engineering is hiring a Project Engineer in Kuching, Sarawak."
+}
