@@ -2387,6 +2387,12 @@
             "#fdz-help-modal li{margin-bottom:5px;}",
             "#fdz-help-modal .fh-tip{background:#fff8e1;border-left:4px solid #f59e0b;padding:9px 13px;border-radius:4px;color:#92400e;font-size:0.82rem;margin:8px 0;}",
             "#fdz-help-modal .fh-shot{display:block;margin:8px 0 4px;border:1px solid #e4e4e7;border-radius:8px;overflow:hidden;background:#f4f4f5;cursor:zoom-in;}",
+            "#fdz-shot-box{position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(14,15,17,0.78);backdrop-filter:blur(2px);cursor:zoom-out;}",
+            "#fdz-shot-box .fsb-frame{position:relative;max-width:min(1100px,94vw);cursor:default;}",
+            "#fdz-shot-box img{display:block;max-width:100%;max-height:82vh;width:auto;height:auto;margin:0 auto;border-radius:10px;background:#fff;box-shadow:0 24px 64px rgba(0,0,0,0.55);}",
+            "#fdz-shot-box .fsb-cap{color:rgba(255,255,255,0.85);font-family:'Inter',sans-serif;font-size:0.85rem;text-align:center;margin:12px 0 0;}",
+            "#fdz-shot-box .fsb-x{position:absolute;top:-16px;right:-16px;width:36px;height:36px;border-radius:50%;border:none;background:#fff;color:#141518;font-size:1.4rem;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.4);}",
+            "#fdz-shot-box .fsb-x:hover{background:#e30613;color:#fff;}",
             "#fdz-help-modal .fh-shot img{display:block;width:100%;height:auto;}",
             "#fdz-help-modal .fh-cap{font-size:0.74rem;color:#71717a;margin:2px 0 10px;line-height:1.45;}",
             "#fdz-help-modal .fh-n{display:inline-block;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#e30613;color:#fff;font-size:0.66rem;font-weight:800;line-height:17px;text-align:center;margin:0 4px 0 1px;vertical-align:1px;}",
@@ -2520,6 +2526,45 @@
         // Only the Guide button and the × close it — no click-outside or Escape,
         // so it never vanishes mid-task.
         var body = overlay.querySelector('.fh-body');
+
+        // Guide pictures open in a pop-up over the CMS (not a new tab), so the
+        // staff never leave the page they are working on. The link's href stays
+        // as a fallback. Closes on ×, a click outside the picture, or Esc.
+        function closeShot() {
+          var box = document.getElementById('fdz-shot-box');
+          if (box && box.style.display !== 'none') box.style.display = 'none';
+        }
+        function openShot(src, cap) {
+          var box = document.getElementById('fdz-shot-box');
+          if (!box) {
+            box = document.createElement('div');
+            box.id = 'fdz-shot-box';
+            box.setAttribute('role', 'dialog');
+            box.setAttribute('aria-modal', 'true');
+            box.innerHTML = '<div class="fsb-frame"><button type="button" class="fsb-x" aria-label="' + fdzL('Close', 'Tutup') + '">&times;</button>' +
+              '<img alt=""><p class="fsb-cap"></p></div>';
+            box.addEventListener('click', function (e) { if (e.target === box || e.target.classList.contains('fsb-x')) closeShot(); });
+            document.addEventListener('keydown', function (e) {
+              var b = document.getElementById('fdz-shot-box');
+              if (e.key === 'Escape' && b && b.style.display !== 'none') { e.stopPropagation(); closeShot(); }
+            }, true);
+            document.body.appendChild(box);
+          }
+          box.querySelector('img').src = src;
+          box.querySelector('img').alt = cap || '';
+          var c = box.querySelector('.fsb-cap');
+          c.textContent = cap || '';
+          c.style.display = cap ? '' : 'none';
+          box.style.display = 'flex';
+          box.querySelector('.fsb-x').focus();
+        }
+        body.addEventListener('click', function (e) {
+          var a = e.target.closest ? e.target.closest('a.fh-shot') : null;
+          if (!a) return;
+          e.preventDefault();
+          var img = a.querySelector('img');
+          openShot(a.getAttribute('href'), img ? img.getAttribute('alt') : '');
+        });
         function setOpen(open) {
           overlay.style.display = open ? 'block' : 'none';
           document.body.classList.toggle('fdz-help-open', open);
